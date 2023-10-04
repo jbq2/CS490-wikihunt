@@ -11,12 +11,9 @@
         </li>
     </ul>
 </nav>
-<h1>Welcome to WikiHunt</h1>
-<p> This is the home page</p>
-
+<h1>Leaderboard</h1>
+<p> This is the Leaderboard page</p>
 
 <style>
     @import '/public/global.css';
 </style>
-
-

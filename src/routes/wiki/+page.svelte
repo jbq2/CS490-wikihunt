@@ -11,11 +11,12 @@
         </li>
     </ul>
 </nav>
+
 <script>
     // import { onMount } from "svelte"; // onMount runs after the component is first rendered to the DOM.
     let wikiPage = ""; // Wiki Page to be Displayed
     let pageContent = "";
-  
+
     function fetchWikiPage() {
         // Figured out URL from here: https://www.mediawiki.org/w/api.php?action=parse&format=json&origin=*&page=Project%3ASandbox&formatversion=2
         // on https://www.mediawiki.org/wiki/API:Parsing_wikitext and API sandbox
@@ -34,9 +35,19 @@
                 console.error("Error fetching Wikipedia content:", error);
             });
     }
+
+    function clickLink(event) {
+        if (event.target.tagName === 'A') { // check to see if it is a link with the a tag
+            event.preventDefault(); // prevents default (navigate to a new page)
+            wikiPage = event.target.textContent; // sets wikiPage to be the next page based on link name
+            console.log("Page:", wikiPage);
+            fetchWikiPage(); // show new page
+        }
+    }
+
 </script>
-  
-<main>
+
+<main on:click={clickLink}>
     <input type="text" bind:value={wikiPage} placeholder="Enter Wikipedia page title" />
     <button on:click={fetchWikiPage}>Load Page</button>
     {@html pageContent} <!-- loads content -->

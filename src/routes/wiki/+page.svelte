@@ -34,15 +34,30 @@
             .catch((error) => { // error
                 console.error("Error fetching Wikipedia content:", error);
             });
+        window.scrollTo({ // resets the page to view the top
+            top: 0,
+            behavior: 'auto'
+        });
     }
 
     function clickLink(event) {
         event.preventDefault(); // prevents default (navigate to a new page)
-        if (event.target.tagName === 'A') { // check to see if it is a link with the a tag
-            wikiPage = event.target.textContent; // sets wikiPage to be the next page based on link name
-            console.log("Next Page:", wikiPage);
-            fetchWikiPage(); // show new page
+        if (event.target.tagName === 'I') { // for the case where a wikipedia page uses italicized text
+            const linkElm = event.target.closest('a');
+            if (linkElm) {
+                getPage(linkElm);
+            }
+        } else {
+            if (event.target.tagName === 'A') { // check to see if it is a link with the <a> tag
+                getPage(event.target);
+            }
         }
+    }
+
+    function getPage(page) {
+        wikiPage = page.getAttribute('title')
+        console.log("Next Page:", wikiPage); // sets wikiPage to be the next page based on link name
+        fetchWikiPage(); // show new page
     }
 </script>
 

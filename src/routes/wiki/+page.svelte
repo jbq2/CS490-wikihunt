@@ -12,7 +12,7 @@
     </ul>
 </nav>
 
-<script>
+<script setup lang="ts">
     // import { onMount } from "svelte"; // onMount runs after the component is first rendered to the DOM.
     let wikiPage = ""; // Wiki Page to be Displayed
     let pageContent = "";
@@ -37,14 +37,13 @@
     }
 
     function clickLink(event) {
+        event.preventDefault(); // prevents default (navigate to a new page)
         if (event.target.tagName === 'A') { // check to see if it is a link with the a tag
-            event.preventDefault(); // prevents default (navigate to a new page)
             wikiPage = event.target.textContent; // sets wikiPage to be the next page based on link name
-            console.log("Page:", wikiPage);
+            console.log("Next Page:", wikiPage);
             fetchWikiPage(); // show new page
         }
     }
-
 </script>
 
 <main on:click={clickLink}>

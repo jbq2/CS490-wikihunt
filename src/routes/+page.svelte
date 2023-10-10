@@ -1,22 +1,2 @@
-<nav>
-    <ul>
-        <li>
-            <a href="/">Home</a>
-        </li>
-        <li>
-            <a href="/wiki">Wiki</a>
-        </li>
-        <li>
-            <a href="/leaderboard">Leaderboard</a>
-        </li>
-    </ul>
-</nav>
 <h1>Welcome to WikiHunt</h1>
 <p> This is the home page</p>
-
-
-<style>
-    @import '/public/global.css';
-</style>
-
-

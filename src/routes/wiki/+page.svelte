@@ -1,17 +1,3 @@
-<nav>
-    <ul>
-        <li>
-            <a href="/">Home</a>
-        </li>
-        <li>
-            <a href="/wiki">Wiki</a>
-        </li>
-        <li>
-            <a href="/leaderboard">Leaderboard</a>
-        </li>
-    </ul>
-</nav>
-
 <script setup lang="ts">
     // import { onMount } from "svelte"; // onMount runs after the component is first rendered to the DOM.
     let wikiPage = ""; // Wiki Page to be Displayed
@@ -40,10 +26,10 @@
         });
     }
 
-    function clickLink(event) {
+    function clickLink(event: any) {
         event.preventDefault(); // prevents default (navigate to a new page)
         if (event.target.tagName === 'I') { // for the case where a wikipedia page uses italicized text
-            const linkElm = event.target.closest('a');
+            const linkElm: HTMLAnchorElement = event.target.closest('a');
             if (linkElm) {
                 getPage(linkElm);
             }
@@ -54,19 +40,17 @@
         }
     }
 
-    function getPage(page) {
-        wikiPage = page.getAttribute('title')
+    function getPage(page: HTMLAnchorElement) {
+        wikiPage = page.getAttribute('title')!;
         console.log("Next Page:", wikiPage); // sets wikiPage to be the next page based on link name
         fetchWikiPage(); // show new page
     }
 </script>
 
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <main on:click={clickLink}>
     <input type="text" bind:value={wikiPage} placeholder="Enter Wikipedia page title" />
     <button on:click={fetchWikiPage}>Load Page</button>
     {@html pageContent} <!-- loads content -->
 </main>
-
-<style>
-    @import '/public/global.css';
-</style>

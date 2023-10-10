@@ -1,5 +1,3 @@
-export const wikiHtmlStyles: string = `
-<style>
 cite,
 dfn {
 	font-style: inherit;
@@ -396,5 +394,3 @@ span.texhtml span.texhtml {
 		background-image: none;
 	}
 }
-</style>
-`;

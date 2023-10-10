@@ -1,7 +1,4 @@
 <script setup lang="ts">
-    import { wikiHtmlStyles } from "../constants/wiki-html-css";
-
-    // import { onMount } from "svelte"; // onMount runs after the component is first rendered to the DOM.
     let wikiPage = ""; // Wiki Page to be Displayed
     let pageContent = "";
 
@@ -16,11 +13,10 @@
             }) 
             .then((data) => { // get data
                 if (data && data.parse && data.parse.text) { // gets all data, parsed data, and parsed text
-                    pageContent = wikiHtmlStyles + data.parse.text["*"];
-                    console.log(pageContent);
+                    pageContent = data.parse.text["*"];
                 }
             })
-            .catch((error) => { // error
+            .catch((error) => { // errors
                 console.error("Error fetching Wikipedia content:", error);
             });
         window.scrollTo({ // resets the page to view the top
@@ -51,17 +47,53 @@
 </script>
 
 <style>
+
+    @import '/public/wiki-common.css';
+
     #wiki-page-container {
-        width:50rem;
-        margin: auto;
+        align-items: center;
+        justify-items: center;
+        padding-left: 12.5%;
+        padding-right: 12.5%;
+        width: 150%;
+
+        display: grid;
+        grid-template-columns: repeat(2, 50fr);
+        grid-column-gap: 1px; /* Adjust the gap as needed */
     }
 
     /* https://stackoverflow.com/questions/56607606/styling-a-html-tag-of-a-svelte-component-by-ising-the-in-component-style */
         /* use of :global in css to style injected html using @html */
-    /* #wiki-page-container :global(tr) {
-        margin: auto;
+
+    #wiki-page-container :global(table.wikitable), :global(figure), :global(li.gallerybox) {
+        background-color: #f8f9fa;
+        border: 1px solid #a2a9b1;     
+        padding: 5px;  
+    }
+    #wiki-page-container :global(li.gallerybox) {
+        margin: 3px;
         display: inline-block;
-    } */
+    }
+
+    #wiki-page-container :global(table.wikitable) {
+        background-color: #f8f9fa;
+        border: 1px solid #a2a9b1;
+    }
+
+    #wiki-page-container :global(figure) {
+        padding:5px;
+        text-align: center;
+        float: right;
+        margin: 1rem;
+    }
+
+    #wiki-page-container :global(p) {
+        clear: left;
+    }
+
+    #wiki-page-container :global(figcaption) {
+        width:20rem
+    }
 </style>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->

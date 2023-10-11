@@ -3,6 +3,8 @@
 
     let pageContent:string = "";
     let wikiPage:string = ""; 
+    let count = 0;
+    import Timer from "./Timer.svelte";
 
     function clickLink (event: any) {
         event.preventDefault(); // prevents default (navigate to a new page)
@@ -11,10 +13,12 @@
             const linkElm = event.target.closest('a');
             if (linkElm) {
                getPage(linkElm);
+               count+=1;
             }   
         } else {
             if (event.target.tagName === 'A') { // check to see if it is a link with the <a> tag
                 getPage(event.target);
+                count+=1
             }
         }
     }
@@ -91,7 +95,10 @@
     #wiki-page-container :global(figcaption) {
         width:20rem
     }
+
+
 </style>
+
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
@@ -102,3 +109,6 @@
         {@html pageContent} <!-- loads content -->
     </div>
 </main>
+<p> Wikipedia Articles Clicked: {count}</p> <!-- counter is at the bottom, not formated the best-->
+<Timer />
+

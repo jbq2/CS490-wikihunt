@@ -25,7 +25,12 @@
         mediaWikiService.getPagePromise(wikiPage)
             .then((data) => { // get data
                 if (data && data.parse && data.parse.text) { // gets all data, parsed data, and parsed text
-                    pageContent = data.parse.text["*"];
+                    // pageContent = data.parse.text["*"];
+                    let parser = new DOMParser();
+                    let doc = parser.parseFromString(data.parse.text["*"], 'text/html');
+                    let editLinks = doc.querySelectorAll("span.mw-editsection");
+                    editLinks.forEach(link => link.remove());
+                    pageContent = doc.body.innerHTML;
                 }
             })
             .catch((error) => { // errors
@@ -41,6 +46,8 @@
         console.log("Next Page:", wikiPage); // sets wikiPage to be the next page based on link name
         fetchWikiPage(); // show new page
     }
+
+    $: console.log(pageContent);
 </script>
 
 <style>

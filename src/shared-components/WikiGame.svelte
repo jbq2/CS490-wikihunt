@@ -1,13 +1,27 @@
 <script setup lang="ts">
-    let wikiPage = ""; // Wiki Page to be Displayed
-    let pageContent = "";
+    import { mediaWikiService } from "../services/MediaWikiService";  
 
+    let pageContent:string = "";
+    let wikiPage:string = ""; 
+
+    function clickLink (event: any) {
+        event.preventDefault(); // prevents default (navigate to a new page)
+        console.log(event.origin);
+        if (event.target.tagName === 'I') { // for the case where a wikipedia page uses italicized text
+            const linkElm = event.target.closest('a');
+            if (linkElm) {
+               getPage(linkElm);
+            }   
+        } else {
+            if (event.target.tagName === 'A') { // check to see if it is a link with the <a> tag
+                getPage(event.target);
+            }
+        }
+    }
     function fetchWikiPage() {
         // Figured out URL from here: https://www.mediawiki.org/w/api.php?action=parse&format=json&origin=*&page=Project%3ASandbox&formatversion=2
         // on https://www.mediawiki.org/wiki/API:Parsing_wikitext and API sandbox
-        const apiUrl = `https://en.wikipedia.org/w/api.php?action=parse&format=json&origin=*&page=${wikiPage}&prop=text`;
-  
-        fetch(apiUrl)
+        mediaWikiService.getPagePromise(wikiPage)
             .then((response) => {
                 return response.json();
             }) 
@@ -24,23 +38,8 @@
             behavior: 'auto'
         });
     }
-
-    function clickLink(event: any) {
-        event.preventDefault(); // prevents default (navigate to a new page)
-        if (event.target.tagName === 'I') { // for the case where a wikipedia page uses italicized text
-            const linkElm: HTMLAnchorElement = event.target.closest('a');
-            if (linkElm) {
-                getPage(linkElm);
-            }
-        } else {
-            if (event.target.tagName === 'A') { // check to see if it is a link with the <a> tag
-                getPage(event.target);
-            }
-        }
-    }
-
     function getPage(page: HTMLAnchorElement) {
-        wikiPage = page.getAttribute('title')!;
+        wikiPage = page.getAttribute('title')!
         console.log("Next Page:", wikiPage); // sets wikiPage to be the next page based on link name
         fetchWikiPage(); // show new page
     }

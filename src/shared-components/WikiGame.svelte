@@ -105,10 +105,11 @@
 <main on:click={clickLink}>
     <input type="text" bind:value={wikiPage} placeholder="Enter Wikipedia page title" />
     <button on:click={fetchWikiPage}>Load Page</button>
+
+    <p> Wikipedia Articles Clicked: {count}</p> <!-- counter is at the bottom, not formated the best-->
+    <Timer />
+    
     <div id="wiki-page-container">
         {@html pageContent} <!-- loads content -->
     </div>
 </main>
-<p> Wikipedia Articles Clicked: {count}</p> <!-- counter is at the bottom, not formated the best-->
-<Timer />
-

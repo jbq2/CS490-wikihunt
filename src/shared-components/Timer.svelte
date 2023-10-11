@@ -1,46 +1,43 @@
 <script>
     let minutes = 0;
     let seconds = 0;
-  
+
     function startTimer() {
-      // Update the timer every second
-      const interval = setInterval(() => {
-        if (seconds === 59) {
-          minutes++;
-          seconds = 0;
-        } else {
-          seconds++;
-        }
-      }, 1000);
-  
-      // Stop the timer after a certain duration (if needed)
-      // For example, to stop the timer after 5 minutes, you can use:
-      // setTimeout(() => {
-      //   clearInterval(interval);
-      // }, 300000);
+        // Update the timer every second
+        const interval = setInterval(() => {
+            if (seconds === 59) {
+                minutes++;
+                seconds = 0;
+            } else {
+                seconds++;
+            }
+        }, 1000);
 
-      function stopTimer(){
+        // Stop the timer after a certain duration (if needed)
+        // For example, to stop the timer after 5 minutes, you can use:
+        // setTimeout(() => {
+        //   clearInterval(interval);
+        // }, 300000);
 
-        
-      }
+        function stopTimer() {}
     }
-  
+
     startTimer();
-  </script>
-  
-  <main>
+</script>
+
+<main>
     <h1>Count-up Timer</h1>
     <div class="timer">
-      {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+        {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
     </div>
-  </main>
-  
-  <style>
+</main>
+
+<style>
     main {
-      text-align: center;
+        text-align: center;
     }
-  
+
     .timer {
-      font-size: 2em;
+        font-size: 2em;
     }
-  </style>
+</style>

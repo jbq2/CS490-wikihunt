@@ -73,15 +73,11 @@
         justify-items: center;
         padding-left: 12.5%;
         padding-right: 12.5%;
-        width: 150%;
+        width: 75%;
 
-        display: grid;
         grid-template-columns: repeat(2, 50fr);
         grid-column-gap: 1px; /* Adjust the gap as needed */
     }
-
-    /* https://stackoverflow.com/questions/56607606/styling-a-html-tag-of-a-svelte-component-by-ising-the-in-component-style */
-        /* use of :global in css to style injected html using @html */
 
     #wiki-page-container :global(table.wikitable), :global(figure), :global(li.gallerybox) {
         background-color: #f8f9fa;
@@ -112,8 +108,6 @@
     #wiki-page-container :global(figcaption) {
         width:20rem
     }
-
-
 </style>
 
 

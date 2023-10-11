@@ -18,13 +18,11 @@
             }
         }
     }
+    
     function fetchWikiPage() {
         // Figured out URL from here: https://www.mediawiki.org/w/api.php?action=parse&format=json&origin=*&page=Project%3ASandbox&formatversion=2
         // on https://www.mediawiki.org/wiki/API:Parsing_wikitext and API sandbox
         mediaWikiService.getPagePromise(wikiPage)
-            .then((response) => {
-                return response.json();
-            }) 
             .then((data) => { // get data
                 if (data && data.parse && data.parse.text) { // gets all data, parsed data, and parsed text
                     pageContent = data.parse.text["*"];

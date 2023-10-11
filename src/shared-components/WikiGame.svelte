@@ -25,12 +25,7 @@
         mediaWikiService.getPagePromise(wikiPage)
             .then((data) => { // get data
                 if (data && data.parse && data.parse.text) { // gets all data, parsed data, and parsed text
-                    // pageContent = data.parse.text["*"];
-                    let parser = new DOMParser();
-                    let doc = parser.parseFromString(data.parse.text["*"], 'text/html');
-                    let editLinks = doc.querySelectorAll("span.mw-editsection");
-                    editLinks.forEach(link => link.remove());
-                    pageContent = doc.body.innerHTML;
+                    pageContent = cleanPage(data.parse.text["*"]);
                 }
             })
             .catch((error) => { // errors
@@ -47,7 +42,22 @@
         fetchWikiPage(); // show new page
     }
 
-    $: console.log(pageContent);
+    function cleanPage(pageContent: string){
+        let parser = new DOMParser();
+        let doc = parser.parseFromString(pageContent, 'text/html');
+
+        let editLinks = doc.querySelectorAll("span.mw-editsection");
+        for (let link of editLinks){
+            link.remove();
+        }
+
+        let headerBox = doc.querySelector("table[class^='box-']");
+        if (headerBox) {
+            headerBox.remove();
+        }
+
+        return doc.body.innerHTML;
+    }
 </script>
 
 <style>

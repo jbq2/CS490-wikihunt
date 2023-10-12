@@ -8,7 +8,6 @@
 
     function clickLink (event: any) {
         event.preventDefault(); // prevents default (navigate to a new page)
-        console.log(event.origin);
         if (event.target.tagName === 'I') { // for the case where a wikipedia page uses italicized text
             const linkElm = event.target.closest('a');
             if (linkElm) {
@@ -40,44 +39,32 @@
             behavior: 'auto'
         });
     }
+
     function getPage(page: HTMLAnchorElement) {
         wikiPage = page.getAttribute('title')!
-        console.log("Next Page:", wikiPage); // sets wikiPage to be the next page based on link name
         fetchWikiPage(); // show new page
     }
 
+    function eraseElements(elements: NodeListOf<Element>): void {
+        for(let e of elements) {
+            e.remove()
+        }
+    }
+
     function cleanPage(pageContent: string){
-        let parser = new DOMParser();
-        let doc = parser.parseFromString(pageContent, 'text/html');
+        const parser: DOMParser = new DOMParser();
+        const doc: Document = parser.parseFromString(pageContent, 'text/html');
 
-        let editLinks = doc.querySelectorAll("span.mw-editsection");
-        for (let link of editLinks){
-            link.remove();
-        }
+        eraseElements(doc.querySelectorAll("span.mw-editsection"));
+        eraseElements(doc.querySelectorAll("table[class^='box-']"));
+        eraseElements(doc.querySelectorAll("sup[id^='cite_ref'], sup[class='noprint Inline-Template Template-Fact']"));
+        eraseElements(doc.querySelectorAll("span[id='References'], span[id='Notes'], span[id='Citations'], span[id='Bibliography'], span[id='Further_reading']"))
+        eraseElements(doc.querySelectorAll("div[class^='reflist'], div[class='refbegin']"));
 
-        let headerBox = doc.querySelector("table[class^='box-']");
-        if (headerBox) {
-            headerBox.remove();
-        }
-
-        let citations = doc.querySelectorAll("sup[id^='cite_ref'], sup[class='noprint Inline-Template Template-Fact']");
-        for (let citation of citations){
-            citation.remove();
-        }
-
-        let otherCitations = doc.querySelectorAll("sup");
+        const otherCitations: NodeListOf<Element> = doc.querySelectorAll("sup");
         for (let otherCitation of otherCitations){
             if (otherCitation.textContent?.trim() === "[citation needed]")
                 otherCitation.remove();
-        }
-
-        let deleteHeaders = doc.querySelectorAll("span[id='References'], span[id='Notes'], span[id='Citations'], span[id='Bibliography'], span[id='Further_reading']");
-        let references = doc.querySelectorAll("div[class^='reflist'], div[class='refbegin']");
-        for (let header of deleteHeaders){
-            header.remove();
-        }
-        for (let reference of references){
-            reference.remove();
         }
 
         return doc.body.innerHTML;

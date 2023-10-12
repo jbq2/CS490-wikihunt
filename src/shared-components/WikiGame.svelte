@@ -1,10 +1,12 @@
 <script lang="ts">
     import { mediaWikiService } from "../services/MediaWikiService";  
-
-    let pageContent:string = "";
-    let wikiPage:string = ""; 
-    let count = 0;
     import Timer from "./Timer.svelte";
+    
+    let pageContent: string = "";
+    let wikiPage: string = ""; 
+    let count: number = 0;
+
+    let timerComponent: Timer;
 
     function clickLink (event: any) {
         event.preventDefault(); // prevents default (navigate to a new page)
@@ -12,13 +14,17 @@
             const linkElm = event.target.closest('a');
             if (linkElm) {
                getPage(linkElm);
-               count+=1;
+               count += 1;
             }   
         } else {
             if (event.target.tagName === 'A') { // check to see if it is a link with the <a> tag
                 getPage(event.target);
-                count+=1
+                count += 1;
             }
+        }
+
+        if(wikiPage == 'Cooking apple') { // just as an example
+            timerComponent.stop();
         }
     }
 
@@ -157,7 +163,7 @@
     <button on:click={fetchWikiPage}>Load Page</button>
     <button on:click={startGame}>Start Game</button>
     <p> Wikipedia Articles Clicked: {count}</p> <!-- counter is at the bottom, not formated the best-->
-    <Timer />
+    <Timer bind:this={ timerComponent } />
     
     <div id="wiki-page-container">
         {@html pageContent} <!-- loads content -->

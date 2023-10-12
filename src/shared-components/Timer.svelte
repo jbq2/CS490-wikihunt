@@ -1,6 +1,6 @@
-<script>
-    let minutes = 0;
-    let seconds = 0;
+<script lang="ts">
+    let minutes: number = 0;
+    let seconds: number = 0;
 
     function startTimer() {
         // Update the timer every second

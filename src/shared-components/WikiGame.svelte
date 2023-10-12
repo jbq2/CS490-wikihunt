@@ -28,7 +28,14 @@
         mediaWikiService.getPagePromise(wikiPage)
             .then((data) => { // get data
                 if (data && data.parse && data.parse.text) { // gets all data, parsed data, and parsed text
-                    pageContent = cleanPage(data.parse.text["*"]);
+                    let tempData = cleanPage(data.parse.text["*"]);
+                    if (redirectPage(tempData)){  
+                        fetchWikiPage();
+                    }
+                    else{
+                        pageContent = tempData;
+                    }
+
                 }
             })
             .catch((error) => { // errors
@@ -69,6 +76,18 @@
         }
 
         return doc.body.innerHTML;
+    }
+
+    function redirectPage(pageContent: string): boolean {
+        let parser = new DOMParser();
+        let doc = parser.parseFromString(pageContent, 'text/html');
+
+        let check = doc.querySelector('div[class="redirectMsg"]');
+        if (check){
+            wikiPage = String(doc.querySelector('a')?.getAttribute('title'));
+        }
+
+        return check ? true : false;
     }
 </script>
 

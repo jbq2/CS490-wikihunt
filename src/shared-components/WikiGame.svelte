@@ -29,7 +29,7 @@
             .then((data) => { // get data
                 if (data && data.parse && data.parse.text) { // gets all data, parsed data, and parsed text
                     let tempData = cleanPage(data.parse.text["*"]);
-                    if (redirectPage(tempData)){  
+                    if (isRedirectPage(tempData)){  
                         fetchWikiPage();
                     }
                     else{
@@ -78,11 +78,11 @@
         return doc.body.innerHTML;
     }
 
-    function redirectPage(pageContent: string): boolean {
-        let parser = new DOMParser();
-        let doc = parser.parseFromString(pageContent, 'text/html');
+    function isRedirectPage(pageContent: string): boolean {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(pageContent, 'text/html');
 
-        let check = doc.querySelector('div[class="redirectMsg"]');
+        const check = doc.querySelector('div[class="redirectMsg"]');
         if (check){
             wikiPage = String(doc.querySelector('a')?.getAttribute('title'));
         }

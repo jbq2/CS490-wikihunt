@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts">
     import { mediaWikiService } from "../services/MediaWikiService";  
 
     let pageContent:string = "";

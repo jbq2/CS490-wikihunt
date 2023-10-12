@@ -60,6 +60,26 @@
             headerBox.remove();
         }
 
+        let citations = doc.querySelectorAll("sup[id^='cite_ref'], sup[class='noprint Inline-Template Template-Fact']");
+        for (let citation of citations){
+            citation.remove();
+        }
+
+        let otherCitations = doc.querySelectorAll("sup");
+        for (let otherCitation of otherCitations){
+            if (otherCitation.textContent?.trim() === "[citation needed]")
+                otherCitation.remove();
+        }
+
+        let deleteHeaders = doc.querySelectorAll("span[id='References'], span[id='Notes'], span[id='Citations'], span[id='Bibliography'], span[id='Further_reading']");
+        let references = doc.querySelectorAll("div[class^='reflist'], div[class='refbegin']");
+        for (let header of deleteHeaders){
+            header.remove();
+        }
+        for (let reference of references){
+            reference.remove();
+        }
+
         return doc.body.innerHTML;
     }
 </script>

@@ -60,6 +60,7 @@
         eraseElements(doc.querySelectorAll("sup[id^='cite_ref'], sup[class='noprint Inline-Template Template-Fact']"));
         eraseElements(doc.querySelectorAll("span[id='References'], span[id='Notes'], span[id='Citations'], span[id='Bibliography'], span[id='Further_reading']"))
         eraseElements(doc.querySelectorAll("div[class^='reflist'], div[class='refbegin']"));
+        eraseElements(doc.querySelectorAll("sup[class^='noprint']"))
 
         const otherCitations: NodeListOf<Element> = doc.querySelectorAll("sup");
         for (let otherCitation of otherCitations){

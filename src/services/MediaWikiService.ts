@@ -18,7 +18,6 @@ class MediaWikiService {
                 return response.json();
             })
             .then((response) => {
-                var words = response.query.random; //access the random part
                 const startAndEnd = <[]>response.query.random.map((page: any) => page['title']) // makes an array that contains the titles from each given page (in this case there are 2 pages returned)
                 return startAndEnd;
             })

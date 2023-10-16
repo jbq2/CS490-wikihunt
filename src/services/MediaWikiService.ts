@@ -11,18 +11,19 @@ class MediaWikiService {
     }
 
     getStartEndWords(): Promise<string[]> {
+        // This response grabs 2 random wikipedia pages and this function will access the titles of these pages
         const getWordsUrl = `https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&rnnamespace=0&list=random&formatversion=2&rnlimit=2`;
         return fetch(getWordsUrl)
-            .then((response) => {
+            .then((response) => { // get response
                 return response.json();
             })
             .then((response) => {
-                var words = response.query.random; 
-                const startAndEnd: string[] = [];
-                for (var word in words) {
-                    startAndEnd.push(words[word].title);
+                var words = response.query.random; //access the random part
+                const startAndEnd: string[] = []; // array for start and end words
+                for (var word in words) { // access each page from response
+                    startAndEnd.push(words[word].title); // append titles from each page to array 
                 }
-                console.log("Start and End words: ", startAndEnd);
+                // console.log("Start and End words: ", startAndEnd);
                 return startAndEnd;
             })
             .catch((error) => {

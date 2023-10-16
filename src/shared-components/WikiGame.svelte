@@ -91,10 +91,10 @@
     }
 
     function startGame(): void {
-        mediaWikiService.getStartEndWords()
-            .then((startAndEnd) => {
+        mediaWikiService.getStartEndWords() 
+            .then((startAndEnd) => { // gets array from service
                 console.log("Start and End Words: ", startAndEnd);
-                wikiPage = startAndEnd[0];
+                wikiPage = startAndEnd[0]; // sets the start word
                 fetchWikiPage();
             })
             .catch((error) => {

@@ -89,6 +89,10 @@
 
         return check ? true : false;
     }
+
+    function startGame(): void {
+        mediaWikiService.getStartEndWords();
+    }
 </script>
 
 <style>
@@ -143,7 +147,7 @@
 <main on:click={clickLink}>
     <input type="text" bind:value={wikiPage} placeholder="Enter Wikipedia page title" />
     <button on:click={fetchWikiPage}>Load Page</button>
-
+    <button on:click={startGame}>Start Game</button>
     <p> Wikipedia Articles Clicked: {count}</p> <!-- counter is at the bottom, not formated the best-->
     <Timer />
     

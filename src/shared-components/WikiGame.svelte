@@ -91,7 +91,15 @@
     }
 
     function startGame(): void {
-        mediaWikiService.getStartEndWords();
+        mediaWikiService.getStartEndWords()
+            .then((startAndEnd) => {
+                console.log("Start and End Words: ", startAndEnd);
+                wikiPage = startAndEnd[0];
+                fetchWikiPage();
+            })
+            .catch((error) => {
+                console.error("Error fetching Wikipedia pages:", error);
+            });
     }
 </script>
 

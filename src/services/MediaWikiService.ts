@@ -26,7 +26,7 @@ class MediaWikiService {
                 return startAndEnd;
             })
             .catch((error) => {
-                console.error("error fetching Wikipedia pages:", error);
+                console.error("Error fetching Wikipedia pages:", error);
                 throw error;
             });
             

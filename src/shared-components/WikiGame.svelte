@@ -89,6 +89,18 @@
 
         return check ? true : false;
     }
+
+    function startGame(): void {
+        mediaWikiService.getStartEndWords() 
+            .then((startAndEnd) => { // gets array from service
+                console.log("Start and End Words: ", startAndEnd);
+                wikiPage = startAndEnd[0]; // sets the start word
+                fetchWikiPage();
+            })
+            .catch((error) => {
+                console.error("Error fetching Wikipedia pages:", error);
+            });
+    }
 </script>
 
 <style>
@@ -143,7 +155,7 @@
 <main on:click={clickLink}>
     <input type="text" bind:value={wikiPage} placeholder="Enter Wikipedia page title" />
     <button on:click={fetchWikiPage}>Load Page</button>
-
+    <button on:click={startGame}>Start Game</button>
     <p> Wikipedia Articles Clicked: {count}</p> <!-- counter is at the bottom, not formated the best-->
     <Timer />
     

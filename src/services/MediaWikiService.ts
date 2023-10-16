@@ -19,11 +19,7 @@ class MediaWikiService {
             })
             .then((response) => {
                 var words = response.query.random; //access the random part
-                const startAndEnd: string[] = []; // array for start and end words
-                for (var word in words) { // access each page from response
-                    startAndEnd.push(words[word].title); // append titles from each page to array 
-                }
-                // console.log("Start and End words: ", startAndEnd);
+                const startAndEnd = <[]>response.query.random.map((page: any) => page['title']) // makes an array that contains the titles from each given page (in this case there are 2 pages returned)
                 return startAndEnd;
             })
             .catch((error) => {

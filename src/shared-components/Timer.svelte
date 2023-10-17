@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     let minutes = 0;
     let seconds = 0;
     let isWin = false;

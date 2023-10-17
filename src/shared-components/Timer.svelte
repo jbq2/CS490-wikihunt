@@ -1,11 +1,9 @@
 <script>
-    import { onMount } from "svelte";
-
     let minutes = 0;
     let seconds = 0;
     let isWin = false;
 
-    function startTimer() {
+    export function startTimer() {
         // Update the timer every second
         const interval = setInterval(() => {
             if (seconds === 59) {
@@ -29,10 +27,6 @@
     export function stop() {
         isWin = true;
     }
-
-    onMount(() => {
-        startTimer();
-    });
 </script>
 
 <main>

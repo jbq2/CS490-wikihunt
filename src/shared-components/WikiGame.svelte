@@ -3,7 +3,8 @@
     import Timer from "./Timer.svelte";
     
     let pageContent: string = "";
-    let wikiPage: string = ""; 
+    let currPage: string = ""; 
+    let endPage: string | undefined = undefined; // has to be different than wikiPage initially
     let count: number = 0;
 
     let timerComponent: Timer;
@@ -23,7 +24,7 @@
             }
         }
 
-        if(wikiPage == 'Cooking apple') { // just as an example
+        if(currPage === endPage) { // just as an example
             timerComponent.stop();
         }
     }
@@ -31,7 +32,7 @@
     function fetchWikiPage() {
         // Figured out URL from here: https://www.mediawiki.org/w/api.php?action=parse&format=json&origin=*&page=Project%3ASandbox&formatversion=2
         // on https://www.mediawiki.org/wiki/API:Parsing_wikitext and API sandbox
-        mediaWikiService.getPagePromise(wikiPage)
+        mediaWikiService.getPagePromise(currPage)
             .then((data) => { // get data
                 if (data && data.parse && data.parse.text) { // gets all data, parsed data, and parsed text
                     let tempData = cleanPage(data.parse.text["*"]);
@@ -54,7 +55,7 @@
     }
 
     function getPage(page: HTMLAnchorElement) {
-        wikiPage = page.getAttribute('title')!
+        currPage = page.getAttribute('title')!
         fetchWikiPage(); // show new page
     }
 
@@ -90,7 +91,7 @@
 
         const check = doc.querySelector('div[class="redirectMsg"]');
         if (check){
-            wikiPage = String(doc.querySelector('a')?.getAttribute('title'));
+            currPage = String(doc.querySelector('a')?.getAttribute('title'));
         }
 
         return !!check;
@@ -99,8 +100,10 @@
     function startGame(): void {
         mediaWikiService.getStartEndWords() 
             .then((startAndEnd) => { // gets array from service
-                console.log("Start and End Words: ", startAndEnd);
-                wikiPage = startAndEnd[0]; // sets the start word
+                currPage = startAndEnd[0]; // sets the start word
+                endPage = startAndEnd[1];
+                console.log(`START:"${currPage}", END: "${endPage}"`);
+                timerComponent.startTimer();
                 fetchWikiPage();
             })
             .catch((error) => {
@@ -159,7 +162,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <main on:click={clickLink}>
-    <input type="text" bind:value={wikiPage} placeholder="Enter Wikipedia page title" />
+    <input type="text" bind:value={currPage} placeholder="Enter Wikipedia page title" />
     <button on:click={fetchWikiPage}>Load Page</button>
     <button on:click={startGame}>Start Game</button>
     <p> Wikipedia Articles Clicked: {count}</p> <!-- counter is at the bottom, not formated the best-->

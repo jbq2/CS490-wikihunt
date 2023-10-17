@@ -19,7 +19,9 @@
         //   clearInterval(interval);
         // }, 300000);
 
-        function stopTimer() {}
+        function stopTimer() {
+            
+        }
     }
 
     startTimer();

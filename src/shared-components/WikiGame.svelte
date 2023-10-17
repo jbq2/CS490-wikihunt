@@ -87,7 +87,7 @@
             wikiPage = String(doc.querySelector('a')?.getAttribute('title'));
         }
 
-        return check ? true : false;
+        return !!check;
     }
 
     function startGame(): void {

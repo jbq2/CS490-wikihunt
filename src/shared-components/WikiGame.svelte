@@ -23,6 +23,7 @@
         }
     }
 
+ 
     function fetchWikiPage() {
         // Figured out URL from here: https://www.mediawiki.org/w/api.php?action=parse&format=json&origin=*&page=Project%3ASandbox&formatversion=2
         // on https://www.mediawiki.org/wiki/API:Parsing_wikitext and API sandbox
@@ -116,9 +117,11 @@
 <main on:click={clickLink}>
     <input type="text" bind:value={wikiPage} placeholder="Enter Wikipedia page title" />
     <button on:click={fetchWikiPage}>Load Page</button>
-
+    
     <p> Wikipedia Articles Clicked: {count}</p> <!-- counter is at the bottom, not formated the best-->
     <Timer />
+    <h1> Title: {wikiPage} </h1>
+    
     
     <div id="wiki-page-container">
         {@html pageContent} <!-- loads content -->

@@ -99,17 +99,24 @@
     }
 
     function startGame(): void {
-        mediaWikiService.getStartEndWords() 
-            .then((startAndEnd) => { // gets array from service
-                currPage = startAndEnd[0]; // sets the start word
-                endPage = startAndEnd[1];
-                console.log(`START:"${currPage}", END: "${endPage}"`);
-                timerComponent.startTimer();
-                fetchWikiPage();
-            })
-            .catch((error) => {
-                console.error("Error fetching Wikipedia pages:", error);
-            });
+        let offset = 0;
+        const words: string[] = [];
+        for (let i = 0; i < 20; i++) {
+            mediaWikiService.getNextSetOfWords(offset)
+                .then((startAndEnd) => { // gets array from service
+                    console.log("offset: ", offset, " list: ", words);
+                    words.push(...startAndEnd);
+                    offset = offset + 10;
+                })
+                .catch((error) => {
+                    console.error("Error fetching Wikipedia pages:", error);
+                });
+        }
+        currPage = words[0]; // sets the start word
+        endPage = words[1];
+        console.log(`START:"${currPage}", END: "${endPage}", LIST: "${words}"`);
+        timerComponent.startTimer();
+        fetchWikiPage();
     }
 </script>
 

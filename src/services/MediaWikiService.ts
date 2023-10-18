@@ -27,6 +27,24 @@ class MediaWikiService {
             });
             
     }
+
+    getNextSetOfWords(offset: number): Promise<any> {
+        const getNextWordsURL = `https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&list=mostviewed&formatversion=2&pvimoffset=${offset}`
+        return fetch(getNextWordsURL)
+        .then((response) => { // get response
+            return response.json();
+        })
+        .then((response) => {
+            const startAndEnd = <[]>response.query.mostviewed.map((page: any) => page['title']) // makes an array that contains the titles from each given page (in this case there are 2 pages returned)
+            return startAndEnd;
+        })
+        .catch((error) => {
+            console.error("Error fetching Wikipedia pages:", error);
+            throw error;
+        });
+    }
+
+
 }
 
 export const mediaWikiService = new MediaWikiService();

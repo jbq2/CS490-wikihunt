@@ -1,4 +1,5 @@
 <script lang="ts">
+    import Page from "../routes/+page.svelte";
     import { mediaWikiService } from "../services/MediaWikiService";  
     import Timer from "./Timer.svelte";
     
@@ -98,23 +99,33 @@
         return !!check;
     }
 
-    function startGame(): void {
-        let offset = 0;
-        const words: string[] = [];
-        for (let i = 0; i < 20; i++) {
-            mediaWikiService.getNextSetOfWords(offset)
-                .then((startAndEnd) => { // gets array from service
-                    console.log("offset: ", offset, " list: ", words);
-                    words.push(...startAndEnd);
-                    offset = offset + 10;
-                })
-                .catch((error) => {
-                    console.error("Error fetching Wikipedia pages:", error);
-                });
+    async function getWords(): Promise<void> {
+        let max = 500; // Change this number to set how many top Wikipedia pages to get
+        let min = 1; // To avoid the "Main Page" 
+        let words: string[] = [];
+        for (let i = 0; i<(max/10); i++) {
+            try {
+                const wordsFromOffset = await mediaWikiService.getNextSetOfWords(i*10); // Gets 10 pages at a time
+                words.push(...wordsFromOffset); // Add the words to our bigger list
+            } catch (error) {
+                console.error("Error fetching list of pages:", error);
+            }
         }
-        currPage = words[0]; // sets the start word
-        endPage = words[1];
-        console.log(`START:"${currPage}", END: "${endPage}", LIST: "${words}"`);
+        startGame(words, max, min); 
+    }
+
+    function startGame(words: string[], max: number, min: number): void {
+        let startIdx = Math.floor(Math.random() * (max - min + 1) + min); // Get random start
+        let endIdx = Math.floor(Math.random() * (max - min + 1) + min); // Get random End
+        while (startIdx == endIdx) { // Make sure they are not the same
+            startIdx = Math.floor(Math.random() * (max - min + 1) + min);
+            endIdx = Math.floor(Math.random() * (max - min + 1) + min);
+        }
+
+        // Start the game
+        currPage = words[startIdx]; 
+        endPage = words[endIdx];
+        console.log(`START:"${currPage}", END: "${endPage}"`);
         timerComponent.startTimer();
         fetchWikiPage();
     }
@@ -172,7 +183,7 @@
 <main on:click={clickLink}>
     <input type="text" bind:value={currPage} placeholder="Enter Wikipedia page title" />
     <button on:click={fetchWikiPage}>Load Page</button>
-    <button on:click={startGame}>Start Game</button>
+    <button on:click={getWords}>Start Game</button>
     <p> Wikipedia Articles Clicked: {count}</p> <!-- counter is at the bottom, not formated the best-->
     <Timer bind:this={ timerComponent } />
     <h1> Title: {currPage} </h1>

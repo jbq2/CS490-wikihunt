@@ -4,7 +4,7 @@
     let timer: number;
 
     export function startTimer() {
-        clearInterval(timer);
+        stop();
         minutes = 0;
         seconds = 0;
 

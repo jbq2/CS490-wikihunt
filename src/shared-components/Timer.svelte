@@ -1,31 +1,26 @@
 <script lang="ts">
     let minutes = 0;
     let seconds = 0;
-    let isWin = false;
+    let timer: number;
 
     export function startTimer() {
-        // Update the timer every second
-        const interval = setInterval(() => {
+        stop();
+        minutes = 0;
+        seconds = 0;
+
+        timer = setInterval(() => {
             if (seconds === 59) {
                 minutes++;
                 seconds = 0;
-            } else {
+            } 
+            else {
                 seconds++;
             }
-
-            if(isWin) {
-                clearInterval(interval);
-            }
         }, 1000);
-        // Stop the timer after a certain duration (if needed)
-        // For example, to stop the timer after 5 minutes, you can use:
-        // setTimeout(() => {
-        //   clearInterval(interval);
-        // }, 300000);
     }
 
     export function stop() {
-        isWin = true;
+        clearInterval(timer);
     }
 </script>
 

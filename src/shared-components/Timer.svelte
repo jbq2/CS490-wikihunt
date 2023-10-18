@@ -2,6 +2,7 @@
     let minutes = 0;
     let seconds = 0;
     let timer: number;
+    let isRestart = false;
 
     export function startTimer() {
         stop();
@@ -16,11 +17,21 @@
             else {
                 seconds++;
             }
+
+
+            if(isRestart){
+                isRestart = false;
+                minutes = 0;
+                seconds = 0;
+            }
         }, 1000);
     }
 
     export function stop() {
         clearInterval(timer);
+    }
+    export function restart() {
+        isRestart = true;
     }
 </script>
 

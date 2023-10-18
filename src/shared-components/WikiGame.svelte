@@ -168,7 +168,7 @@
     <button on:click={startGame}>Start Game</button>
     <p> Wikipedia Articles Clicked: {count}</p> <!-- counter is at the bottom, not formated the best-->
     <Timer bind:this={ timerComponent } />
-    <h1> Title: {wikiPage} </h1>
+    <h1> Title: {currPage} </h1>
     
     <div id="wiki-page-container">
         {@html pageContent} <!-- loads content -->

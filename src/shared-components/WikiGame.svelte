@@ -29,6 +29,7 @@
         }
     }
 
+ 
     function fetchWikiPage() {
         // Figured out URL from here: https://www.mediawiki.org/w/api.php?action=parse&format=json&origin=*&page=Project%3ASandbox&formatversion=2
         // on https://www.mediawiki.org/wiki/API:Parsing_wikitext and API sandbox
@@ -167,6 +168,7 @@
     <button on:click={startGame}>Start Game</button>
     <p> Wikipedia Articles Clicked: {count}</p> <!-- counter is at the bottom, not formated the best-->
     <Timer bind:this={ timerComponent } />
+    <h1> Title: {currPage} </h1>
     
     <div id="wiki-page-container">
         {@html pageContent} <!-- loads content -->

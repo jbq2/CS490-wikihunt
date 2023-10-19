@@ -7,6 +7,7 @@
     let currPage: string = ""; 
     let endPage: string | undefined = undefined; // has to be different than wikiPage initially
     let count: number = 0;
+    let firstPage:string = "";
 
     let timerComponent: Timer;
 
@@ -28,6 +29,7 @@
         if(currPage === endPage) { // just as an example
             timerComponent.stop();
         }
+
     }
 
  
@@ -183,7 +185,15 @@
 <main on:click={clickLink}>
     <input type="text" bind:value={currPage} placeholder="Enter Wikipedia page title" />
     <button on:click={fetchWikiPage}>Load Page</button>
+
     <button on:click={getWords}>Start Game</button>
+    <button on:click={() => {
+        currPage = firstPage;
+        timerComponent.restart();
+        count = 0;
+        fetchWikiPage();
+        timerComponent.startTimer();
+    }}>Restart</button>
     <p> Wikipedia Articles Clicked: {count}</p> <!-- counter is at the bottom, not formated the best-->
     <Timer bind:this={ timerComponent } />
     <h1> Title: {currPage} </h1>

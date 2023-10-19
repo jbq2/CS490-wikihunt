@@ -7,6 +7,7 @@
     let endPage: string | undefined = undefined; // has to be different than wikiPage initially
     let count: number = 0;
     let firstPage:string = "";
+    let startCheck:boolean = false;
 
     let timerComponent: Timer;
 
@@ -159,27 +160,34 @@
     #wiki-page-container :global(figcaption) {
         width:20rem
     }
+
 </style>
 
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <main on:click={clickLink}>
-    <input type="text" bind:value={currPage} placeholder="Enter Wikipedia page title" />
-    <button on:click={fetchWikiPage}>Load Page</button>
-    <button on:click={startGame}>Start Game</button>
-    <button on:click={() => {
-        currPage = firstPage;
-        timerComponent.restart();
-        count = 0;
-        fetchWikiPage();
-        timerComponent.startTimer();
-    }}>Restart</button>
-    <p> Wikipedia Articles Clicked: {count}</p> <!-- counter is at the bottom, not formated the best-->
-    <Timer bind:this={ timerComponent } />
-    <h1> Title: {currPage} </h1>
-    
-    <div id="wiki-page-container">
-        {@html pageContent} <!-- loads content -->
-    </div>
+    {#if !startCheck}
+        <button id="start-button" on:click={() =>{ 
+        startCheck = true;
+        startGame();
+        }}>Start Game</button>
+    {:else}     
+        <input type="text" bind:value={currPage} placeholder="Enter Wikipedia page title" />
+        <button id="load-page" on:click={fetchWikiPage}>Load Page</button>
+        <button id="restart" on:click={() => {
+            currPage = firstPage;
+            timerComponent.restart();
+            count = 0;
+            fetchWikiPage();
+            timerComponent.startTimer();
+        }}>Restart</button>
+        <p id="click-counter"> Wikipedia Articles Clicked: {count}</p> <!-- counter is at the bottom, not formated the best-->
+        <p id="timer"><Timer bind:this={ timerComponent } /></p>
+        
+        <div id="wiki-page-container">
+            <h1> Title: {currPage} </h1>
+            {@html pageContent} <!-- loads content -->
+        </div>
+    {/if}
 </main>

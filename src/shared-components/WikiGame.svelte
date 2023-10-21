@@ -132,15 +132,20 @@
     
     #win-message {
         font-size: 70px;
-        margin-top: 10rem;
+        margin-top: 6rem;
     }
 
     #win-caption {
         font-size: 35px;
-        margin-top: 16rem;
+        margin-top: 12rem;
     }
 
-    #win-message, #win-caption {
+    #win-time {
+        font-size: 35px;
+        margin-top: 15rem;
+    }
+
+    #win-message, #win-caption, #win-time {
         text-align: center;
         width: 100%;
         position: fixed;
@@ -196,6 +201,7 @@
     {#if isWin}
         <h1 id="win-message">You Win!</h1>
         <h2 id="win-caption">You found "{ endPage }"</h2>
+        <h2 id="win-time">in { timerComponent.getTime() }</h2>
     {/if}
     <input type="text" bind:value={ currPage } placeholder="Enter Wikipedia page title" />
     <button on:click={ fetchWikiPage }>Load Page</button>
@@ -203,7 +209,7 @@
     <button on:click={ restartGame }>Restart Game</button>
     <div 
         id="main-container"
-        style="filter:blur({isWin ? '5px' : '0px'})"
+        style="filter: blur({isWin ? '5px' : '0px'})"
     >
         <p> Wikipedia Articles Clicked: { count }</p> <!-- counter is at the bottom, not formated the best-->
         <Timer bind:this={ timerComponent } />

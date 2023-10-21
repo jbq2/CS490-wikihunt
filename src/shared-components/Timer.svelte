@@ -4,7 +4,7 @@
     let timer: number;
     let isRestart = false;
 
-    export function startTimer() {
+    export function startTimer(): void {
         stop();
         minutes = 0;
         seconds = 0;
@@ -27,11 +27,15 @@
         }, 1000);
     }
 
-    export function stop() {
+    export function stop(): void {
         clearInterval(timer);
     }
-    export function restart() {
+    export function restart(): void {
         isRestart = true;
+    }
+
+    export function getTime(): string {
+        return `${minutes} minutes and ${seconds} seconds!`
     }
 </script>
 

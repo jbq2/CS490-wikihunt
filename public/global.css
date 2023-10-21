@@ -63,3 +63,12 @@ button:not(:disabled):active {
 button:focus {
 	border-color: #666;
 }
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline; /* Display list items horizontally */
+    margin-right: 20px; /* Add some spacing between list items */
+}

@@ -259,7 +259,7 @@
     {/if}
     <input type="text" bind:value={ currPage } placeholder="Enter Wikipedia page title" />
     <button on:click={ fetchWikiPage }>Load Page</button>
-    <button on:click={ getSetWords }>Start Game</button>
+    <button on:click={ getTopWords }>Start Game</button>
     <button on:click={ restartGame }>Restart Game</button>
     <div 
         id="main-container"

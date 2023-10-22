@@ -195,14 +195,12 @@
 
     #overlay-container {
     position: fixed;
-    bottom: 0px; /* Adjust the top position as needed */
-    right: 10px; /* Adjust the left position as needed */
     top: 10px; /* Adjust the top position as needed */
     right:0px; /* Adjust the left position as needed */
     height:100%;
-    width:150px;
+    width:125px;
     background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent background */
-    padding: 1px;
+  
     padding: 5px;
     border-radius: 5px;
 }
@@ -221,10 +219,6 @@
     <button on:click={ fetchWikiPage }>Load Page</button>
     <button on:click={ startGame }>Start Game</button>
     <button on:click={ restartGame }>Restart Game</button>
-    <div 
-        id="main-container"
-        style="filter: blur({isWin ? '5px' : '0px'})"
-    >
     <div id= "overlay-container">
         <p id="click-counter"><b>  Wikipedia Articles Clicked: {count} </b></p> <!-- counter is at the bottom, not formated the best-->
         <p id="timer"><Timer bind:this={ timerComponent } /></p>
@@ -236,6 +230,13 @@
 
 
     </div>
+    
+    
+    <div 
+        id="main-container"
+        style="filter: blur({isWin ? '5px' : '0px'})"
+    >
+    
         <div id="wiki-page-container">
             {#if currPage}
                 <h1>{ currPage }</h1>

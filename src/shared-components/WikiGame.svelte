@@ -106,27 +106,35 @@
         return !!check;
     }
 
+    function getIdx(length: number) { // Gets two random indexes
+        let max = length;
+        let startIdx = Math.floor(Math.random() * max);
+        let endIdx = Math.floor(Math.random() * max);
+        while (startIdx == endIdx) { // Make sure they are not the same
+            startIdx = Math.floor(Math.random() * length);
+            endIdx = Math.floor(Math.random() * length);
+        }
+        return [startIdx, endIdx];
+    }
+
     async function getTopWords(): Promise<void> { // Gets the array of the mostviewed pages up to max 
         let max = 100; // Change this number to set how many top Wikipedia pages to get
-        let min = 1; // To avoid the "Main Page"
-        let startIdx = Math.floor(Math.random() * (max - min + 1) + min); // Get random start
-        let endIdx = Math.floor(Math.random() * (max - min + 1) + min); // Get random End
-        while (startIdx == endIdx) { // Make sure they are not the same
-            startIdx = Math.floor(Math.random() * (max - min + 1) + min);
-            endIdx = Math.floor(Math.random() * (max - min + 1) + min);
-        } 
+        let idxs = getIdx(max+1);
+        let startIdx = idxs[0] + 1;
+        let endIdx = idxs[1] + 1;
         let words: string[] = [];
         try {
             let wordsFromOffset = await mediaWikiService.getNextSetOfWords(startIdx); 
-            words.push(...wordsFromOffset); // Add the words to our bigger list
+            words.push(...wordsFromOffset); 
             wordsFromOffset = await mediaWikiService.getNextSetOfWords(endIdx); 
-            words.push(...wordsFromOffset); // Add the words to our bigger list
+            words.push(...wordsFromOffset); 
+
             currPage = firstPage = words[0]; 
             endPage = words[1];
             if (currPage === undefined || endPage === undefined) { // If words were unable to be obtained
                 getRandomWords();
             } else {
-                console.log(`START:"${currPage}, startIdx: "${startIdx}", END: "${endPage}"`);
+                console.log(`START:"${currPage}" IDX: "${startIdx}", END: "${endPage}", IDX: "${endIdx}"`);
                 timerComponent.startTimer();
                 fetchWikiPage();
             }
@@ -150,16 +158,12 @@
 
     async function getSetWords(): Promise<void> {
         let wordList = setWords.rtnSetWords(); // This gets the array of the set words we have created
-        let length = wordList.length;
-        let startIdx = Math.floor(Math.random() * length);
-        let endIdx = Math.floor(Math.random() * length);
-        while (startIdx == endIdx) { // Make sure they are not the same
-            startIdx = Math.floor(Math.random() * length);
-            endIdx = Math.floor(Math.random() * length);
-        }
+        let idxs = getIdx(wordList.length);
+        let startIdx = idxs[0];
+        let endIdx = idxs[1]
         currPage = firstPage = wordList[startIdx]; 
         endPage = wordList[endIdx];
-        console.log(`START:"${currPage}", END: "${endPage}"`);
+        console.log(`START:"${currPage}" IDX: "${startIdx}", END: "${endPage}", IDX: "${endIdx}"`);
         await tick(); // Allows timer to load
         timerComponent.startTimer();
         fetchWikiPage();
@@ -167,8 +171,9 @@
 
     function start(): void {
         startCheck = true;
-        getTopWords()
-        // getSetWords(); // Get words from the set list
+        // getTopWords(); // Gets two random wikipedia pages that are in most viewed
+        // getRandomWords(); // Gets two fully random wikipedia pages
+        getSetWords(); // Get words from the set list
     }
 
     function restartGame(): void {

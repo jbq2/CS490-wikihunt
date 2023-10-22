@@ -10,7 +10,7 @@ class MediaWikiService {
             });
     }
 
-    getStartEndWords(): Promise<string[]> {
+    getRandomWords(): Promise<string[]> {
         // This response grabs 2 random wikipedia pages and this function will access the titles of these pages
         const getWordsUrl = `https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&rnnamespace=0&list=random&formatversion=2&rnlimit=2`;
         return fetch(getWordsUrl)
@@ -26,6 +26,22 @@ class MediaWikiService {
                 throw error;
             });
             
+    }
+    
+    getNextSetOfWords(offset: number): Promise<any> {
+        const getNextWordsURL = `https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&list=mostviewed&continue=-%7C%7C&formatversion=2&pvimoffset=${offset}`
+        return fetch(getNextWordsURL)
+        .then((response) => { // get response
+            return response.json();
+        })
+        .then((response) => {
+            const subWords = <[]>response.query.mostviewed.map((page: any) => page['title']) // makes an array that contains the titles of each page returned
+            return subWords;
+        })
+        .catch((error) => {
+            console.error("Error fetching Wikipedia pages:", error);
+            throw error;
+        });
     }
 }
 

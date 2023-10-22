@@ -176,6 +176,11 @@
         getTopWords()
     }
 
+    function start(): void {
+        startCheck = true;
+        startGame()
+    }
+
     function restartGame(): void {
         isWin = false;
         currPage = firstPage;

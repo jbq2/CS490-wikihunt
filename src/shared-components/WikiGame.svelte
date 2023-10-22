@@ -7,6 +7,7 @@
     let endPage: string | undefined = undefined; // has to be different than wikiPage initially
     let count: number = 0;
     let firstPage:string = "";
+    let isWin = false;
 
     let timerComponent: Timer;
 
@@ -27,8 +28,8 @@
 
         if(currPage === endPage) { // just as an example
             timerComponent.stop();
+            isWin = true;
         }
-
     }
 
  
@@ -108,16 +109,48 @@
                 console.log(`START:"${currPage}", END: "${endPage}"`);
                 timerComponent.startTimer();
                 fetchWikiPage();
+                isWin = false;
             })
             .catch((error) => {
                 console.error("Error fetching Wikipedia pages:", error);
             });
+    }
+
+    function restartGame(): void {
+        isWin = false;
+        currPage = firstPage;
+        timerComponent.restart();
+        count = 0;
+        fetchWikiPage();
+        timerComponent.startTimer();
     }
 </script>
 
 <style>
 
     @import '/public/wiki-common.css';
+    
+    #win-message {
+        font-size: 70px;
+        margin-top: 6rem;
+    }
+
+    #win-caption {
+        font-size: 35px;
+        margin-top: 12rem;
+    }
+
+    #win-time {
+        font-size: 35px;
+        margin-top: 15rem;
+    }
+
+    #win-message, #win-caption, #win-time {
+        text-align: center;
+        width: 100%;
+        position: fixed;
+        z-index: 100; /* chose some random large number to put this message above every other element*/
+    }
 
     #wiki-page-container {
         align-items: center;
@@ -165,21 +198,27 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <main on:click={clickLink}>
-    <input type="text" bind:value={currPage} placeholder="Enter Wikipedia page title" />
-    <button on:click={fetchWikiPage}>Load Page</button>
-    <button on:click={startGame}>Start Game</button>
-    <button on:click={() => {
-        currPage = firstPage;
-        timerComponent.restart();
-        count = 0;
-        fetchWikiPage();
-        timerComponent.startTimer();
-    }}>Restart</button>
-    <p> Wikipedia Articles Clicked: {count}</p> <!-- counter is at the bottom, not formated the best-->
-    <Timer bind:this={ timerComponent } />
-    <h1> Title: {currPage} </h1>
-    
-    <div id="wiki-page-container">
-        {@html pageContent} <!-- loads content -->
+    {#if isWin}
+        <h1 id="win-message">You Win!</h1>
+        <h2 id="win-caption">You found "{ endPage }"</h2>
+        <h2 id="win-time">in { timerComponent.getTime() }</h2>
+    {/if}
+    <input type="text" bind:value={ currPage } placeholder="Enter Wikipedia page title" />
+    <button on:click={ fetchWikiPage }>Load Page</button>
+    <button on:click={ startGame }>Start Game</button>
+    <button on:click={ restartGame }>Restart Game</button>
+    <div 
+        id="main-container"
+        style="filter: blur({isWin ? '5px' : '0px'})"
+    >
+        <p> Wikipedia Articles Clicked: { count }</p> <!-- counter is at the bottom, not formated the best-->
+        <Timer bind:this={ timerComponent } />
+        
+        <div id="wiki-page-container">
+            {#if currPage}
+                <h1>{ currPage }</h1>
+            {/if}
+            {@html pageContent} <!-- loads content -->
+        </div>
     </div>
 </main>

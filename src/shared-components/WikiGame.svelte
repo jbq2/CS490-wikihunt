@@ -108,19 +108,33 @@
 
     async function getTopWords(): Promise<void> { // Gets the array of the mostviewed pages up to max 
         let max = 100; // Change this number to set how many top Wikipedia pages to get
-        let min = 1; // To avoid the "Main Page" 
+        let min = 1; // To avoid the "Main Page"
+        let startIdx = Math.floor(Math.random() * (max - min + 1) + min); // Get random start
+        let endIdx = Math.floor(Math.random() * (max - min + 1) + min); // Get random End
+        while (startIdx == endIdx) { // Make sure they are not the same
+            startIdx = Math.floor(Math.random() * (max - min + 1) + min);
+            endIdx = Math.floor(Math.random() * (max - min + 1) + min);
+        } 
         let words: string[] = [];
-        for (let i = 0; i<(max/10); i++) {
-            try {
-                const wordsFromOffset = await mediaWikiService.getNextSetOfWords(i*10); // Gets 10 pages at a time
-                words.push(...wordsFromOffset); // Add the words to our bigger list
-            } catch (error) {
-                console.error("Error fetching list of pages:", error);
+        try {
+            let wordsFromOffset = await mediaWikiService.getNextSetOfWords(startIdx); 
+            words.push(...wordsFromOffset); // Add the words to our bigger list
+            wordsFromOffset = await mediaWikiService.getNextSetOfWords(endIdx); 
+            words.push(...wordsFromOffset); // Add the words to our bigger list
+            currPage = firstPage = words[0]; 
+            endPage = words[1];
+            if (currPage === undefined || endPage === undefined) { // If words were unable to be obtained
+                getRandomWords();
+            } else {
+                console.log(`START:"${currPage}, startIdx: "${startIdx}", END: "${endPage}"`);
+                timerComponent.startTimer();
+                fetchWikiPage();
             }
+        } catch (error) {
+            console.error("Error fetching list of pages:", error);
         }
-        startTopGame(words, max, min); 
     }
-
+    
     async function getRandomWords(): Promise<void> { // Uses random words for the game
         try {
             const words = await mediaWikiService.getRandomWords();
@@ -131,27 +145,6 @@
             fetchWikiPage();
         } catch (error) {
             console.error("Error fetching Wikipedia pages:", error);
-        }
-    }
-    
-    function startTopGame(words: string[], max: number, min: number): void { // A function that uses the most viewed pages and uses random ones as backup 
-        let startIdx = Math.floor(Math.random() * (max - min + 1) + min); // Get random start
-        let endIdx = Math.floor(Math.random() * (max - min + 1) + min); // Get random End
-        while (startIdx == endIdx) { // Make sure they are not the same
-            startIdx = Math.floor(Math.random() * (max - min + 1) + min);
-            endIdx = Math.floor(Math.random() * (max - min + 1) + min);
-        }
-
-        // Start the game
-        currPage = firstPage = words[startIdx]; 
-        endPage = words[endIdx];
-        if (currPage === undefined || endPage === undefined) {
-            // console.log("Top Pages is down")
-            getRandomWords();
-        } else {
-            console.log(`START:"${currPage}", END: "${endPage}"`);
-            timerComponent.startTimer();
-            fetchWikiPage();
         }
     }
 
@@ -174,8 +167,8 @@
 
     function start(): void {
         startCheck = true;
-        // getTopWords()
-        getSetWords(); // Get words from the set list
+        getTopWords()
+        // getSetWords(); // Get words from the set list
     }
 
     function restartGame(): void {

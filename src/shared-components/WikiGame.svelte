@@ -276,8 +276,8 @@
             <h2 id="win-caption">You found "{ endPage }"</h2>
             <h2 id="win-time">in { timerComponent.getTime() }</h2>
         {/if}
-        <input type="text" bind:value={ currPage } placeholder="Enter Wikipedia page title" />
-        <button on:click={ fetchWikiPage }>Load Page</button>
+        <!-- <input type="text" bind:value={ currPage } placeholder="Enter Wikipedia page title" /> -->
+        <!-- <button on:click={ fetchWikiPage }>Load Page</button> -->
         <button on:click={ restartGame }>Restart Game</button>
         <div 
             id="main-container"

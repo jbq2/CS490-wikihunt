@@ -260,7 +260,6 @@
     height:100%;
     width:125px;
     background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent background */
-  
     padding: 5px;
     border-radius: 5px;
 }

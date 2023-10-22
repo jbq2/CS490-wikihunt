@@ -40,13 +40,13 @@
 </script>
 
 <main>
-    <h1>Count-up Timer</h1>
+    <!-- <h1>Count-up Timer</h1> -->
     <div class="timer">
 =       {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
     </div>
 </main>
 
-<style>
+<!-- <style>
     main {
         text-align: center;
     }
@@ -54,4 +54,4 @@
     .timer {
         font-size: 2em;
     }
-</style>
+</style> -->

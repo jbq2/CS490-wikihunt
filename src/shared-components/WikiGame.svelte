@@ -1,6 +1,7 @@
 <script lang="ts">
     import { mediaWikiService } from "../services/MediaWikiService";  
     import { setWords } from "./SetWords";
+    import { beforeUpdate, tick } from 'svelte';
     import Timer from "./Timer.svelte";
     
     let pageContent: string = "";
@@ -154,7 +155,7 @@
         }
     }
 
-    function getSetWords(): void {
+    async function getSetWords(): Promise<void> {
         let wordList = setWords.rtnSetWords(); // This gets the array of the set words we have created
         let length = wordList.length;
         let startIdx = Math.floor(Math.random() * length);
@@ -166,6 +167,7 @@
         currPage = firstPage = wordList[startIdx]; 
         endPage = wordList[endIdx];
         console.log(`START:"${currPage}", END: "${endPage}"`);
+        await tick(); // Allows timer to load
         timerComponent.startTimer();
         fetchWikiPage();
     }

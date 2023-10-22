@@ -1,6 +1,6 @@
 <script lang="ts">
     import { mediaWikiService } from "../services/MediaWikiService";  
-    import type SetWords from "./SetWords.svelte";
+    import { setWords } from "./SetWords";
     import Timer from "./Timer.svelte";
     
     let pageContent: string = "";
@@ -12,7 +12,6 @@
     let startCheck:boolean = false;
 
     let timerComponent: Timer;
-    let wordsComponent: SetWords;
 
     function clickLink (event: any) {
         event.preventDefault(); // prevents default (navigate to a new page)
@@ -39,6 +38,7 @@
     function fetchWikiPage() {
         // Figured out URL from here: https://www.mediawiki.org/w/api.php?action=parse&format=json&origin=*&page=Project%3ASandbox&formatversion=2
         // on https://www.mediawiki.org/wiki/API:Parsing_wikitext and API sandbox
+        console.log(currPage);
         mediaWikiService.getPagePromise(currPage)
             .then((data) => { // get data
                 if (data && data.parse && data.parse.text) { // gets all data, parsed data, and parsed text
@@ -105,8 +105,8 @@
         return !!check;
     }
 
-    async function getTopWords(): Promise<void> {
-        let max = 500; // Change this number to set how many top Wikipedia pages to get
+    async function getTopWords(): Promise<void> { // Gets the array of the mostviewed pages up to max 
+        let max = 100; // Change this number to set how many top Wikipedia pages to get
         let min = 1; // To avoid the "Main Page" 
         let words: string[] = [];
         for (let i = 0; i<(max/10); i++) {
@@ -117,13 +117,13 @@
                 console.error("Error fetching list of pages:", error);
             }
         }
-        startGame(words, max, min); 
+        startTopGame(words, max, min); 
     }
 
-    async function getRandomWords(): Promise<void> {
+    async function getRandomWords(): Promise<void> { // Uses random words for the game
         try {
             const words = await mediaWikiService.getRandomWords();
-            currPage = words[0]; // sets the start word
+            currPage = firstPage = words[0]; // sets the start word
             endPage = words[1];
             console.log(`START:"${currPage}", END: "${endPage}"`);
             timerComponent.startTimer();
@@ -133,23 +133,7 @@
         }
     }
     
-    function getSetWords() {
-        let wordList = wordsComponent.rtnSetWords(); // This gets the array of the set words we have created
-        let length = wordList.length;
-        let startIdx = Math.floor(Math.random() * length);
-        let endIdx = Math.floor(Math.random() * length);
-        while (startIdx == endIdx) { // Make sure they are not the same
-            startIdx = Math.floor(Math.random() * length);
-            endIdx = Math.floor(Math.random() * length);
-        }
-        currPage = wordList[startIdx]; 
-        endPage = wordList[endIdx];
-        console.log(`START:"${currPage}", END: "${endPage}"`);
-        timerComponent.startTimer();
-        fetchWikiPage();
-    }
-
-    function startGame(words: string[], max: number, min: number): void {
+    function startTopGame(words: string[], max: number, min: number): void { // A function that uses the most viewed pages and uses random ones as backup 
         let startIdx = Math.floor(Math.random() * (max - min + 1) + min); // Get random start
         let endIdx = Math.floor(Math.random() * (max - min + 1) + min); // Get random End
         while (startIdx == endIdx) { // Make sure they are not the same
@@ -160,7 +144,6 @@
         // Start the game
         currPage = firstPage = words[startIdx]; 
         endPage = words[endIdx];
-        console.log("curr: ", currPage);
         if (currPage === undefined || endPage === undefined) {
             // console.log("Top Pages is down")
             getRandomWords();
@@ -171,9 +154,26 @@
         }
     }
 
+    function getSetWords(): void {
+        let wordList = setWords.rtnSetWords(); // This gets the array of the set words we have created
+        let length = wordList.length;
+        let startIdx = Math.floor(Math.random() * length);
+        let endIdx = Math.floor(Math.random() * length);
+        while (startIdx == endIdx) { // Make sure they are not the same
+            startIdx = Math.floor(Math.random() * length);
+            endIdx = Math.floor(Math.random() * length);
+        }
+        currPage = firstPage = wordList[startIdx]; 
+        endPage = wordList[endIdx];
+        console.log(`START:"${currPage}", END: "${endPage}"`);
+        timerComponent.startTimer();
+        fetchWikiPage();
+    }
+
     function start(): void {
         startCheck = true;
-        getTopWords()
+        // getTopWords()
+        getSetWords(); // Get words from the set list
     }
 
     function restartGame(): void {

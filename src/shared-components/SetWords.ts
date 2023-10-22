@@ -1,5 +1,5 @@
-<script lang="ts">
-    let setWords = [
+class SetWords {
+    public wordList: string[] = [
         'Kyoto',
         'Tetris',
         'Chernobyl',
@@ -102,7 +102,8 @@
         'Zedd'
     ];
 
-    export function rtnSetWords(): string[] {
-        return setWords;
+    rtnSetWords(): string[] {
+        return this.wordList;
     }
-</script>
+}
+export const setWords = new SetWords();

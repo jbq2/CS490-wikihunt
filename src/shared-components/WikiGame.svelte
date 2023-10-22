@@ -1,6 +1,6 @@
 <script lang="ts">
     import { mediaWikiService } from "../services/MediaWikiService";  
-    import SetWords from "./SetWords.svelte";
+    import type SetWords from "./SetWords.svelte";
     import Timer from "./Timer.svelte";
     
     let pageContent: string = "";
@@ -158,7 +158,7 @@
         }
 
         // Start the game
-        currPage = words[startIdx]; 
+        currPage = firstPage = words[startIdx]; 
         endPage = words[endIdx];
         console.log("curr: ", currPage);
         if (currPage === undefined || endPage === undefined) {

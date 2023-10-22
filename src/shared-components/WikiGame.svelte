@@ -246,6 +246,18 @@
     #wiki-page-container :global(figcaption) {
         width:20rem
     }
+
+    #overlay-container {
+    position: fixed;
+    top: 10px; /* Adjust the top position as needed */
+    right:0px; /* Adjust the left position as needed */
+    height:100%;
+    width:125px;
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent background */
+  
+    padding: 5px;
+    border-radius: 5px;
+}
 </style>
 
 
@@ -261,6 +273,19 @@
     <button on:click={ fetchWikiPage }>Load Page</button>
     <button on:click={ getTopWords }>Start Game</button>
     <button on:click={ restartGame }>Restart Game</button>
+    <div id= "overlay-container">
+        <p id="click-counter"><b>  Wikipedia Articles Clicked: {count} </b></p> <!-- counter is at the bottom, not formated the best-->
+        <p id="timer"><Timer bind:this={ timerComponent } /></p>
+        <p> <b> Start Page: {firstPage} </b></p>
+
+        <p> 
+          <b> End Page: {endPage} </b> 
+        </p>
+
+
+    </div>
+    
+    
     <div 
         id="main-container"
         style="filter: blur({isWin ? '5px' : '0px'})"
@@ -268,7 +293,7 @@
         <p> Wikipedia Articles Clicked: { count }</p> <!-- counter is at the bottom, not formated the best-->
         <Timer bind:this={ timerComponent } />
         <SetWords bind:this = {wordsComponent} />
-        
+       
         <div id="wiki-page-container">
             {#if currPage}
                 <h1>{ currPage }</h1>

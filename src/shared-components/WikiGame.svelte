@@ -1,5 +1,6 @@
 <script lang="ts">
     import { mediaWikiService } from "../services/MediaWikiService";  
+    import SetWords from "./SetWords.svelte";
     import Timer from "./Timer.svelte";
     
     let pageContent: string = "";
@@ -10,6 +11,7 @@
     let isWin = false;
 
     let timerComponent: Timer;
+    let wordsComponent: SetWords;
 
     function clickLink (event: any) {
         event.preventDefault(); // prevents default (navigate to a new page)
@@ -102,7 +104,7 @@
         return !!check;
     }
 
-    async function getWords(): Promise<void> {
+    async function getTopWords(): Promise<void> {
         let max = 500; // Change this number to set how many top Wikipedia pages to get
         let min = 1; // To avoid the "Main Page" 
         let words: string[] = [];
@@ -128,6 +130,22 @@
         } catch (error) {
             console.error("Error fetching Wikipedia pages:", error);
         }
+    }
+    
+    function getSetWords() {
+        let wordList = wordsComponent.rtnSetWords(); // This gets the array of the set words we have created
+        let length = wordList.length;
+        let startIdx = Math.floor(Math.random() * length);
+        let endIdx = Math.floor(Math.random() * length);
+        while (startIdx == endIdx) { // Make sure they are not the same
+            startIdx = Math.floor(Math.random() * length);
+            endIdx = Math.floor(Math.random() * length);
+        }
+        currPage = wordList[startIdx]; 
+        endPage = wordList[endIdx];
+        console.log(`START:"${currPage}", END: "${endPage}"`);
+        timerComponent.startTimer();
+        fetchWikiPage();
     }
 
     function startGame(words: string[], max: number, min: number): void {
@@ -241,7 +259,7 @@
     {/if}
     <input type="text" bind:value={ currPage } placeholder="Enter Wikipedia page title" />
     <button on:click={ fetchWikiPage }>Load Page</button>
-    <button on:click={ getWords }>Start Game</button>
+    <button on:click={ getSetWords }>Start Game</button>
     <button on:click={ restartGame }>Restart Game</button>
     <div 
         id="main-container"
@@ -249,6 +267,7 @@
     >
         <p> Wikipedia Articles Clicked: { count }</p> <!-- counter is at the bottom, not formated the best-->
         <Timer bind:this={ timerComponent } />
+        <SetWords bind:this = {wordsComponent} />
         
         <div id="wiki-page-container">
             {#if currPage}

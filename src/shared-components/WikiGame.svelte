@@ -252,15 +252,6 @@
     #wiki-page-container :global(figcaption) {
         width:20rem
     }
-    
-    #game-stats {
-        position: sticky;
-        top: 0;
-        background-color: white;
-        padding: 10px; 
-        border-bottom: 2px solid black; 
-    }
-
     #overlay-container {
     position: fixed;
     top: 10px; /* Adjust the top position as needed */

@@ -276,6 +276,7 @@
     <div id= "overlay-container">
         <p id="click-counter"><b>  Wikipedia Articles Clicked: {count} </b></p> <!-- counter is at the bottom, not formated the best-->
         <p id="timer"><Timer bind:this={ timerComponent } /></p>
+        <SetWords bind:this = {wordsComponent} />
         <p> <b> Start Page: {firstPage} </b></p>
 
         <p> 
@@ -290,9 +291,6 @@
         id="main-container"
         style="filter: blur({isWin ? '5px' : '0px'})"
     >
-        <p> Wikipedia Articles Clicked: { count }</p> <!-- counter is at the bottom, not formated the best-->
-        <Timer bind:this={ timerComponent } />
-        <SetWords bind:this = {wordsComponent} />
        
         <div id="wiki-page-container">
             {#if currPage}

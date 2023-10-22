@@ -163,10 +163,12 @@
 
     #overlay-container {
     position: fixed;
-    bottom: 0px; /* Adjust the top position as needed */
-    right: 10px; /* Adjust the left position as needed */
+    top: 10px; /* Adjust the top position as needed */
+    right:0px; /* Adjust the left position as needed */
+    height:100%;
+    width:150px;
     background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent background */
-    padding: 1px;
+    padding: 5px;
     border-radius: 5px;
 }
 
@@ -193,13 +195,14 @@
         }}>Restart</button>
 
         <div id= "overlay-container">
-            <p id="click-counter"> Wikipedia Articles Clicked: {count}</p> <!-- counter is at the bottom, not formated the best-->
+            <p id="click-counter"> <b> Wikipedia Articles Clicked: {count} </b> </p> <!-- counter is at the bottom, not formated the best-->
             <p id="timer"><Timer bind:this={ timerComponent } /></p>
             <p> <b> Start Page: {firstPage} </b></p>
             
             <p> 
               <b> End Page: {endPage} </b> 
             </p>
+
 
 
         </div>

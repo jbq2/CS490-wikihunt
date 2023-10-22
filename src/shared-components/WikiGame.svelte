@@ -193,6 +193,7 @@
     #wiki-page-container :global(figcaption) {
         width:20rem
     }
+
 </style>
 
 

@@ -29,7 +29,7 @@ class MediaWikiService {
     }
     
     getNextSetOfWords(offset: number): Promise<any> {
-        const getNextWordsURL = `https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&list=mostviewed&continue=-%7C%7C&formatversion=2&pvimoffset=${offset}`
+        const getNextWordsURL = `https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&list=mostviewed&continue=-%7C%7C&formatversion=2&pvimoffset=${offset}&pvimlimit=1`
         return fetch(getNextWordsURL)
         .then((response) => { // get response
             return response.json();

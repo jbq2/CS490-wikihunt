@@ -42,7 +42,7 @@
 <main>
     <h1>Count-up Timer</h1>
     <div class="timer">
-        {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+=       {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
     </div>
 </main>
 

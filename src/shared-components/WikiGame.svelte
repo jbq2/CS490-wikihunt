@@ -164,8 +164,9 @@
         const startIdx = idxs[0];
         const endIdx = idxs[1]
         currPage = firstPage = wordList[startIdx]; 
-        // endPage = wordList[endIdx];
-        endPage = "Apple";
+        path.push(firstPage);
+        endPage = wordList[endIdx];
+        // endPage = "Apple";
         console.log(`START:"${currPage}" IDX: "${startIdx}", END: "${endPage}", IDX: "${endIdx}"`);
         await tick(); // Allows timer to load
         timerComponent.startTimer();
@@ -225,9 +226,14 @@
     #path-and-new-game-button-container {
         font-size: 20px;
         margin-top: 21rem;
+        text-align: center;
+        position: fixed;
+        width: 75%;
+        left: 12.5%; /* (100% - 75%) / 2 to center the element */
+        z-index: 100; /* chose some random large number to put this message above every other element*/
     }
 
-    #win-message, #win-caption, #win-time, #win-clicks, #path-and-new-game-button-container {
+    #win-message, #win-caption, #win-time, #win-clicks {
         text-align: center;
         position: fixed;
         width: 100%;
@@ -299,12 +305,10 @@
             <h2 id="win-time">in { timerComponent.getTime() }</h2>
             <h3 id='win-clicks'>Final Score: { count } clicks</h3>
             <div id='path-and-new-game-button-container'>
-                Path:
+                <strong>Path:</strong>
                 {#each path as page}
-                    <!-- <div> {page}</div> -->
                     {' '+page+' '}
-                    {#if page !== path[count-1]} 
-                        <!-- <div> →</div>  -->
+                    {#if page !== path[count]} 
                         →
                     {/if} 
                 {/each}

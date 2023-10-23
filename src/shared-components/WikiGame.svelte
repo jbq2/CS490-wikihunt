@@ -11,6 +11,7 @@
     let firstPage:string = "";
     let isWin = false;
     let startCheck:boolean = false;
+    let path:string[] = [];
 
     let timerComponent: Timer;
 
@@ -66,6 +67,7 @@
         currPage = page.getAttribute('title')!
         console.log("Navigating to Page: ", currPage);
         fetchWikiPage(); // show new page
+        path.push(currPage);
     }
 
     function eraseElements(elements: NodeListOf<Element>): void {
@@ -147,6 +149,7 @@
         try {
             const words = await mediaWikiService.getRandomWords();
             currPage = firstPage = words[0]; // sets the start word
+            path.push(currPage);
             endPage = words[1];
             console.log(`START:"${currPage}", END: "${endPage}"`);
             timerComponent.startTimer();
@@ -181,6 +184,7 @@
         currPage = firstPage;
         timerComponent.restart();
         count = 0;
+        path = [];
         fetchWikiPage();
         timerComponent.startTimer();
     }
@@ -189,6 +193,7 @@
         isWin = false;
         count = 0;
         timerComponent.restart();
+        path = [];
         start();
     }
 </script>
@@ -217,11 +222,12 @@
         margin-top: 18rem;
     }
 
-    #new-game-button {
+    #path-and-new-game-button-container {
+        font-size: 20px;
         margin-top: 21rem;
     }
 
-    #win-message, #win-caption, #win-time, #win-clicks, #new-game-button-container {
+    #win-message, #win-caption, #win-time, #win-clicks, #path-and-new-game-button-container {
         text-align: center;
         position: fixed;
         width: 100%;
@@ -292,9 +298,20 @@
             <h2 id="win-caption">You found "{ endPage }"</h2>
             <h2 id="win-time">in { timerComponent.getTime() }</h2>
             <h3 id='win-clicks'>Final Score: { count } clicks</h3>
-            <h3 id='new-game-button-container'>
-                <button id='new-game-button' on:click={ newGame }>New Game</button>
-            </h3>
+            <div id='path-and-new-game-button-container'>
+                Path:
+                {#each path as page}
+                    <!-- <div> {page}</div> -->
+                    {' '+page+' '}
+                    {#if page !== path[count-1]} 
+                        <!-- <div> →</div>  -->
+                        →
+                    {/if} 
+                {/each}
+                <h3 id='new-game-button-container'>
+                    <button id='new-game-button' on:click={ newGame }>New Game</button>
+                </h3>
+            </div>
         {/if}
         <!-- <input type="text" bind:value={ currPage } placeholder="Enter Wikipedia page title" /> -->
         <!-- <button on:click={ fetchWikiPage }>Load Page</button> -->

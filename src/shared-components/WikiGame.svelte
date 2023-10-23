@@ -161,7 +161,8 @@
         const startIdx = idxs[0];
         const endIdx = idxs[1]
         currPage = firstPage = wordList[startIdx]; 
-        endPage = wordList[endIdx];
+        // endPage = wordList[endIdx];
+        endPage = "Apple";
         console.log(`START:"${currPage}" IDX: "${startIdx}", END: "${endPage}", IDX: "${endIdx}"`);
         await tick(); // Allows timer to load
         timerComponent.startTimer();
@@ -182,6 +183,13 @@
         count = 0;
         fetchWikiPage();
         timerComponent.startTimer();
+    }
+
+    function newGame(): void {
+        isWin = false;
+        count = 0;
+        timerComponent.restart();
+        start();
     }
 </script>
 
@@ -204,10 +212,19 @@
         margin-top: 15rem;
     }
 
-    #win-message, #win-caption, #win-time {
+    #win-clicks {
+        font-size: 30px;
+        margin-top: 18rem;
+    }
+
+    #new-game-button {
+        margin-top: 21rem;
+    }
+
+    #win-message, #win-caption, #win-time, #win-clicks, #new-game-button-container {
         text-align: center;
-        width: 100%;
         position: fixed;
+        width: 100%;
         z-index: 100; /* chose some random large number to put this message above every other element*/
     }
 
@@ -274,10 +291,13 @@
             <h1 id="win-message">You Win!</h1>
             <h2 id="win-caption">You found "{ endPage }"</h2>
             <h2 id="win-time">in { timerComponent.getTime() }</h2>
+            <h3 id='win-clicks'>Final Score: { count } clicks</h3>
+            <h3 id='new-game-button-container'>
+                <button id='new-game-button' on:click={ newGame }>New Game</button>
+            </h3>
         {/if}
         <!-- <input type="text" bind:value={ currPage } placeholder="Enter Wikipedia page title" /> -->
         <!-- <button on:click={ fetchWikiPage }>Load Page</button> -->
-        <button on:click={ restartGame }>Restart Game</button>
         <div 
             id="main-container"
             style="filter: blur({isWin ? '5px' : '0px'})"
@@ -289,6 +309,7 @@
                 <p> 
                 <b> End Page: {endPage} </b> 
                 </p>
+                <button id='restart-button' on:click={ restartGame }>Restart Game</button>
             </div>
             <div id="wiki-page-container">
                 {#if currPage}

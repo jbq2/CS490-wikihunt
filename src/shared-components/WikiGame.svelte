@@ -31,6 +31,8 @@
         }
 
         if(currPage === endPage) { // just as an example
+            path.pop();
+            path.push(endPage);
             timerComponent.stop();
             isWin = true;
         }
@@ -103,6 +105,9 @@
         const check = doc.querySelector('div[class="redirectMsg"]');
         if (check){
             currPage = String(doc.querySelector('a')?.getAttribute('title'));
+            if (currPage == endPage){
+                isWin = true;
+            }
         }
 
         return !!check;
@@ -167,6 +172,7 @@
         path.push(firstPage);
         endPage = wordList[endIdx];
         // endPage = "Apple";
+        // endPage = "Christmas";
         console.log(`START:"${currPage}" IDX: "${startIdx}", END: "${endPage}", IDX: "${endIdx}"`);
         await tick(); // Allows timer to load
         timerComponent.startTimer();
@@ -246,9 +252,10 @@
         padding-left: 12.5%;
         padding-right: 12.5%;
         width: 75%;
-
+        position: relative;
         grid-template-columns: repeat(2, 50fr);
         grid-column-gap: 1px; /* Adjust the gap as needed */
+        margin-right: 125px; /* Add margin to account for the overlay container width */
     }
 
     #wiki-page-container :global(table.wikitable), :global(figure), :global(li.gallerybox) {
@@ -281,15 +288,15 @@
         width:20rem
     }
     #overlay-container {
-    position: fixed;
-    top: 10px; /* Adjust the top position as needed */
-    right:0px; /* Adjust the left position as needed */
-    height:100%;
-    width:125px;
-    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent background */
-    padding: 5px;
-    border-radius: 5px;
-}
+        position: fixed;
+        text-align: center;
+        top: 10px;
+        right:0px;
+        height:100%;
+        width:125px; 
+        padding: 5px 5px 5px 5px;
+        z-index: 50;
+    }
 </style>
 
 
@@ -320,18 +327,21 @@
         <!-- <input type="text" bind:value={ currPage } placeholder="Enter Wikipedia page title" /> -->
         <!-- <button on:click={ fetchWikiPage }>Load Page</button> -->
         <div 
+            id= "overlay-container"
+            style="filter: blur({isWin ? '5px' : '0px'})"    
+        >
+            <p id="click-counter"><b>  Wikipedia Articles Clicked: {count} </b></p> <!-- counter is at the bottom, not formated the best-->
+            <p id="timer"><Timer bind:this={ timerComponent } /></p>
+            <p> <b> Start Page: {firstPage} </b></p>
+            <p> 
+            <b> End Page: {endPage} </b> 
+            </p>
+            <button id='restart-button' on:click={ restartGame }>Restart Game</button>
+        </div>
+        <div 
             id="main-container"
             style="filter: blur({isWin ? '5px' : '0px'})"
         >
-            <div id= "overlay-container">
-                <p id="click-counter"><b>  Wikipedia Articles Clicked: {count} </b></p> <!-- counter is at the bottom, not formated the best-->
-                <p id="timer"><Timer bind:this={ timerComponent } /></p>
-                <p> <b> Start Page: {firstPage} </b></p>
-                <p> 
-                <b> End Page: {endPage} </b> 
-                </p>
-                <button id='restart-button' on:click={ restartGame }>Restart Game</button>
-            </div>
             <div id="wiki-page-container">
                 {#if currPage}
                     <h1>{ currPage }</h1>

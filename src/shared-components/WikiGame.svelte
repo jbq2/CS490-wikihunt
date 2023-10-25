@@ -17,6 +17,9 @@
 
     function clickLink (event: any) {
         event.preventDefault(); // prevents default (navigate to a new page)
+
+        if (event.target.getAttribute("class") === "external text") { return };
+
         if (event.target.tagName === 'I') { // for the case where a wikipedia page uses italicized text
             const linkElm = event.target.closest('a');
             if (linkElm) {

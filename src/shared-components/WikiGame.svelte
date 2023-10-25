@@ -170,8 +170,8 @@
         const endIdx = idxs[1]
         currPage = firstPage = wordList[startIdx]; 
         path.push(firstPage);
-        endPage = wordList[endIdx];
-        // endPage = "Apple";
+        // endPage = wordList[endIdx];
+        endPage = "Apple";
         // endPage = "Christmas";
         console.log(`START:"${currPage}" IDX: "${startIdx}", END: "${endPage}", IDX: "${endIdx}"`);
         await tick(); // Allows timer to load

@@ -11,6 +11,7 @@
     let firstPage:string = "";
     let isWin = false;
     let startCheck:boolean = false;
+    let path:string[] = [];
 
     let timerComponent: Timer;
 
@@ -30,6 +31,8 @@
         }
 
         if(currPage === endPage) { // just as an example
+            path.pop();
+            path.push(endPage);
             timerComponent.stop();
             isWin = true;
         }
@@ -66,6 +69,7 @@
         currPage = page.getAttribute('title')!
         console.log("Navigating to Page: ", currPage);
         fetchWikiPage(); // show new page
+        path.push(currPage);
     }
 
     function eraseElements(elements: NodeListOf<Element>): void {
@@ -101,6 +105,9 @@
         const check = doc.querySelector('div[class="redirectMsg"]');
         if (check){
             currPage = String(doc.querySelector('a')?.getAttribute('title'));
+            if (currPage == endPage){
+                isWin = true;
+            }
         }
 
         return !!check;
@@ -147,6 +154,7 @@
         try {
             const words = await mediaWikiService.getRandomWords();
             currPage = firstPage = words[0]; // sets the start word
+            path.push(currPage);
             endPage = words[1];
             console.log(`START:"${currPage}", END: "${endPage}"`);
             timerComponent.startTimer();
@@ -161,7 +169,10 @@
         const startIdx = idxs[0];
         const endIdx = idxs[1]
         currPage = firstPage = wordList[startIdx]; 
+        path.push(firstPage);
         endPage = wordList[endIdx];
+        // endPage = "Apple";
+        // endPage = "Christmas";
         console.log(`START:"${currPage}" IDX: "${startIdx}", END: "${endPage}", IDX: "${endIdx}"`);
         await tick(); // Allows timer to load
         timerComponent.startTimer();
@@ -180,8 +191,17 @@
         currPage = firstPage;
         timerComponent.restart();
         count = 0;
+        path = [];
         fetchWikiPage();
         timerComponent.startTimer();
+    }
+
+    function newGame(): void {
+        isWin = false;
+        count = 0;
+        timerComponent.restart();
+        path = [];
+        start();
     }
 </script>
 
@@ -204,10 +224,25 @@
         margin-top: 15rem;
     }
 
-    #win-message, #win-caption, #win-time {
+    #win-clicks {
+        font-size: 30px;
+        margin-top: 18rem;
+    }
+
+    #path-and-new-game-button-container {
+        font-size: 20px;
+        margin-top: 21rem;
         text-align: center;
-        width: 100%;
         position: fixed;
+        width: 75%;
+        left: 12.5%; /* (100% - 75%) / 2 to center the element */
+        z-index: 100; /* chose some random large number to put this message above every other element*/
+    }
+
+    #win-message, #win-caption, #win-time, #win-clicks {
+        text-align: center;
+        position: fixed;
+        width: 100%;
         z-index: 100; /* chose some random large number to put this message above every other element*/
     }
 
@@ -217,9 +252,10 @@
         padding-left: 12.5%;
         padding-right: 12.5%;
         width: 75%;
-
+        position: relative;
         grid-template-columns: repeat(2, 50fr);
         grid-column-gap: 1px; /* Adjust the gap as needed */
+        margin-right: 125px; /* Add margin to account for the overlay container width */
     }
 
     #wiki-page-container :global(table.wikitable), :global(figure), :global(li.gallerybox) {
@@ -252,15 +288,15 @@
         width:20rem
     }
     #overlay-container {
-    position: fixed;
-    top: 10px; /* Adjust the top position as needed */
-    right:0px; /* Adjust the left position as needed */
-    height:100%;
-    width:125px;
-    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent background */
-    padding: 5px;
-    border-radius: 5px;
-}
+        position: fixed;
+        text-align: center;
+        top: 10px;
+        right:0px;
+        height:100%;
+        width:125px; 
+        padding: 5px 5px 5px 5px;
+        z-index: 50;
+    }
 </style>
 
 
@@ -274,22 +310,38 @@
             <h1 id="win-message">You Win!</h1>
             <h2 id="win-caption">You found "{ endPage }"</h2>
             <h2 id="win-time">in { timerComponent.getTime() }</h2>
+            <h3 id='win-clicks'>Final Score: { count } clicks</h3>
+            <div id='path-and-new-game-button-container'>
+                <strong>Path:</strong>
+                {#each path as page}
+                    {' '+page+' '}
+                    {#if page !== path[count]} 
+                        →
+                    {/if} 
+                {/each}
+                <h3 id='new-game-button-container'>
+                    <button id='new-game-button' on:click={ newGame }>New Game</button>
+                </h3>
+            </div>
         {/if}
         <!-- <input type="text" bind:value={ currPage } placeholder="Enter Wikipedia page title" /> -->
         <!-- <button on:click={ fetchWikiPage }>Load Page</button> -->
-        <button on:click={ restartGame }>Restart Game</button>
+        <div 
+            id= "overlay-container"
+            style="filter: blur({isWin ? '5px' : '0px'})"    
+        >
+            <p id="click-counter"><b>  Wikipedia Articles Clicked: {count} </b></p> <!-- counter is at the bottom, not formated the best-->
+            <p id="timer"><Timer bind:this={ timerComponent } /></p>
+            <p> <b> Start Page: {firstPage} </b></p>
+            <p> 
+            <b> End Page: {endPage} </b> 
+            </p>
+            <button id='restart-button' on:click={ restartGame }>Restart Game</button>
+        </div>
         <div 
             id="main-container"
             style="filter: blur({isWin ? '5px' : '0px'})"
         >
-            <div id= "overlay-container">
-                <p id="click-counter"><b>  Wikipedia Articles Clicked: {count} </b></p> <!-- counter is at the bottom, not formated the best-->
-                <p id="timer"><Timer bind:this={ timerComponent } /></p>
-                <p> <b> Start Page: {firstPage} </b></p>
-                <p> 
-                <b> End Page: {endPage} </b> 
-                </p>
-            </div>
             <div id="wiki-page-container">
                 {#if currPage}
                     <h1>{ currPage }</h1>

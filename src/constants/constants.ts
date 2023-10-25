@@ -42,7 +42,6 @@ export const wordList: string[] = [
     'Cinema Paradiso',
     'El Dorado',
     'The Umbrella Academy',
-    'Stranger Things',
     'Great Sphinx of Giza',
     'The Elder Scrolls V: Skyrim',
     'Frida Kahlo',

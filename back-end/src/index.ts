@@ -1,4 +1,5 @@
 import express from 'express';
+import { mediawikiRouter } from './routes/MediawikiRoute.js';
 
 const port = 3000;
 const app = express();
@@ -12,6 +13,8 @@ app.get('/', async (req, res) => {
         desc: 'test endpoint'
     }); 
 });
+
+app.use('/mediawiki', mediawikiRouter);
 
 try {
     app.listen(port, () => {

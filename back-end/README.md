@@ -14,3 +14,4 @@
 - because this uses Typsecript, it must be compiled to plain javascript
     - run `npm run build` to compile Typescript files into a single `index.js` in the `dist` directory
     - to run locally, `node dist/index.js`
+- when importing custom made modules or files, you need to include the `.js` extension

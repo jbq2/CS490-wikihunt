@@ -12,32 +12,24 @@
     let isWin = false;
     let startCheck:boolean = false;
     let path:string[] = [];
+    let pathString:string = "";
 
     let timerComponent: Timer;
 
     function clickLink (event: any) {
         event.preventDefault(); // prevents default (navigate to a new page)
 
-        if (event.target.getAttribute("class") === "external text") { return };
+        // if (event.target.getAttribute("class") === "external text") { return };
 
         if (event.target.tagName === 'I') { // for the case where a wikipedia page uses italicized text
             const linkElm = event.target.closest('a');
             if (linkElm) {
                getPage(linkElm);
-               count += 1;
             }   
         } else {
             if (event.target.tagName === 'A') { // check to see if it is a link with the <a> tag
                 getPage(event.target);
-                count += 1;
             }
-        }
-
-        if(currPage === endPage) { // just as an example
-            path.pop();
-            path.push(endPage);
-            timerComponent.stop();
-            isWin = true;
         }
     }
 
@@ -69,10 +61,22 @@
     }
 
     function getPage(page: HTMLAnchorElement) {
-        currPage = page.getAttribute('title')!
+        let temp:string = page.getAttribute('title')!
+        if (!temp)
+            return;
+
+        if (temp == endPage){
+            pathString += endPage;
+            timerComponent.stop();
+            isWin = true;
+        } else 
+            pathString += temp + ' → ';
+
+        path.push(temp);
+        currPage = temp;
+        count++;
         console.log("Navigating to Page: ", currPage);
         fetchWikiPage(); // show new page
-        path.push(currPage);
     }
 
     function eraseElements(elements: NodeListOf<Element>): void {
@@ -157,7 +161,7 @@
         try {
             const words = await mediaWikiService.getRandomWords();
             currPage = firstPage = words[0]; // sets the start word
-            path.push(currPage);
+            // path.push(currPage); 
             endPage = words[1];
             console.log(`START:"${currPage}", END: "${endPage}"`);
             timerComponent.startTimer();
@@ -172,10 +176,12 @@
         const startIdx = idxs[0];
         const endIdx = idxs[1]
         currPage = firstPage = wordList[startIdx]; 
+        // currPage = firstPage = "Limestone";
         path.push(firstPage);
+        pathString += currPage + ' → '
         endPage = wordList[endIdx];
+        // endPage = "Pompeii";
         // endPage = "Apple";
-        // endPage = "Christmas";
         console.log(`START:"${currPage}" IDX: "${startIdx}", END: "${endPage}", IDX: "${endIdx}"`);
         await tick(); // Allows timer to load
         timerComponent.startTimer();
@@ -195,6 +201,7 @@
         timerComponent.restart();
         count = 0;
         path = [];
+        pathString = "";
         fetchWikiPage();
         timerComponent.startTimer();
     }
@@ -204,6 +211,7 @@
         count = 0;
         timerComponent.restart();
         path = [];
+        pathString = "";
         start();
     }
 </script>
@@ -315,13 +323,19 @@
             <h2 id="win-time">in { timerComponent.getTime() }</h2>
             <h3 id='win-clicks'>Final Score: { count } clicks</h3>
             <div id='path-and-new-game-button-container'>
-                <strong>Path:</strong>
-                {#each path as page}
-                    {' '+page+' '}
-                    {#if page !== path[count]} 
-                        →
-                    {/if} 
-                {/each}
+                <strong>Path:</strong> 
+                {#if path.length < 15}
+                    {pathString}
+                {:else}
+                    {#each path.slice(0, 3) as page}
+                        {' '+page+' →'}
+                    {/each}
+                     ...{path.length - 7} more pages... →
+                    {#each path.slice(-4, -2) as page}
+                        {' '+page+' →'}
+                    {/each}
+                    {' '+path[path.length -1]}
+                {/if}
                 <h3 id='new-game-button-container'>
                     <button id='new-game-button' on:click={ newGame }>New Game</button>
                 </h3>

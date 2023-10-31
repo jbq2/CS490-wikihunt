@@ -175,14 +175,13 @@
         const idxs = getIdx(wordList.length);
         const startIdx = idxs[0];
         const endIdx = idxs[1]
-        // currPage = firstPage = wordList[startIdx]; 
-        currPage = firstPage = "Limestone";
+        currPage = firstPage = wordList[startIdx]; 
+        // currPage = firstPage = "Limestone";
         path.push(firstPage);
         pathString += currPage + ' → '
-        // endPage = wordList[endIdx];
-        endPage = "Pompeii";
+        endPage = wordList[endIdx];
+        // endPage = "Pompeii";
         // endPage = "Apple";
-        // endPage = "Christmas";
         console.log(`START:"${currPage}" IDX: "${startIdx}", END: "${endPage}", IDX: "${endIdx}"`);
         await tick(); // Allows timer to load
         timerComponent.startTimer();

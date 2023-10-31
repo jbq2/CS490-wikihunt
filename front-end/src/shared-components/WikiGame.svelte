@@ -325,7 +325,18 @@
             <h3 id='win-clicks'>Final Score: { count } clicks</h3>
             <div id='path-and-new-game-button-container'>
                 <strong>Path:</strong> 
-                {pathString}
+                {#if path.length < 15}
+                    {pathString}
+                {:else}
+                    {#each path.slice(0, 3) as page}
+                        {' '+page+' →'}
+                    {/each}
+                     ...{path.length - 7} more pages... →
+                    {#each path.slice(-4, -2) as page}
+                        {' '+page+' →'}
+                    {/each}
+                    {' '+path[path.length -1]}
+                {/if}
                 <h3 id='new-game-button-container'>
                     <button id='new-game-button' on:click={ newGame }>New Game</button>
                 </h3>

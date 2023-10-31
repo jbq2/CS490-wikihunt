@@ -62,7 +62,7 @@
 
     function getPage(page: HTMLAnchorElement) {
         let temp:string = page.getAttribute('title')!
-        if (temp === null)
+        if (!temp)
             return;
 
         if (temp == endPage){

@@ -5,6 +5,7 @@ import dotenv from 'dotenv'
 
 dotenv.config();
 const connectionString= process.env.DB_STRING
+let wordCollection;
 
 MongoClient.connect(connectionString)
 .then(client => {
@@ -14,3 +15,4 @@ MongoClient.connect(connectionString)
 
 })
 .catch(error=> console.error(error))
+export { wordCollection }; 

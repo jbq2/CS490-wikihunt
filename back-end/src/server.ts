@@ -11,7 +11,7 @@ MongoClient.connect(connectionString)
 .then(client => {
     console.log('Connected to Database')
     const db= client.db('WikiHunt')
-    const wordCollection = db.collection('randomizedwords')
+    wordCollection = db.collection('randomizedwords')
 
 })
 .catch(error=> console.error(error))

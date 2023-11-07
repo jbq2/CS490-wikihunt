@@ -535,5 +535,5 @@ export const sportsMemesVideoGamesAnimeList: string[] = [
 ];
 
 export const combinedList = Array.from(
-    new Set([...wordList, ...historyList, ...sportsMemesVideoGamesAnimeList, ...mathScienceList].values())
+    new Set([...wordList, ...historyList, ...sportsMemesVideoGamesAnimeList, ...mathScienceList]).values()
 );

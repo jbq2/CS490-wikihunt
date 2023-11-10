@@ -13,6 +13,11 @@ mediawikiRouter.get('/startend', async (req, res) => {
     while(start === end) {
         end = Math.floor(Math.random() * wordList.length);
     } 
+
+    res.json({
+        start: wordList[start],
+        end: wordList[end]
+    });
 });
 
 // GET endpoint to return enhanced/cleaned article html

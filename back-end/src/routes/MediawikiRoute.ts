@@ -15,19 +15,19 @@ mediawikiRouter.get('/startend', async (req, res) => {
     } 
 
      // Store the pair in the database
-    try {
-        await wordCollection.insertOne({
-            start: wordList[start],
-            end: wordList[end]
-        });
-        res.json({
-            start: wordList[start],
-            end: wordList[end],
-        });
-    } catch (error) {
-        console.error('Failed to store the pair in the database:', error);
-        res.status(500).json({ error: 'Failed to store the pair in the database' });
-    }
+    // try {
+    //     await wordCollection.insertOne({
+    //         start: wordList[start],
+    //         end: wordList[end]
+    //     });
+    //     res.json({
+    //         start: wordList[start],
+    //         end: wordList[end],
+    //     });
+    // } catch (error) {
+    //     console.error('Failed to store the pair in the database:', error);
+    //     res.status(500).json({ error: 'Failed to store the pair in the database' });
+    // }
 });
 
 mediawikiRouter.get('/page/:title', async (req, res) => {

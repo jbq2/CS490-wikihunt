@@ -1,6 +1,8 @@
 import Router from 'express';
-import { wordList } from '../constants/constants.js';
+import fetch from 'node-fetch';
+import { mediaWikiUrlRoot, wordList } from '../constants/constants.js';
 import { wordCollection } from '../server.js';
+
 export const mediawikiRouter = Router();
 
 mediawikiRouter.get('/startend', async (req, res) => {
@@ -26,3 +28,15 @@ mediawikiRouter.get('/startend', async (req, res) => {
     }
 });
 
+mediawikiRouter.get('/page/:title', async (req, res) => {
+    const apiUrl: string = `${mediaWikiUrlRoot}?action=parse&format=json&origin=*&page=${req.params['title']}&prop=text`;
+    const data: string = await fetch(apiUrl)
+        .then((response) => response.json())
+        .then((data: any) => data && data.parse && data.parse.text ? data.parse.text['*'] : null);
+
+    res.json({
+        success: !!data,
+        title: req.params['title'],
+        html: data
+    });
+});

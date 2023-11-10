@@ -1,5 +1,7 @@
 import Router from 'express';
 import fetch from 'node-fetch';
+import { HtmlCleanerUtil } from '../util/HtmlCleanerUtil.js';
+import { JSDOM } from 'jsdom';
 import { mediaWikiUrlRoot, wordList } from '../constants/constants.js';
 import { wordCollection } from '../server.js';
 
@@ -29,14 +31,30 @@ mediawikiRouter.get('/startend', async (req, res) => {
 });
 
 mediawikiRouter.get('/page/:title', async (req, res) => {
-    const apiUrl: string = `${mediaWikiUrlRoot}?action=parse&format=json&origin=*&page=${req.params['title']}&prop=text`;
-    const data: string = await fetch(apiUrl)
+    let title: string = req.params['title']
+    let apiUrl: string = `${mediaWikiUrlRoot}?action=parse&format=json&origin=*&page=${title}&prop=text`;
+    let data: string = await fetch(apiUrl)
         .then((response) => response.json())
-        .then((data: any) => data && data.parse && data.parse.text ? data.parse.text['*'] : null);
+        .then((data: any) => data && data.parse && data.parse.text ? data.parse.text['*'] : null);    
+    let doc: Document = (new JSDOM(data)).window.document;
+
+    while(getRedirectMsg(doc)) {
+        title = String(doc.querySelector('a')?.getAttribute('title'));
+        apiUrl = `${mediaWikiUrlRoot}?action=parse&format=json&origin=*&page=${title}&prop=text`;
+        data = await fetch(apiUrl)
+            .then((response) => response.json())
+            .then((data: any) => data && data.parse && data.parse.text ? data.parse.text['*'] : null);
+        doc = (new JSDOM(data)).window.document;
+    }
 
     res.json({
         success: !!data,
-        title: req.params['title'],
-        html: data
+        title: title,
+        html: HtmlCleanerUtil.cleanHtml(doc)
     });
 });
+
+function getRedirectMsg(doc: Document): Element {
+    const check = doc.querySelector('div[class="redirectMsg"]');
+    return check;
+}

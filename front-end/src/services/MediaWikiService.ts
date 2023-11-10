@@ -10,6 +10,10 @@ class MediaWikiService {
             });
     }
 
+    getPageFromApi(title: string): Promise<any> {
+        return fetch(`http://localhost:3000/mediawiki/page/${title}`).then((response) => response.json());
+    }
+
     getRandomWords(): Promise<string[]> {
         // This response grabs 2 random wikipedia pages and this function will access the titles of these pages
         const getWordsUrl = `https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&rnnamespace=0&list=random&formatversion=2&rnlimit=2`;

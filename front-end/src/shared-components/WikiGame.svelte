@@ -189,6 +189,10 @@
     }
 
     function start(): void {
+        mediaWikiService.getPageFromApi('Apple')
+            .then((data) => { 
+                console.log(data);
+            });
         startCheck = true;
         // getTopWords(); // Gets two random wikipedia pages that are in most viewed
         // getRandomWords(); // Gets two fully random wikipedia pages

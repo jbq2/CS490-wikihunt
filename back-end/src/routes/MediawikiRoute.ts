@@ -1,6 +1,6 @@
 import Router from 'express';
 import fetch from 'node-fetch';
-import { HtmlCleanerUtil } from '../util/HtmlCleanerUtil.js';
+import { ArticleEnhancerUtil } from '../util/ArticleEnhancerUtil.js';
 import { JSDOM } from 'jsdom';
 import { mediaWikiUrlRoot, wordList } from '../constants/constants.js';
 import { wordCollection } from '../server.js';
@@ -50,7 +50,7 @@ mediawikiRouter.get('/page/:title', async (req, res) => {
     res.json({
         success: !!data,
         title: title,
-        html: HtmlCleanerUtil.cleanHtml(doc)
+        html: ArticleEnhancerUtil.cleanArticle(doc)
     });
 });
 

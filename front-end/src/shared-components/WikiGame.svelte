@@ -67,12 +67,6 @@
         fetchWikiPage(); // show new page
     }
 
-    function eraseElements(elements: NodeListOf<Element>): void {
-        for(let e of elements) {
-            e.remove()
-        }
-    }
-
     function getIdx(length: number) { // Gets two random indexes
         let max = length;
         let startIdx = Math.floor(Math.random() * max);

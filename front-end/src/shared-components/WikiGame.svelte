@@ -3,6 +3,11 @@
     import { wordList } from "../constants/constants";
     import { tick } from 'svelte';
     import Timer from "./Timer.svelte";
+
+    type ApiPageResponse = {
+        title: string,
+        html: string
+    };
     
     let pageContent: string = "";
     let currPage: string = ""; 
@@ -18,9 +23,6 @@
 
     function clickLink (event: any) {
         event.preventDefault(); // prevents default (navigate to a new page)
-
-        // if (event.target.getAttribute("class") === "external text") { return };
-
         if (event.target.tagName === 'I') { // for the case where a wikipedia page uses italicized text
             const linkElm = event.target.closest('a');
             if (linkElm) {
@@ -38,22 +40,8 @@
         // Figured out URL from here: https://www.mediawiki.org/w/api.php?action=parse&format=json&origin=*&page=Project%3ASandbox&formatversion=2
         // on https://www.mediawiki.org/wiki/API:Parsing_wikitext and API sandbox
         console.log(currPage);
-        mediaWikiService.getPagePromise(currPage)
-            .then((data) => { // get data
-                if (data && data.parse && data.parse.text) { // gets all data, parsed data, and parsed text
-                    let tempData = cleanPage(data.parse.text["*"]);
-                    if (isRedirectPage(tempData)){  
-                        fetchWikiPage();
-                    }
-                    else{
-                        pageContent = tempData;
-                    }
-
-                }
-            })
-            .catch((error) => { // errors
-                console.error("Error fetching Wikipedia content:", error);
-            });
+        mediaWikiService.getPageFromApi(currPage)
+            .then((data: ApiPageResponse) => { pageContent = data.html });
         window.scrollTo({ // resets the page to view the top
             top: 0,
             behavior: 'auto'
@@ -83,41 +71,6 @@
         for(let e of elements) {
             e.remove()
         }
-    }
-
-    function cleanPage(pageContent: string){
-        const parser: DOMParser = new DOMParser();
-        const doc: Document = parser.parseFromString(pageContent, 'text/html');
-
-        eraseElements(doc.querySelectorAll("span.mw-editsection"));
-        eraseElements(doc.querySelectorAll("table[class^='box-']"));
-        eraseElements(doc.querySelectorAll("sup[id^='cite_ref'], sup[class='noprint Inline-Template Template-Fact']"));
-        eraseElements(doc.querySelectorAll("span[id='References'], span[id='Notes'], span[id='Citations'], span[id='Bibliography'], span[id='Further_reading']"))
-        eraseElements(doc.querySelectorAll("div[class^='reflist'], div[class='refbegin']"));
-        eraseElements(doc.querySelectorAll("sup[class^='noprint']"))
-
-        const otherCitations: NodeListOf<Element> = doc.querySelectorAll("sup");
-        for (let otherCitation of otherCitations){
-            if (otherCitation.textContent?.trim() === "[citation needed]")
-                otherCitation.remove();
-        }
-
-        return doc.body.innerHTML;
-    }
-
-    function isRedirectPage(pageContent: string): boolean {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(pageContent, 'text/html');
-
-        const check = doc.querySelector('div[class="redirectMsg"]');
-        if (check){
-            currPage = String(doc.querySelector('a')?.getAttribute('title'));
-            if (currPage == endPage){
-                isWin = true;
-            }
-        }
-
-        return !!check;
     }
 
     function getIdx(length: number) { // Gets two random indexes
@@ -176,12 +129,9 @@
         const startIdx = idxs[0];
         const endIdx = idxs[1]
         currPage = firstPage = wordList[startIdx]; 
-        // currPage = firstPage = "Limestone";
         path.push(firstPage);
         pathString += currPage + ' → '
         endPage = wordList[endIdx];
-        // endPage = "Pompeii";
-        // endPage = "Apple";
         console.log(`START:"${currPage}" IDX: "${startIdx}", END: "${endPage}", IDX: "${endIdx}"`);
         await tick(); // Allows timer to load
         timerComponent.startTimer();

@@ -9,8 +9,20 @@ mediawikiRouter.get('/startend', async (req, res) => {
     while(start === end) {
         end = Math.floor(Math.random() * wordList.length);
     } 
+    res.json({
+        start: wordList[start],
+        end: wordList[end],
+    });
 
-     // Store the pair in the database
+    
+});
+
+mediawikiRouter.post('/startend', async (req, res) => {
+    let start = Math.floor(Math.random() * wordList.length);
+    let end = Math.floor(Math.random() * wordList.length);
+    while(start === end) {
+        end = Math.floor(Math.random() * wordList.length);
+    } 
     try {
         await wordCollection.insertOne({
             start: wordList[start],

@@ -1,12 +1,15 @@
 <script lang="ts">
     import { mediaWikiService } from "../services/MediaWikiService";  
-    import { wordList } from "../constants/constants";
-    import { tick } from 'svelte';
     import Timer from "./Timer.svelte";
 
     type ApiPageResponse = {
         title: string,
         html: string
+    };
+
+    type ApiStartEndResponse = {
+        start: string,
+        end: string
     };
     
     let pageContent: string = "";
@@ -37,8 +40,6 @@
 
  
     function fetchWikiPage() {
-        // Figured out URL from here: https://www.mediawiki.org/w/api.php?action=parse&format=json&origin=*&page=Project%3ASandbox&formatversion=2
-        // on https://www.mediawiki.org/wiki/API:Parsing_wikitext and API sandbox
         console.log(currPage);
         mediaWikiService.getPageFromApi(currPage)
             .then((data: ApiPageResponse) => { pageContent = data.html });
@@ -67,80 +68,22 @@
         fetchWikiPage(); // show new page
     }
 
-    function getIdx(length: number) { // Gets two random indexes
-        let max = length;
-        let startIdx = Math.floor(Math.random() * max);
-        let endIdx = Math.floor(Math.random() * max);
-        while (startIdx == endIdx) { // Make sure they are not the same
-            startIdx = Math.floor(Math.random() * length);
-            endIdx = Math.floor(Math.random() * length);
-        }
-        return [startIdx, endIdx];
-    }
-
-    async function getTopWords(): Promise<void> { // Gets the array of the mostviewed pages up to max 
-        let max = 100; // Change this number to set how many top Wikipedia pages to get
-        let idxs = getIdx(max+1);
-        let startIdx = idxs[0] + 1;
-        let endIdx = idxs[1] + 1;
-        let words: string[] = [];
-        try {
-            let wordsFromOffset = await mediaWikiService.getNextSetOfWords(startIdx); 
-            words.push(...wordsFromOffset); 
-            wordsFromOffset = await mediaWikiService.getNextSetOfWords(endIdx); 
-            words.push(...wordsFromOffset); 
-
-            currPage = firstPage = words[0]; 
-            endPage = words[1];
-            if (currPage === undefined || endPage === undefined) { // If words were unable to be obtained
-                getRandomWords();
-            } else {
-                console.log(`START:"${currPage}" IDX: "${startIdx}", END: "${endPage}", IDX: "${endIdx}"`);
-                timerComponent.startTimer();
-                fetchWikiPage();
-            }
-        } catch (error) {
-            console.error("Error fetching list of pages:", error);
-        }
-    }
-    
-    async function getRandomWords(): Promise<void> { // Uses random words for the game
-        try {
-            const words = await mediaWikiService.getRandomWords();
-            currPage = firstPage = words[0]; // sets the start word
-            // path.push(currPage); 
-            endPage = words[1];
-            console.log(`START:"${currPage}", END: "${endPage}"`);
-            timerComponent.startTimer();
-            fetchWikiPage();
-        } catch (error) {
-            console.error("Error fetching Wikipedia pages:", error);
-        }
-    }
-
-    async function getSetWords(): Promise<void> {
-        const idxs = getIdx(wordList.length);
-        const startIdx = idxs[0];
-        const endIdx = idxs[1]
-        currPage = firstPage = wordList[startIdx]; 
-        path.push(firstPage);
-        pathString += currPage + ' → '
-        endPage = wordList[endIdx];
-        console.log(`START:"${currPage}" IDX: "${startIdx}", END: "${endPage}", IDX: "${endIdx}"`);
-        await tick(); // Allows timer to load
-        timerComponent.startTimer();
-        fetchWikiPage();
-    }
-
     function start(): void {
         mediaWikiService.getPageFromApi('Apple')
             .then((data) => { 
                 console.log(data);
             });
         startCheck = true;
-        // getTopWords(); // Gets two random wikipedia pages that are in most viewed
-        // getRandomWords(); // Gets two fully random wikipedia pages
-        getSetWords(); // Get words from the set list
+        
+        mediaWikiService.getWordsFromApi()
+            .then(async (data: ApiStartEndResponse) => {
+                currPage = firstPage = data.start;
+                path.push(firstPage);
+                pathString += currPage + ' → ';
+                timerComponent.startTimer();
+                endPage = data.end;
+                fetchWikiPage();
+            });
     }
 
     function restartGame(): void {
@@ -257,7 +200,6 @@
         z-index: 50;
     }
 </style>
-
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->

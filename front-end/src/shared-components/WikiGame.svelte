@@ -204,11 +204,12 @@
     #loading-img {
         width: 40px;
         margin: auto;
+        vertical-align: middle;
     }
 
-    #loading-img-span {
-        align-content: center;
-        margin:auto;
+    #loading-container {
+        text-align: center;
+        padding-top: 50px;
     }
 </style>
 
@@ -260,19 +261,19 @@
             id="main-container"
             style="filter: blur({isWin ? '5px' : '0px'})"
         >
+        {#if !isLoading}
             <div id="wiki-page-container">
-                {#if !isLoading}
-                    {#if currPage}
-                        <h1>{ currPage }</h1>
-                    {/if}
+                {#if currPage}
+                    <h1>{ currPage }</h1>
+                {/if}
 
-                    {@html pageContent}
-                {:else}
-                    <span id="loading-img-span" style="align-items: center">
-                        <img id="loading-img" src="/loading.gif" alt="loading..." />
-                    </span>
-                {/if} <!-- loads content -->
+                {@html pageContent} <!-- loads content -->
             </div>
+        {:else}
+            <div id="loading-container" >
+                <img id="loading-img" src="/loading.gif" alt="loading..." />
+            </div>
+        {/if}
         </div>
     {/if}
 </main>

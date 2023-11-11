@@ -1,3 +1,5 @@
+import { PUBLIC_API_LOCAL_URL } from '$env/static/public';
+
 class MediaWikiService {
     getPagePromise(pageTitle: string): Promise<any> {
         const apiUrl = `https://en.wikipedia.org/w/api.php?action=parse&format=json&origin=*&page=${pageTitle}&prop=text`;
@@ -11,7 +13,7 @@ class MediaWikiService {
     }
 
     getPageFromApi(title: string): Promise<any> {
-        return fetch(`http://localhost:3000/mediawiki/page/${title}`).then((response) => response.json());
+        return fetch(`${PUBLIC_API_LOCAL_URL}/mediawiki/page/${title}`).then((response) => response.json());
     }
 
     getRandomWords(): Promise<string[]> {

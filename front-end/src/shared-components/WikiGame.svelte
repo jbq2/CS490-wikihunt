@@ -21,6 +21,7 @@
     let startCheck:boolean = false;
     let path:string[] = [];
     let pathString:string = "";
+    let isLoading = false;
 
     let timerComponent: Timer;
 
@@ -40,10 +41,13 @@
 
  
     function fetchWikiPage() {
-        pageContent = 'loading...';
+        isLoading = true;
         console.log(currPage);
         mediaWikiService.getPageFromApi(currPage)
-            .then((data: ApiPageResponse) => { pageContent = data.html });
+            .then((data: ApiPageResponse) => { 
+                pageContent = data.html;
+                isLoading = false; 
+            });
         window.scrollTo({ // resets the page to view the top
             top: 0,
             behavior: 'auto'
@@ -196,6 +200,16 @@
         padding: 5px 5px 5px 5px;
         z-index: 50;
     }
+
+    #loading-img {
+        width: 40px;
+        margin: auto;
+    }
+
+    #loading-img-span {
+        align-content: center;
+        margin:auto;
+    }
 </style>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -247,10 +261,17 @@
             style="filter: blur({isWin ? '5px' : '0px'})"
         >
             <div id="wiki-page-container">
-                {#if currPage}
-                    <h1>{ currPage }</h1>
-                {/if}
-                {@html pageContent} <!-- loads content -->
+                {#if !isLoading}
+                    {#if currPage}
+                        <h1>{ currPage }</h1>
+                    {/if}
+
+                    {@html pageContent}
+                {:else}
+                    <span id="loading-img-span" style="align-items: center">
+                        <img id="loading-img" src="/loading.gif" alt="loading..." />
+                    </span>
+                {/if} <!-- loads content -->
             </div>
         </div>
     {/if}

@@ -40,6 +40,7 @@
 
  
     function fetchWikiPage() {
+        pageContent = 'loading...';
         console.log(currPage);
         mediaWikiService.getPageFromApi(currPage)
             .then((data: ApiPageResponse) => { pageContent = data.html });
@@ -69,10 +70,6 @@
     }
 
     function start(): void {
-        mediaWikiService.getPageFromApi('Apple')
-            .then((data) => { 
-                console.log(data);
-            });
         startCheck = true;
         
         mediaWikiService.getWordsFromApi()

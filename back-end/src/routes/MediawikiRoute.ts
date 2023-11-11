@@ -8,6 +8,7 @@ export const mediawikiRouter = Router();
 
 // GET endpoint that returns a random pair of words
 mediawikiRouter.get('/startend', async (req, res) => {
+    console.log('hit /startend');
     let start = Math.floor(Math.random() * wordList.length);
     let end = Math.floor(Math.random() * wordList.length);
     while(start === end) {
@@ -22,6 +23,7 @@ mediawikiRouter.get('/startend', async (req, res) => {
 
 // GET endpoint to return enhanced/cleaned article html
 mediawikiRouter.get('/page/:title', async (req, res) => {
+    console.log('hit /page/:title');
     let title: string = req.params['title']
     let apiUrl: string = `${mediaWikiUrlRoot}?action=parse&format=json&origin=*&page=${title}&prop=text`;   
     let doc: Document = await getHtmlDoc(apiUrl);

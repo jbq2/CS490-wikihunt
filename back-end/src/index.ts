@@ -14,6 +14,7 @@ app.get('/', async (req, res) => {
         desc: 'test endpoint'
     });
     setInterval(() => daily.checkTime(), 60000); // 60,000 milliseconds = 1 minute 
+    // setInterval(() => daily.getDailyWords(), 60000); // 60,000 milliseconds = 1 minute 
 });
 
 app.use('/mediawiki', mediawikiRouter);

@@ -22,24 +22,31 @@ class Daily {
     }
 
     async getWord(): Promise<string[]> {
-        let wordCount = await listOfWords.stats(); // set to length of table
-        let idx = Math.floor(Math.random() * wordCount);
-        let results = await listOfWords.findOne({index: idx})
-        if (results) {
-            let word = results.word; // set startWord based on obtained index
-            let category = results.category; // set startCategory based on startWord
-            return [word, category]
-        } else {
-            throw new Error("Error getting word");
+        try {
+            let wordCount = await listOfWords.countDocuments(); 
+            // console.log("wordCount:", wordCount);
+            let idx = Math.floor(Math.random() * wordCount);
+            // console.log("idx:", idx);
+            let results = await listOfWords.findOne({ index: idx })
+            if (results) {
+                let word = results.word; // set startWord based on obtained index
+                let category = results.category; // set startCategory based on startWord
+                return [word, category]
+            } else {
+                throw new Error("Error getting word");
+            }
+        } catch (error) {
+            console.error("Error getting word:", error);
+            throw error; 
         }
     }
 
     async setDailyWords(): Promise<void> { // Sets Daily words in the document, calls getRandomTwoWords
-        let words = this.getRandomTwoWords();
+        let words = await this.getRandomTwoWords();
         await dailyWords.updateOne(
-            {start: words[0]},
-            {end: words[1]},
-            {upsert: true}
+            {},
+            { $set: { start: words[0], end: words[1] } },
+            { upsert: true }
         );
     }
 

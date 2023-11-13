@@ -12,7 +12,8 @@ app.get('/', async (req, res) => {
         source: 'test source',
         size: data.length,
         desc: 'test endpoint'
-    }); 
+    });
+    setInterval(() => daily.checkTime(), 60000); // 60,000 milliseconds = 1 minute 
 });
 
 app.use('/mediawiki', mediawikiRouter);
@@ -25,5 +26,3 @@ try {
 catch(e) {
     console.log('failed to start server');
 }
-
-setInterval(daily.checkTime, 60000); // 60,000 milliseconds = 1 minute

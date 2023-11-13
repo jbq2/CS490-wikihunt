@@ -1,7 +1,6 @@
 <script lang="ts">
+    import type { PageApiResponse, StartEndApiResponse } from "../constants/models";
     import { mediaWikiService } from "../services/MediaWikiService";  
-    import { wordList } from "../constants/constants";
-    import { tick } from 'svelte';
     import Timer from "./Timer.svelte";
     
     let pageContent: string = "";
@@ -19,8 +18,6 @@
     function clickLink (event: any) {
         event.preventDefault(); // prevents default (navigate to a new page)
 
-        // if (event.target.getAttribute("class") === "external text") { return };
-
         if (event.target.tagName === 'I') { // for the case where a wikipedia page uses italicized text
             const linkElm = event.target.closest('a');
             if (linkElm) {
@@ -35,8 +32,8 @@
 
     function fetchWikiPage(): void {
         mediaWikiService.getPageFromApi(currPage)
-            .then((data) => {
-                pageContent = data['html'];
+            .then((data: PageApiResponse) => {
+                pageContent = data.html;
             });
         window.scrollTo({ // resets the page to view the top
             top: 0,
@@ -63,24 +60,18 @@
         fetchWikiPage(); // show new page
     }
 
-    async function start(): Promise<void> {
-        // mediaWikiService.getPageFromApi('Apple')
-        //     .then((data) => { 
-        //         console.log(data);
-        //     });
-        // getTopWords(); // Gets two random wikipedia pages that are in most viewed
-        // getRandomWords(); // Gets two fully random wikipedia pages
+    function start(): void {
         startCheck = true;
         mediaWikiService.getRandomWordsFromApi()
-            .then((data) => {
-                currPage = firstPage = data['start'];
-                endPage = data['end'];
+            .then((data: StartEndApiResponse) => {
+                currPage = firstPage = data.start;
+                endPage = data.end;
                 timerComponent.startTimer();
                 fetchWikiPage();
                 path.push(currPage);
                 pathString += currPage + ' → ';
                 console.log(`START:"${currPage}", END: "${endPage}"`);
-            }); 
+            });
     }
 
     function restartGame(): void {

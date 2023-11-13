@@ -12,6 +12,7 @@
     let startCheck:boolean = false;
     let path:string[] = [];
     let pathString:string = "";
+    let isLoading = false;
 
     let timerComponent: Timer;
 
@@ -31,9 +32,11 @@
     }
 
     function fetchWikiPage(): void {
+        isLoading = true;
         mediaWikiService.getPageFromApi(currPage)
             .then((data: PageApiResponse) => {
                 pageContent = data.html;
+                isLoading = false;
             });
         window.scrollTo({ // resets the page to view the top
             top: 0,
@@ -190,6 +193,17 @@
         padding: 5px 5px 5px 5px;
         z-index: 50;
     }
+
+    #loading-img {
+        width: 40px;
+        margin: auto;
+        vertical-align: middle;
+    }
+
+    #loading-container {
+        text-align: center;
+        padding-top: 50px;
+    }
 </style>
 
 
@@ -241,12 +255,18 @@
             id="main-container"
             style="filter: blur({isWin ? '5px' : '0px'})"
         >
-            <div id="wiki-page-container">
-                {#if currPage}
-                    <h1>{ currPage }</h1>
-                {/if}
-                {@html pageContent} <!-- loads content -->
-            </div>
+            {#if !isLoading}
+                <div id="wiki-page-container">
+                    {#if currPage}
+                        <h1>{ currPage }</h1>
+                    {/if}
+                    {@html pageContent} <!-- loads content -->
+                </div>
+            {:else}
+                <div id="loading-container">
+                    <img id="loading-img" src="/loading.gif" alt="loading..." />
+                </div>
+            {/if}
         </div>
     {/if}
 </main>

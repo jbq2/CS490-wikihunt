@@ -22,6 +22,11 @@
     <button class="hamburger-menu" on:click={toggleSidebar}>☰</button>
     <aside class="sidebar {isSidebarOpen ? 'open' : ''}">
         <button class="close-btn" on:click={toggleSidebar}>×</button>
+        <ul>
+            <a on:click={toggleSidebar} id="left-link" href="/"><li style="left: 1.6rem" id="nav-bar-link1">Home</li></a>
+            <a on:click={toggleSidebar} href="/wiki"><li id="nav-bar-link2">Play</li></a>
+            <a on:click={toggleSidebar} id="right-link" href="/leaderboard"><li style="right: 1.6rem" id="nav-bar-link3">Leaderboard</li></a>
+        </ul>
     </aside>
 </div>
 <slot />
@@ -67,6 +72,7 @@
 
     .hamburger-menu {
         display: none; 
+        margin: 0;
     }
 
     .sidebar {
@@ -86,7 +92,7 @@
 
     @media screen and (max-width: 392px) {
         .nav-bar { display: none; }
-        .hamburger-menu { display: block }
+        .hamburger-menu { display: block; }
     }
 
 </style>

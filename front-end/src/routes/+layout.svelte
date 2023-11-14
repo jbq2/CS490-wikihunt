@@ -3,7 +3,8 @@
         <img class="logoimage" src={'src/lib/assets/wikilogo.png'} alt="Logo">
         <!-- <h1 style="margin: 0 10px;">WikiHunt</h1> -->
     </a>
-    <nav style="text-align: center">
+    
+    <nav class="nav-bar" style="text-align: center">
         <ul style="padding: 0 0 0 20px;" id="nav-bar">
             <a id="left-link" href="/"><li style="left: 1.6rem" id="nav-bar-link1">Home</li></a>
             <a href="/wiki"><li id="nav-bar-link2">Play</li></a>
@@ -50,6 +51,10 @@
 
     #nav-bar-link3 {
         text-indent: -0.25rem;
+    }
+
+    @media screen and (max-width: 392px) {
+        .nav-bar { display: none; }
     }
 
 </style>

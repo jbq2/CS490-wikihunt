@@ -1,3 +1,11 @@
+<script>
+    let isSidebarOpen = false;
+
+    function toggleSidebar() {
+        isSidebarOpen = !isSidebarOpen;
+    }
+</script>
+
 <div id="header">
     <a href="/">
         <img class="logoimage" src={'src/lib/assets/wikilogo.png'} alt="Logo">
@@ -11,6 +19,10 @@
             <a id="right-link" href="/leaderboard"><li style="right: 1.6rem" id="nav-bar-link3">Leaderboard</li></a>
         </ul>
     </nav>
+    <button class="hamburger-menu" on:click={toggleSidebar}>☰</button>
+    <aside class="sidebar {isSidebarOpen ? 'open' : ''}">
+        <button class="close-btn" on:click={toggleSidebar}>×</button>
+    </aside>
 </div>
 <slot />
 
@@ -53,8 +65,28 @@
         text-indent: -0.25rem;
     }
 
+    .hamburger-menu {
+        display: none; 
+    }
+
+    .sidebar {
+        position: fixed;
+        width: 150px;
+        top: 0;
+        left: -300px;
+        height: 100%;
+        background: white;
+        transition: left 0.3s;
+        opacity: 0.9
+    }
+
+    .sidebar.open {
+        left: 0;
+    }
+
     @media screen and (max-width: 392px) {
         .nav-bar { display: none; }
+        .hamburger-menu { display: block }
     }
 
 </style>

@@ -82,7 +82,7 @@
         left: -300px;
         height: 100%;
         background: white;
-        transition: left 0.3s;
+        transition: left 0.31s;
         opacity: 0.9
     }
 

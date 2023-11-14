@@ -1,39 +1,51 @@
-<script>
+<script lang='ts'>
     let isSidebarOpen = false;
 
-    function toggleSidebar() {
+    function toggleSidebar(): void {
         isSidebarOpen = !isSidebarOpen;
     }
+
+    function clickOff(event: any): void {
+        console.log(event)
+        if (isSidebarOpen){
+            let tag: string = event.target.tagName;
+            const tags: string[] = ['BUTTON', 'ASIDE', 'UL', 'LI']
+            if (tags.indexOf(tag) === -1)
+                toggleSidebar();
+        }
+    }
 </script>
-
-<div id="header">
-    <div id="hamburger-and-logo">
-        {#if !isSidebarOpen}
-            <button class="hamburger-menu" on:click={toggleSidebar}>☰</button>
-        {/if}
-        <a class="logolink" href="/">
-            <img class="logoimage" src={'src/lib/assets/wikilogo2.png'} alt="Logo">
-            <!-- <h1 style="margin: 0 10px;">WikiHunt</h1> -->
-        </a>
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+<main on:click={clickOff}>
+    <div id="header">
+        <div id="hamburger-and-logo">
+            {#if !isSidebarOpen}
+                <button class="hamburger-menu" on:click={toggleSidebar}>☰</button>
+            {/if}
+            <a class="logolink" href="/">
+                <img class="logoimage" src={'src/lib/assets/wikilogo2.png'} alt="Logo">
+                <!-- <h1 style="margin: 0 10px;">WikiHunt</h1> -->
+            </a>
+        </div>
+        <nav class="nav-bar" style="text-align: center">
+            <ul style="padding: 0 0 0 20px;" id="nav-bar">
+                <a id="left-link" href="/"><li style="left: 1.6rem" id="nav-bar-link1">Home</li></a>
+                <a href="/wiki"><li id="nav-bar-link2">Play</li></a>
+                <a id="right-link" href="/leaderboard"><li style="right: 1.6rem" id="nav-bar-link3">Leaderboard</li></a>
+            </ul>
+        </nav>
+        <aside class="sidebar {isSidebarOpen ? 'open' : ''}">
+            <button class="close-btn" on:click={toggleSidebar}>×</button>
+            <ul style="list-style-type: none; margin-right: 5rem; padding-left: 1rem">
+                <a on:click={toggleSidebar} href="/"><li>Home</li></a>
+                <a on:click={toggleSidebar} href="/wiki"><li>Play</li></a>
+                <a on:click={toggleSidebar} href="/leaderboard"><li>Leaderboard</li></a>
+            </ul>
+        </aside>
     </div>
-    <nav class="nav-bar" style="text-align: center">
-        <ul style="padding: 0 0 0 20px;" id="nav-bar">
-            <a id="left-link" href="/"><li style="left: 1.6rem" id="nav-bar-link1">Home</li></a>
-            <a href="/wiki"><li id="nav-bar-link2">Play</li></a>
-            <a id="right-link" href="/leaderboard"><li style="right: 1.6rem" id="nav-bar-link3">Leaderboard</li></a>
-        </ul>
-    </nav>
-    <aside class="sidebar {isSidebarOpen ? 'open' : ''}">
-        <button class="close-btn" on:click={toggleSidebar}>×</button>
-        <ul style="list-style-type: none; margin-right: 5rem">
-            <a on:click={toggleSidebar} href="/"><li>Home</li></a>
-            <a on:click={toggleSidebar} href="/wiki"><li>Play</li></a>
-            <a on:click={toggleSidebar} href="/leaderboard"><li>Leaderboard</li></a>
-        </ul>
-    </aside>
-</div>
-<slot />
-
+    <slot />
+</main>
 <style>
     @import '/public/global.css';
 
@@ -81,7 +93,7 @@
 
     .sidebar {
         position: fixed;
-        width: 150px;
+        width: 100px;
         top: 0;
         left: -300px;
         height: 100%;
@@ -94,7 +106,11 @@
         left: 0;
     }
 
-    @media screen and (max-width: 392px) {
+    .close-btn {
+        margin-right: 2.5rem;
+    }
+
+    @media screen and (max-width: 450px) {
         .nav-bar { display: none; }
         .hamburger-menu, .logoimage, .logolink { display: inline-block; }
     }

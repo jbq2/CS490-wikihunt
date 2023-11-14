@@ -8,7 +8,7 @@
 
 <div id="header">
     <a href="/">
-        <img class="logoimage" src={'src/lib/assets/wikilogo.png'} alt="Logo">
+        <img class="logoimage" src={'src/lib/assets/wikilogo2.png'} alt="Logo">
         <!-- <h1 style="margin: 0 10px;">WikiHunt</h1> -->
     </a>
     
@@ -22,7 +22,7 @@
     <button class="hamburger-menu" on:click={toggleSidebar}>☰</button>
     <aside class="sidebar {isSidebarOpen ? 'open' : ''}">
         <button class="close-btn" on:click={toggleSidebar}>×</button>
-        <ul>
+        <ul style="list-style-type: none">
             <a on:click={toggleSidebar} id="left-link" href="/"><li style="left: 1.6rem" id="nav-bar-link1">Home</li></a>
             <a on:click={toggleSidebar} href="/wiki"><li id="nav-bar-link2">Play</li></a>
             <a on:click={toggleSidebar} id="right-link" href="/leaderboard"><li style="right: 1.6rem" id="nav-bar-link3">Leaderboard</li></a>

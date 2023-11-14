@@ -1,6 +1,6 @@
 import express from 'express';
 import { mediawikiRouter } from './routes/MediawikiRoute.js';
-import { daily } from './functions/daily.js'
+// import { daily } from './DAO/daily.js'
 
 const port = 3000;
 const app = express();
@@ -13,7 +13,7 @@ app.get('/', async (req, res) => {
         size: data.length,
         desc: 'test endpoint'
     });
-    setInterval(() => daily.checkTime(), 60000); // 60,000 milliseconds = 1 minute 
+    // setInterval(() => daily.checkTime(), 60000); // 60,000 milliseconds = 1 minute 
     // setInterval(() => daily.getDailyWords(), 60000); // 60,000 milliseconds = 1 minute 
 });
 

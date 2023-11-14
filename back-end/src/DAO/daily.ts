@@ -27,7 +27,7 @@ class Daily {
             // console.log("wordCount:", wordCount);
             let idx = Math.floor(Math.random() * wordCount);
             // console.log("idx:", idx);
-            let results = await listOfWords.findOne({ index: idx })
+            let results = await listOfWords.findOne({}, { skip: idx });
             if (results) {
                 let word = results.word; // set startWord based on obtained index
                 let category = results.category; // set startCategory based on startWord
@@ -58,7 +58,6 @@ class Daily {
         // console.log("start: ", startWord, " end: ", endWord);
         return [startWord, endWord];
     }
-
 }
 
 export const daily = new Daily();

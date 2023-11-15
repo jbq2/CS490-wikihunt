@@ -9,14 +9,14 @@ let dailyWords;
 
 MongoClient.connect(connectionString)
     .then(client => {
-        console.log('Connected to Database')
-        const db= client.db('WikiHunt')
-        wordCollection = db.collection('randomizedwords')
-        listOfWords = db.collection('testTable')
-        dailyWords = db.collection('testTable2')
+        console.log('Connected to Database');
+        const db= client.db('WikiHunt');
+        wordCollection = db.collection('randomizedwords');
+        listOfWords = db.collection('allwords');
+        dailyWords = db.collection('dailypair');
 
     })
-    .catch(error=> console.error(error))
+    .catch(error=> console.error(error));
 export { wordCollection }; 
 export { listOfWords }; 
 export { dailyWords }; 

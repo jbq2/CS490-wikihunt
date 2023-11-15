@@ -6,7 +6,7 @@ class MediaWikiService {
     }
 
     getRandomWordsFromApi(): Promise<any> {
-        return fetch(`${PUBLIC_API_LOCAL_URL}/mediawiki/startend`).then((response) => response.json());
+        return fetch(`${PUBLIC_API_LOCAL_URL}/mediawiki/randomwords`).then((response) => response.json());
     }
 }
 

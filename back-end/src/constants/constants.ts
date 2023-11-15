@@ -1,3 +1,5 @@
+export const mediaWikiUrlRoot: string = 'https://en.wikipedia.org/w/api.php';
+
 export const wordList: string[] = [
     'Apple',
     'Kyoto',

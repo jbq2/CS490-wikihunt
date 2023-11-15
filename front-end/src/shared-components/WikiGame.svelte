@@ -1,7 +1,6 @@
 <script lang="ts">
+    import type { PageApiResponse, StartEndApiResponse } from "../constants/models";
     import { mediaWikiService } from "../services/MediaWikiService";  
-    import { wordList } from "../constants/constants";
-    import { tick } from 'svelte';
     import Timer from "./Timer.svelte";
     
     let pageContent: string = "";
@@ -13,13 +12,12 @@
     let startCheck:boolean = false;
     let path:string[] = [];
     let pathString:string = "";
+    let isLoading = false;
 
     let timerComponent: Timer;
 
     function clickLink (event: any) {
         event.preventDefault(); // prevents default (navigate to a new page)
-
-        // if (event.target.getAttribute("class") === "external text") { return };
 
         if (event.target.tagName === 'I') { // for the case where a wikipedia page uses italicized text
             const linkElm = event.target.closest('a');
@@ -33,26 +31,12 @@
         }
     }
 
- 
-    function fetchWikiPage() {
-        // Figured out URL from here: https://www.mediawiki.org/w/api.php?action=parse&format=json&origin=*&page=Project%3ASandbox&formatversion=2
-        // on https://www.mediawiki.org/wiki/API:Parsing_wikitext and API sandbox
-        console.log(currPage);
-        mediaWikiService.getPagePromise(currPage)
-            .then((data) => { // get data
-                if (data && data.parse && data.parse.text) { // gets all data, parsed data, and parsed text
-                    let tempData = cleanPage(data.parse.text["*"]);
-                    if (isRedirectPage(tempData)){  
-                        fetchWikiPage();
-                    }
-                    else{
-                        pageContent = tempData;
-                    }
-
-                }
-            })
-            .catch((error) => { // errors
-                console.error("Error fetching Wikipedia content:", error);
+    function fetchWikiPage(): void {
+        isLoading = true;
+        mediaWikiService.getPageFromApi(currPage)
+            .then((data: PageApiResponse) => {
+                pageContent = data.html;
+                isLoading = false;
             });
         window.scrollTo({ // resets the page to view the top
             top: 0,
@@ -79,141 +63,42 @@
         fetchWikiPage(); // show new page
     }
 
-    function eraseElements(elements: NodeListOf<Element>): void {
-        for(let e of elements) {
-            e.remove()
-        }
-    }
-
-    function cleanPage(pageContent: string){
-        const parser: DOMParser = new DOMParser();
-        const doc: Document = parser.parseFromString(pageContent, 'text/html');
-
-        eraseElements(doc.querySelectorAll("span.mw-editsection"));
-        eraseElements(doc.querySelectorAll("table[class^='box-']"));
-        eraseElements(doc.querySelectorAll("sup[id^='cite_ref'], sup[class='noprint Inline-Template Template-Fact']"));
-        eraseElements(doc.querySelectorAll("span[id='References'], span[id='Notes'], span[id='Citations'], span[id='Bibliography'], span[id='Further_reading']"))
-        eraseElements(doc.querySelectorAll("div[class^='reflist'], div[class='refbegin']"));
-        eraseElements(doc.querySelectorAll("sup[class^='noprint']"))
-
-        const otherCitations: NodeListOf<Element> = doc.querySelectorAll("sup");
-        for (let otherCitation of otherCitations){
-            if (otherCitation.textContent?.trim() === "[citation needed]")
-                otherCitation.remove();
-        }
-
-        return doc.body.innerHTML;
-    }
-
-    function isRedirectPage(pageContent: string): boolean {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(pageContent, 'text/html');
-
-        const check = doc.querySelector('div[class="redirectMsg"]');
-        if (check){
-            currPage = String(doc.querySelector('a')?.getAttribute('title'));
-            if (currPage == endPage){
-                isWin = true;
-            }
-        }
-
-        return !!check;
-    }
-
-    function getIdx(length: number) { // Gets two random indexes
-        let max = length;
-        let startIdx = Math.floor(Math.random() * max);
-        let endIdx = Math.floor(Math.random() * max);
-        while (startIdx == endIdx) { // Make sure they are not the same
-            startIdx = Math.floor(Math.random() * length);
-            endIdx = Math.floor(Math.random() * length);
-        }
-        return [startIdx, endIdx];
-    }
-
-    async function getTopWords(): Promise<void> { // Gets the array of the mostviewed pages up to max 
-        let max = 100; // Change this number to set how many top Wikipedia pages to get
-        let idxs = getIdx(max+1);
-        let startIdx = idxs[0] + 1;
-        let endIdx = idxs[1] + 1;
-        let words: string[] = [];
-        try {
-            let wordsFromOffset = await mediaWikiService.getNextSetOfWords(startIdx); 
-            words.push(...wordsFromOffset); 
-            wordsFromOffset = await mediaWikiService.getNextSetOfWords(endIdx); 
-            words.push(...wordsFromOffset); 
-
-            currPage = firstPage = words[0]; 
-            endPage = words[1];
-            if (currPage === undefined || endPage === undefined) { // If words were unable to be obtained
-                getRandomWords();
-            } else {
-                console.log(`START:"${currPage}" IDX: "${startIdx}", END: "${endPage}", IDX: "${endIdx}"`);
-                timerComponent.startTimer();
-                fetchWikiPage();
-            }
-        } catch (error) {
-            console.error("Error fetching list of pages:", error);
-        }
-    }
-    
-    async function getRandomWords(): Promise<void> { // Uses random words for the game
-        try {
-            const words = await mediaWikiService.getRandomWords();
-            currPage = firstPage = words[0]; // sets the start word
-            // path.push(currPage); 
-            endPage = words[1];
-            console.log(`START:"${currPage}", END: "${endPage}"`);
-            timerComponent.startTimer();
-            fetchWikiPage();
-        } catch (error) {
-            console.error("Error fetching Wikipedia pages:", error);
-        }
-    }
-
-    async function getSetWords(): Promise<void> {
-        const idxs = getIdx(wordList.length);
-        const startIdx = idxs[0];
-        const endIdx = idxs[1]
-        currPage = firstPage = wordList[startIdx]; 
-        // currPage = firstPage = "Limestone";
-        path.push(firstPage);
-        pathString += currPage + ' → '
-        endPage = wordList[endIdx];
-        // endPage = "Pompeii";
-        // endPage = "Apple";
-        console.log(`START:"${currPage}" IDX: "${startIdx}", END: "${endPage}", IDX: "${endIdx}"`);
-        await tick(); // Allows timer to load
-        timerComponent.startTimer();
-        fetchWikiPage();
-    }
-
     function start(): void {
         startCheck = true;
-        // getTopWords(); // Gets two random wikipedia pages that are in most viewed
-        // getRandomWords(); // Gets two fully random wikipedia pages
-        getSetWords(); // Get words from the set list
+        mediaWikiService.getRandomWordsFromApi()
+            .then((data: StartEndApiResponse) => {
+                currPage = firstPage = data.start;
+                endPage = data.end;
+                timerComponent.startTimer();
+                fetchWikiPage();
+                path.push(currPage);
+                pathString += currPage + ' → ';
+                console.log(`START:"${currPage}", END: "${endPage}"`);
+            });
     }
 
     function restartGame(): void {
-        isWin = false;
+        clearGame();
         currPage = firstPage;
         timerComponent.restart();
-        count = 0;
-        path = [];
-        pathString = "";
         fetchWikiPage();
         timerComponent.startTimer();
     }
 
     function newGame(): void {
+        clearGame();
+        timerComponent.restart();
+        start();
+        fetchWikiPage();
+    }
+
+    function clearGame(): void {
         isWin = false;
         count = 0;
-        timerComponent.restart();
         path = [];
         pathString = "";
-        start();
     }
+    
 </script>
 
 <style>
@@ -308,6 +193,17 @@
         padding: 5px 5px 5px 5px;
         z-index: 50;
     }
+
+    #loading-img {
+        width: 40px;
+        margin: auto;
+        vertical-align: middle;
+    }
+
+    #loading-container {
+        text-align: center;
+        padding-top: 50px;
+    }
 </style>
 
 
@@ -359,12 +255,18 @@
             id="main-container"
             style="filter: blur({isWin ? '5px' : '0px'})"
         >
-            <div id="wiki-page-container">
-                {#if currPage}
-                    <h1>{ currPage }</h1>
-                {/if}
-                {@html pageContent} <!-- loads content -->
-            </div>
+            {#if !isLoading}
+                <div id="wiki-page-container">
+                    {#if currPage}
+                        <h1>{ currPage }</h1>
+                    {/if}
+                    {@html pageContent} <!-- loads content -->
+                </div>
+            {:else}
+                <div id="loading-container">
+                    <img id="loading-img" src="/loading.gif" alt="loading..." />
+                </div>
+            {/if}
         </div>
     {/if}
 </main>

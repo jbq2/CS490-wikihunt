@@ -1,9 +1,15 @@
 import express from 'express';
+import cors from 'cors';
 import { mediawikiRouter } from './routes/MediawikiRoute.js';
 
 const port = 3000;
 const app = express();
 
+const corsOptions = {
+    origin: '*' // this should be changed to actual name of front end url in production
+};
+
+app.use(cors(corsOptions));
 app.get('/', async (req, res) => {
     const data = 'test data';
     res.json({

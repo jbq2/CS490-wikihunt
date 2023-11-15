@@ -24,13 +24,14 @@ class Daily {
     async getWord(): Promise<string[]> {
         try {
             let wordCount = await listOfWords.countDocuments(); 
-            // console.log("wordCount:", wordCount);
+            console.log("wordCount:", wordCount);
             let idx = Math.floor(Math.random() * wordCount);
-            // console.log("idx:", idx);
+            console.log("idx:", idx);
             let results = await listOfWords.findOne({}, { skip: idx });
             if (results) {
-                let word = results.word; // set startWord based on obtained index
+                let word = results.title; // set startWord based on obtained index
                 let category = results.category; // set startCategory based on startWord
+                console.log(results);
                 return [word, category]
             } else {
                 throw new Error("Error getting word");

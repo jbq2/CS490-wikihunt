@@ -1,10 +1,12 @@
 import Router from 'express';
+import { wordList } from '../constants/constants.js';
+import { wordCollection } from '../server.js';
+import { daily } from '../DAO/daily.js'
 import fetch from 'node-fetch';
 import { ArticleEnhancerUtil } from '../util/ArticleEnhancerUtil.js';
 import { JSDOM } from 'jsdom';
 import { mediaWikiUrlRoot, wordList } from '../constants/constants.js';
 import { ArticleContent } from '../constants/models.js';
-
 export const mediawikiRouter = Router();
 
 // GET endpoint that returns a random pair of words
@@ -14,14 +16,21 @@ mediawikiRouter.get('/startend', async (req, res) => {
     while(start === end) {
         end = Math.floor(Math.random() * wordList.length);
     } 
+    res.json({
+        start: wordList[start],
+        end: wordList[end],
+    });
+});
 
-    let endTitle: string = wordList[end];
+mediawikiRouter.get('/getwords', async (req, res) => {
+    let words = await daily.getDailyWords();
+    let endTitle: string = words[1];
     let apiUrl: string = `${mediaWikiUrlRoot}?action=parse&format=json&origin=*&page=${endTitle}&prop=text`;
     let temp: ArticleContent = await getArticleContent(apiUrl, endTitle);
     endTitle = temp.title;
 
     res.json({
-        start: wordList[start],
+        start: words[0],
         end: endTitle
     });
 });

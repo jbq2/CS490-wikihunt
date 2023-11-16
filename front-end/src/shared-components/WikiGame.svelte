@@ -2,8 +2,14 @@
     import type { PageApiResponse, StartEndApiResponse } from "../constants/models";
     import { mediaWikiService } from "../services/MediaWikiService";  
     import Timer from "./Timer.svelte";
+    import { onMount } from "svelte";
     
+    type FinalTime = {
+        minutes: number,
+        seconds: number
+    }
     
+
     let pageContent: string = "";
     let currPage: string = ""; 
     let endPage: string | undefined = undefined; // has to be different than wikiPage initially
@@ -14,8 +20,44 @@
     let path:string[] = [];
     let pathString:string = "";
     let isLoading = false;
+    let elapsedTime: FinalTime;
 
     let timerComponent: Timer;
+
+    function writeToCookie(): void {
+        // first check whether data exists for today (whether the user already played or not) -> use readFromCookie() command
+        // which should return a json/object
+        // if it does -> check if existing time is faster or not -> faster ? override : do nothing
+        const date: Date = new Date();
+        let today:object = {
+            'month': date.getMonth(), 
+            'day': date.getDate(),
+            'year': date.getFullYear()
+        }
+        let pair: object = {
+            'start': firstPage,
+            'end': endPage
+        };
+
+        let stats:string = JSON.stringify({
+            'date':today,
+            'goal': pair,
+            'playTime': elapsedTime,
+            'clicks':count,
+            'winPath': path
+        });
+
+        console.log(pair);
+        console.log(stats);
+        // document.cookie = `userStats=${encodeURIComponent(stats)};path=/`;
+        
+    }
+
+    function readFromCookie(): object {
+        let stats: object = {};
+    
+        return stats;
+    }
 
     function clickLink (event: any) {
         event.preventDefault(); // prevents default (navigate to a new page)
@@ -49,17 +91,21 @@
         let temp:string = page.getAttribute('title')!
         if (!temp)
             return;
+        
+        path.push(temp);
+        currPage = temp;
+        count++;
 
         if (temp == endPage){
             pathString += endPage;
             timerComponent.stop();
             isWin = true;
+            elapsedTime = timerComponent.getTime();
+            writeToCookie();
         } else 
             pathString += temp + ' → ';
 
-        path.push(temp);
-        currPage = temp;
-        count++;
+        
         console.log("Navigating to Page: ", currPage);
         fetchWikiPage(); // show new page
     }
@@ -68,8 +114,10 @@
         startCheck = true;
         mediaWikiService.getRandomWordsFromApi()
             .then((data: StartEndApiResponse) => {
-                currPage = firstPage = data.start;
-                endPage = data.end;
+                // currPage = firstPage = data.start;
+                // endPage = data.end;
+                currPage = firstPage = 'Apple';
+                endPage = 'Fruit';
                 timerComponent.startTimer();
                 fetchWikiPage();
                 path.push(currPage);
@@ -288,7 +336,7 @@
         {#if isWin}
             <h1 id="win-message">You Win!</h1>
             <h2 id="win-caption">You found "{ endPage }"</h2>
-            <h2 id="win-time">in { timerComponent.getTime() }</h2>
+            <h2 id="win-time">in { elapsedTime.minutes } minutes and { elapsedTime.seconds } seconds!</h2>
             <h3 id='win-clicks'>Final Score: { count } clicks</h3>
             <div id='path-and-new-game-button-container'>
                 <strong>Path:</strong> 

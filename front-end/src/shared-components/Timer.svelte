@@ -4,6 +4,11 @@
     let timer: number;
     let isRestart = false;
 
+    type FinalTime = {
+        minutes: number,
+        seconds: number
+    }
+
     export function startTimer(): void {
         stop();
         minutes = 0;
@@ -34,8 +39,16 @@
         isRestart = true;
     }
 
-    export function getTime(): string {
-        return `${minutes} minutes and ${seconds} seconds!`
+    // export function getTime(): string {
+    //     return `${minutes} minutes and ${seconds} seconds!`
+    // }
+
+    export function getTime(): FinalTime {
+        let time: FinalTime = {
+            'minutes': minutes,
+            'seconds': seconds
+        }
+        return time;
     }
 </script>
 

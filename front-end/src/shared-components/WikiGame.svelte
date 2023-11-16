@@ -55,7 +55,10 @@
         
         let currentCookie: Stats | undefined = readFromCookie();
         if (currentCookie){
-            console.log("record exists");
+            // if cookie already exists, should we even let the user record a new best time?
+            if (currentCookie.playTime > elapsedTime) { console.log("overwriting current record"); }
+            else if (currentCookie.playTime === elapsedTime) { console.log("matched current time, we can let user overwrite if they want") }
+            else { return; }
         }
 
         let wordPair: object = {

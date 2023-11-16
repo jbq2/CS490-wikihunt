@@ -53,6 +53,11 @@
         // which should return a json/object
         // if it does -> check if existing time is faster or not -> faster ? override : do nothing
         
+        let currentCookie: Stats | undefined = readFromCookie();
+        if (currentCookie){
+            console.log("record exists");
+        }
+
         let wordPair: object = {
             'start': firstPage,
             'end': endPage

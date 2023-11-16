@@ -9,6 +9,12 @@
         seconds: number
     }
 
+    type DateFormat = {
+        month: number,
+        day: number,
+        year: number
+    }
+
     let pageContent: string = "";
     let currPage: string = ""; 
     let endPage: string | undefined = undefined; // has to be different than wikiPage initially
@@ -28,11 +34,12 @@
         // which should return a json/object
         // if it does -> check if existing time is faster or not -> faster ? override : do nothing
         const date: Date = new Date();
-        let today:object = {
-            'month': date.getMonth(), 
+        let today:DateFormat = {
+            'month': date.getMonth()+1, 
             'day': date.getDate(),
             'year': date.getFullYear()
         }
+
         let pair: object = {
             'start': firstPage,
             'end': endPage
@@ -45,11 +52,10 @@
             'clicks':count,
             'winPath': path
         });
-
-        console.log(pair);
-        console.log(stats);
-        // document.cookie = `userStats=${encodeURIComponent(stats)};path=/`;
         
+        
+        document.cookie = `userStats${today.month}${today.day}${today.year}=${encodeURIComponent(stats)};path=/`;
+        console.log(document);
     }
 
     function readFromCookie(): object {

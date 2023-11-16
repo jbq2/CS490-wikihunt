@@ -49,16 +49,8 @@
         if (!temp)
             return;
 
-        if (temp == endPage){
-            pathString += endPage;
-            timerComponent.stop();
-            isWin = true;
-        } else 
-            pathString += temp + ' → ';
-
-        path.push(temp);
         currPage = temp;
-        count++;
+        updateGame(currPage)
         console.log("Navigating to Page: ", currPage);
         fetchWikiPage(); // show new page
     }
@@ -70,9 +62,8 @@
                 currPage = firstPage = data.start;
                 endPage = data.end;
                 timerComponent.startTimer();
+                updateGame(currPage);
                 fetchWikiPage();
-                path.push(currPage);
-                pathString += currPage + ' → ';
                 console.log(`START:"${currPage}", END: "${endPage}"`);
             });
     }
@@ -99,6 +90,21 @@
         pathString = "";
     }
     
+    function updateGame(page: string): void {
+        if (page === endPage){
+            pathString += endPage;
+            timerComponent.stop();
+            isWin = true;
+        } else 
+            pathString += page + ' → ';
+
+        if (page !== firstPage && count > 0) {
+            count++;
+            path.push(page);
+            currPage = page;
+        }
+    }
+
 </script>
 
 <style>

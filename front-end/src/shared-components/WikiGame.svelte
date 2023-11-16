@@ -15,6 +15,23 @@
         year: number
     }
 
+    type Stats = {
+        date: DateFormat,
+        goal: object,
+        playTime: FinalTime,
+        clicks: number,
+        winPath: string[]
+    }
+
+    const date: Date = new Date();
+    const today:DateFormat = {
+        'month': date.getMonth()+1, 
+        'day': date.getDate(),
+        'year': date.getFullYear()
+    }
+
+    const dailyCookieName: string = `userStats${today.month}${today.day}${today.year}`;
+
     let pageContent: string = "";
     let currPage: string = ""; 
     let endPage: string | undefined = undefined; // has to be different than wikiPage initially
@@ -29,39 +46,39 @@
 
     let timerComponent: Timer;
 
+
     function writeToCookie(): void {
         // first check whether data exists for today (whether the user already played or not) -> use readFromCookie() command
         // which should return a json/object
         // if it does -> check if existing time is faster or not -> faster ? override : do nothing
-        const date: Date = new Date();
-        let today:DateFormat = {
-            'month': date.getMonth()+1, 
-            'day': date.getDate(),
-            'year': date.getFullYear()
-        }
-
-        let pair: object = {
+        
+        let wordPair: object = {
             'start': firstPage,
             'end': endPage
         };
 
         let stats:string = JSON.stringify({
             'date':today,
-            'goal': pair,
+            'goal': wordPair,
             'playTime': elapsedTime,
             'clicks':count,
             'winPath': path
         });
         
+        document.cookie = `${dailyCookieName}=${encodeURIComponent(stats)};path=/`;
         
-        document.cookie = `userStats${today.month}${today.day}${today.year}=${encodeURIComponent(stats)};path=/`;
-        console.log(document);
     }
 
-    function readFromCookie(): object {
-        let stats: object = {};
-    
-        return stats;
+    function readFromCookie(): Stats | undefined {
+        let stats: Stats;
+        const cookies = document.cookie.split('; ');
+        const statsCookie = cookies.find(row => row.startsWith(dailyCookieName));
+        if (statsCookie) {
+            const encodedStats = statsCookie.split('=')[1];
+            const decodedStats = decodeURIComponent(encodedStats);
+            stats = JSON.parse(decodedStats);
+            return stats;
+        }
     }
 
     function clickLink (event: any) {

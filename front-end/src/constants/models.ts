@@ -11,13 +11,13 @@ export type PageApiResponse = {
 export type FinalTime = {
     minutes: number,
     seconds: number
-}
+};
 
 export type DateFormat = {
     month: number,
     day: number,
     year: number
-}
+};
 
 export type Stats = {
     date: DateFormat,
@@ -25,4 +25,8 @@ export type Stats = {
     playTime: FinalTime,
     clicks: number,
     winPath: string[]
-}
+};
+
+export type GameCount = {
+    count: number
+};

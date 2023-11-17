@@ -2,7 +2,6 @@
     import type { PageApiResponse, StartEndApiResponse } from "../constants/models";
     import { mediaWikiService } from "../services/MediaWikiService";  
     import Timer from "./Timer.svelte";
-    import { onMount } from "svelte";
     
     type FinalTime = {
         minutes: number,
@@ -47,18 +46,9 @@
     let timerComponent: Timer;
 
 
-    function writeToCookie(): void {
-        // first check whether data exists for today (whether the user already played or not) -> use readFromCookie() command
-        // which should return a json/object
-        // if it does -> check if existing time is faster or not -> faster ? override : do nothing
-        
+    function writeToCookie(): void {      
         let currentCookie: Stats | undefined = readFromCookie();
-        if (currentCookie){
-            // if cookie already exists, should we even let the user record a new best time?
-            if (currentCookie.playTime > elapsedTime) { console.log("overwriting current record"); }
-            else if (currentCookie.playTime === elapsedTime) { console.log("matched current time, we can let user overwrite if they want") }
-            else { return; }
-        }
+        if (currentCookie) { return; } // daily cookie exists
 
         let wordPair: object = {
             'start': firstPage,
@@ -73,12 +63,11 @@
             'winPath': path
         });
         
-        document.cookie = `${dailyCookieName}=${encodeURIComponent(stats)};path=/`;
-        
+        document.cookie = `${dailyCookieName}=${encodeURIComponent(stats)};path=/`;   
     }
 
     function readFromCookie(): Stats | undefined {
-        let stats: Stats;
+        let stats: Stats | undefined;
         const cookies = document.cookie.split('; ');
         const statsCookie = cookies.find(row => row.startsWith(dailyCookieName));
         if (statsCookie) {

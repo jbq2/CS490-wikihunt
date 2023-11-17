@@ -30,3 +30,10 @@ export type Stats = {
 export type GameCount = {
     count: number
 };
+
+export type CookieCollection = {
+    dailyStats: Stats,
+    allTimeBest: Stats,
+    dailyStreak: GameCount,
+    lastPlayed: DateFormat
+}

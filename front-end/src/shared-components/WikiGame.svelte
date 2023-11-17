@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { PageApiResponse, StartEndApiResponse, FinalTime, DateFormat, Stats } from "../constants/models";
+    import type { PageApiResponse, StartEndApiResponse, FinalTime, DateFormat, Stats, GameCount } from "../constants/models";
     import { mediaWikiService } from "../services/MediaWikiService";  
     import Timer from "./Timer.svelte";
     
@@ -10,10 +10,13 @@
         'year': date.getFullYear()
     }
 
-    const dailyCookieName: string = `dailyStats${today.month}${today.day}${today.year}`;
+    const dailyCookieName: string = `dailyStats`;
     const dailyStreakCookieName: string =  'dailyStreak';
     const lastPlayedCookieName: string = 'lastPlayed';
     const allTimeBestCookieName: string = 'allTimeBestStats';
+    const expiryDate = new Date();
+    expiryDate.setFullYear(expiryDate.getFullYear() + 1); // Set cookie to expire in one year
+
 
     let pageContent: string = "";
     let currPage: string = ""; 
@@ -30,26 +33,32 @@
     let timerComponent: Timer;
 
 
-    function writeToCookie(): void {      
-        let currentCookie: Stats | undefined = readFromCookie();
-        if (currentCookie) { return; } // cookies exist -> update them
 
+    function getGameStats(): string {
         let wordPair: object = {
             'start': firstPage,
             'end': endPage
         };
 
-        let dailyStats: string = JSON.stringify({
+        return JSON.stringify({
             'date':today,
             'goal': wordPair,
             'playTime': elapsedTime,
             'clicks':count,
             'winPath': path
         });
+    }
 
-        let lastPlayed: string = JSON.stringify({
-            'date': today
-        });
+    function writeToCookie(): void {      
+        let currentCookie: any = readFromCookie(dailyCookieName);
+        if (currentCookie) { // cookies exist -> update them
+            updateCookies(); 
+            return;
+        } 
+
+        let dailyStats: string = getGameStats();
+
+        let lastPlayed: string = JSON.stringify(today);
 
         let dailyStreak: string = JSON.stringify({
             'count': 1
@@ -57,21 +66,55 @@
 
         let ATBStats: string = dailyStats;
         
-        document.cookie = `${dailyCookieName}=${encodeURIComponent(dailyStats)};path=/`;   
-        document.cookie = `${allTimeBestCookieName}=${encodeURIComponent(ATBStats)};path=/`
-        document.cookie = `${dailyStreakCookieName}=${encodeURIComponent(dailyStreak)};path=/`
-        document.cookie = `${lastPlayedCookieName}=${encodeURIComponent(lastPlayed)};path=/`
+        document.cookie = `${dailyCookieName}=${encodeURIComponent(dailyStats)};expires=${expiryDate.toUTCString()};path=/`;   
+        document.cookie = `${allTimeBestCookieName}=${encodeURIComponent(ATBStats)};expires=${expiryDate.toUTCString()};path=/`
+        document.cookie = `${dailyStreakCookieName}=${encodeURIComponent(dailyStreak)};expires=${expiryDate.toUTCString()};path=/`
+        document.cookie = `${lastPlayedCookieName}=${encodeURIComponent(lastPlayed)};expires=${expiryDate.toUTCString()};path=/`
     }
 
-    function readFromCookie(): Stats | undefined {
-        let stats: Stats | undefined;
+    function updateCookies(): void {
+        let lastPlayedDate: DateFormat = readFromCookie(lastPlayedCookieName);
+        if (lastPlayedDate === today)
+            return;
+
+        let yesterday: DateFormat = {
+            'day': today.day - 1,
+            'month': today.month,
+            'year': today.year
+        };
+        if (yesterday.day === 0){
+            yesterday.month = today.month - 1;
+            if (yesterday.month === 0) {
+                yesterday.month = 12;
+                yesterday.year -= 1;
+            }
+            if (yesterday.month === 2)
+                yesterday.day = 28;
+            else if ([4,6,9,11].includes(yesterday.month))
+                yesterday.day = 30;
+            else
+                yesterday.day = 31;
+        }
+
+
+        let currentStreak: GameCount = readFromCookie(dailyStreakCookieName);
+        if (lastPlayedDate === yesterday)
+            currentStreak.count++;
+        
+        else 
+            currentStreak.count = 1;
+
+        
+
+    }
+
+    function readFromCookie(inputCookie: string): any {
         const cookies = document.cookie.split('; ');
-        const statsCookie = cookies.find(row => row.startsWith(dailyCookieName));
-        if (statsCookie) {
-            const encodedStats = statsCookie.split('=')[1];
-            const decodedStats = decodeURIComponent(encodedStats);
-            stats = JSON.parse(decodedStats);
-            return stats;
+        const targetCookie = cookies.find(row => row.startsWith(inputCookie));
+        if (targetCookie) {
+            const encodedData = targetCookie.split('=')[1];
+            const decodedData = decodeURIComponent(encodedData);
+            return JSON.parse(decodedData);
         }
     }
 

@@ -36,4 +36,4 @@ export type CookieCollection = {
     allTimeBest: Stats,
     dailyStreak: GameCount,
     lastPlayed: DateFormat
-}
+};

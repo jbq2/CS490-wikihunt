@@ -1,11 +1,12 @@
 <script lang="ts">
-    import type { PageApiResponse, StartEndApiResponse, FinalTime, DateFormat, Stats, GameCount } from "../constants/models";
+    // import { _ } from "$env/static/private";
+    import type { PageApiResponse, StartEndApiResponse, FinalTime, DateFormat, Stats, GameCount, CookieCollection } from "../constants/models";
     import { mediaWikiService } from "../services/MediaWikiService";  
     import Timer from "./Timer.svelte";
     
     const date: Date = new Date();
     const today:DateFormat = {
-        'month': date.getMonth()+1, 
+        'month': date.getMonth()+1,
         'day': date.getDate(),
         'year': date.getFullYear()
     }
@@ -33,38 +34,44 @@
     let timerComponent: Timer;
 
 
-
-    function getGameStats(): string {
+    function getGameStats(): Stats {
         let wordPair: object = {
             'start': firstPage,
             'end': endPage
         };
 
-        return JSON.stringify({
+        return {
             'date':today,
             'goal': wordPair,
             'playTime': elapsedTime,
             'clicks':count,
             'winPath': path
-        });
+        };
     }
 
     function writeToCookie(): void {      
         let currentCookie: any = readFromCookie(dailyCookieName);
+        let dailyStats: string = JSON.stringify(getGameStats());
+        let lastPlayed: string;
+        let dailyStreak: string;
+        let ATBStats: string;
         if (currentCookie) { // cookies exist -> update them
-            updateCookies(); 
-            return;
+            let cookies: CookieCollection | undefined = updateCookies(); 
+            if (!cookies)
+                return;
+
+            dailyStats = JSON.stringify(cookies.dailyStats);
+            lastPlayed = JSON.stringify(cookies.lastPlayed);
+            dailyStreak = JSON.stringify(cookies.dailyStreak);
+            ATBStats = JSON.stringify(cookies.allTimeBest);
         } 
 
-        let dailyStats: string = getGameStats();
-
-        let lastPlayed: string = JSON.stringify(today);
-
-        let dailyStreak: string = JSON.stringify({
-            'count': 1
-        });
-
-        let ATBStats: string = dailyStats;
+        else {
+            dailyStats = JSON.stringify(getGameStats());
+            lastPlayed = JSON.stringify(today);
+            dailyStreak = JSON.stringify({'count': 1});
+            ATBStats = dailyStats;
+        }
         
         document.cookie = `${dailyCookieName}=${encodeURIComponent(dailyStats)};expires=${expiryDate.toUTCString()};path=/`;   
         document.cookie = `${allTimeBestCookieName}=${encodeURIComponent(ATBStats)};expires=${expiryDate.toUTCString()};path=/`
@@ -72,14 +79,14 @@
         document.cookie = `${lastPlayedCookieName}=${encodeURIComponent(lastPlayed)};expires=${expiryDate.toUTCString()};path=/`
     }
 
-    function updateCookies(): void {
+    function updateCookies(): CookieCollection | undefined {
         let lastPlayedDate: DateFormat = readFromCookie(lastPlayedCookieName);
-        if (lastPlayedDate === today)
+        if (JSON.stringify(lastPlayedDate) === JSON.stringify(today))
             return;
 
         let yesterday: DateFormat = {
-            'day': today.day - 1,
             'month': today.month,
+            'day': today.day - 1,
             'year': today.year
         };
         if (yesterday.day === 0){
@@ -96,16 +103,28 @@
                 yesterday.day = 31;
         }
 
-
         let currentStreak: GameCount = readFromCookie(dailyStreakCookieName);
-        if (lastPlayedDate === yesterday)
+        if (JSON.stringify(lastPlayedDate) === JSON.stringify(yesterday))
             currentStreak.count++;
-        
         else 
             currentStreak.count = 1;
 
-        
+        let allTimeBest: Stats = readFromCookie(allTimeBestCookieName);
+        let thisGameStats: Stats = getGameStats();
+        let betterStats: Stats = allTimeBest;
 
+        if (allTimeBest.playTime.minutes > thisGameStats.playTime.minutes)
+            betterStats = thisGameStats
+        else if (allTimeBest.playTime.minutes === thisGameStats.playTime.minutes)
+            betterStats = allTimeBest.playTime.seconds > thisGameStats.playTime.seconds ? thisGameStats : allTimeBest;
+    
+        return {
+            'dailyStats': thisGameStats,
+            // 'allTimeBest': allTimeBest.clicks < thisGameStats.clicks ? allTimeBest : thisGameStats,
+            'allTimeBest': betterStats,
+            'dailyStreak': currentStreak,
+            'lastPlayed': today
+        };
     }
 
     function readFromCookie(inputCookie: string): any {
@@ -173,10 +192,8 @@
         startCheck = true;
         mediaWikiService.getRandomWordsFromApi()
             .then((data: StartEndApiResponse) => {
-                // currPage = firstPage = data.start;
-                // endPage = data.end;
-                currPage = firstPage = 'Apple';
-                endPage = 'Fruit';
+                currPage = firstPage = data.start;
+                endPage = data.end;
                 timerComponent.startTimer();
                 fetchWikiPage();
                 path.push(currPage);

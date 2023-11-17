@@ -1,27 +1,8 @@
 <script lang="ts">
-    import type { PageApiResponse, StartEndApiResponse } from "../constants/models";
+    import type { PageApiResponse, StartEndApiResponse, FinalTime, DateFormat, Stats } from "../constants/models";
     import { mediaWikiService } from "../services/MediaWikiService";  
     import Timer from "./Timer.svelte";
     
-    type FinalTime = {
-        minutes: number,
-        seconds: number
-    }
-
-    type DateFormat = {
-        month: number,
-        day: number,
-        year: number
-    }
-
-    type Stats = {
-        date: DateFormat,
-        goal: object,
-        playTime: FinalTime,
-        clicks: number,
-        winPath: string[]
-    }
-
     const date: Date = new Date();
     const today:DateFormat = {
         'month': date.getMonth()+1, 
@@ -29,7 +10,10 @@
         'year': date.getFullYear()
     }
 
-    const dailyCookieName: string = `userStats${today.month}${today.day}${today.year}`;
+    const dailyCookieName: string = `dailyStats${today.month}${today.day}${today.year}`;
+    const dailyStreakCookieName: string =  'dailyStreak';
+    const lastPlayedCookieName: string = 'lastPlayed';
+    const allTimeBestCookieName: string = 'allTimeBestStats';
 
     let pageContent: string = "";
     let currPage: string = ""; 
@@ -48,22 +32,35 @@
 
     function writeToCookie(): void {      
         let currentCookie: Stats | undefined = readFromCookie();
-        if (currentCookie) { return; } // daily cookie exists
+        if (currentCookie) { return; } // cookies exist -> update them
 
         let wordPair: object = {
             'start': firstPage,
             'end': endPage
         };
 
-        let stats:string = JSON.stringify({
+        let dailyStats: string = JSON.stringify({
             'date':today,
             'goal': wordPair,
             'playTime': elapsedTime,
             'clicks':count,
             'winPath': path
         });
+
+        let lastPlayed: string = JSON.stringify({
+            'date': today
+        });
+
+        let dailyStreak: string = JSON.stringify({
+            'count': 1
+        });
+
+        let ATBStats: string = dailyStats;
         
-        document.cookie = `${dailyCookieName}=${encodeURIComponent(stats)};path=/`;   
+        document.cookie = `${dailyCookieName}=${encodeURIComponent(dailyStats)};path=/`;   
+        document.cookie = `${allTimeBestCookieName}=${encodeURIComponent(ATBStats)};path=/`
+        document.cookie = `${dailyStreakCookieName}=${encodeURIComponent(dailyStreak)};path=/`
+        document.cookie = `${lastPlayedCookieName}=${encodeURIComponent(lastPlayed)};path=/`
     }
 
     function readFromCookie(): Stats | undefined {

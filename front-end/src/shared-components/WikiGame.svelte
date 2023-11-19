@@ -3,6 +3,7 @@
     import { mediaWikiService } from "../services/MediaWikiService";  
     import Timer from "./Timer.svelte";
     
+    
     let pageContent: string = "";
     let currPage: string = ""; 
     let endPage: string | undefined = undefined; // has to be different than wikiPage initially
@@ -102,9 +103,8 @@
 </script>
 
 <style>
-
     @import '/public/wiki-common.css';
-    
+    @import url('https://fonts.googleapis.com/css?family=Varela Round');
     #win-message {
         font-size: 70px;
         margin-top: 6rem;
@@ -186,14 +186,33 @@
     #overlay-container {
         position: fixed;
         text-align: center;
-        top: 10px;
+        top: 0px;
         right:0px;
         height:100%;
         width:125px; 
         padding: 5px 5px 5px 5px;
         z-index: 50;
+        border-left-style: groove;
+        border-left-color: #94d4d0;
+        border-left-width: 7px;
+        background-color: #edf6f7;
+        font-family: 'Varela Round';
+        font-size: 1em;
+        color: black;
     }
-
+    #timer {
+        margin-bottom: 35%;
+    }
+    #restart-button {
+        position: fixed;
+        bottom: 5%;
+        width: 110px;
+        left: 10%;
+        background-color: #f44336;
+        color: white;
+        border-radius: 4px;
+        font-weight: bold; 
+    }
     #loading-img {
         width: 40px;
         margin: auto;
@@ -243,11 +262,12 @@
             id= "overlay-container"
             style="filter: blur({isWin ? '5px' : '0px'})"    
         >
-            <p id="click-counter"><b>  Wikipedia Articles Clicked: {count} </b></p> <!-- counter is at the bottom, not formated the best-->
-            <p id="timer"><Timer bind:this={ timerComponent } /></p>
-            <p> <b> Start Page: {firstPage} </b></p>
-            <p> 
-            <b> End Page: {endPage} </b> 
+            <img class="logoimage s-7IPF32Wcq3s8" src="src/lib/assets/wikilogo2.png" alt="Logo">
+            <p id="click-counter"><b> {count} clicks </b></p> <!-- counter is at the bottom, not formated the best-->
+            <p id="timer"><b><Timer bind:this={ timerComponent } /></b></p>
+            <p> <b> {firstPage} </b></p>
+            <p> <b>⬇️</b>
+            <p> <b> {endPage} </b> 
             </p>
             <button id='restart-button' on:click={ restartGame }>Restart Game</button>
         </div>

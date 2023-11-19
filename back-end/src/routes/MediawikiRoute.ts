@@ -1,5 +1,5 @@
 import Router from 'express';
-import { wordCollection } from '../server.js';
+import { connectToDatabase, wordCollection } from '../server.js';
 import { daily } from '../DAO/daily.js'
 import fetch from 'node-fetch';
 import { ArticleEnhancerUtil } from '../util/ArticleEnhancerUtil.js';
@@ -8,6 +8,7 @@ import { mediaWikiUrlRoot, wordList } from '../constants/constants.js';
 import { ArticleContent } from '../constants/models.js';
 export const mediawikiRouter = Router();
 
+await connectToDatabase();
 // GET endpoint that returns a random pair of words
 mediawikiRouter.get('/randomwords', async (req, res) => {
     let words = await daily.getRandomTwoWords();

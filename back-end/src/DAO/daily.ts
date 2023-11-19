@@ -1,6 +1,6 @@
 import moment from 'moment'
 import 'moment-timezone'
-import { listOfWords } from '../server.js';
+import { allWordList } from '../server.js';
 import { dailyWords } from '../server.js';
 
 class Daily {
@@ -23,11 +23,11 @@ class Daily {
 
     async getWord(): Promise<string[]> {
         try {
-            let wordCount = await listOfWords.countDocuments(); 
+            let wordCount = await allWordList.countDocuments(); 
             console.log("wordCount:", wordCount);
             let idx = Math.floor(Math.random() * wordCount);
             console.log("idx:", idx);
-            let results = await listOfWords.findOne({}, { skip: idx });
+            let results = await allWordList.findOne({}, { skip: idx });
             if (results) {
                 let word = results.title; // set startWord based on obtained index
                 let category = results.category; // set startCategory based on startWord

@@ -4,20 +4,28 @@ import dotenv from 'dotenv' ;
 dotenv.config();
 const connectionString= process.env.DB_STRING;
 let wordCollection;
-let listOfWords;
+let allWordList;
 let dailyWords;
+let client;
+let db;
 
-MongoClient.connect(connectionString)
-    .then(client => {
+
+const connectToDatabase = async () => {
+    try {
+        client = await MongoClient.connect(connectionString);
         console.log('Connected to Database');
-        const db= client.db('WikiHunt');
-        wordCollection = db.collection('randomizedwords');
-        listOfWords = db.collection('allwords');
-        dailyWords = db.collection('dailypair');
+        db = client.db('WikiHunt');
+        //wordCollection = db.collection('randomizedwords');
+        allWordList = db.collection('newTestTable');
+        dailyWords = db.collection('newTestTable2');
+    } catch (error) {
+        console.error('Error connecting to the database:', error);
+        process.exit(1); // Exit the process with an error code
+    }
+};
 
-    })
-    .catch(error=> console.error(error));
+export {connectToDatabase};
 export { wordCollection }; 
-export { listOfWords }; 
+export { allWordList }; 
 export { dailyWords }; 
 

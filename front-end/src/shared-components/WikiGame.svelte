@@ -258,7 +258,7 @@
     }
     #restart-button {
         position: fixed;
-        bottom: 5%;
+        top: 85%;
         width: 110px;
         left: 10%;
         background-color: #f44336;
@@ -284,7 +284,7 @@
 <main on:click={clickLink}>
     {#if !startCheck}
         <button id="start-button" on:click={ start }>Start Game</button>
-    {:else}         
+    {:else}     
         {#if isWin}
             <h1 id="win-message">You Win!</h1>
             <h2 id="win-caption">You found "{ endPage }"</h2>

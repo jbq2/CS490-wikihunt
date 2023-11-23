@@ -1,6 +1,7 @@
 <script lang="ts">
     // import { _ } from "$env/static/private";
     import { writeToCookie } from '../lib/CookieHelper';
+    import { onMount } from "svelte";
     import type { PageApiResponse, StartEndApiResponse, FinalTime, DateFormat, Stats, GameCount, CookieCollection } from "../constants/models";
     import { mediaWikiService } from "../services/MediaWikiService";  
     import Timer from "./Timer.svelte";
@@ -23,6 +24,8 @@
     let pathString:string = "";
     let isLoading = false;
     let elapsedTime: FinalTime;
+    export let origEnd: string | undefined = undefined; // has to be different than wikiPage initially
+    export let origStart:string = "";
 
     let timerComponent: Timer;
 
@@ -95,16 +98,13 @@
 
     function start(): void {
         startCheck = true;
-        mediaWikiService.getRandomWordsFromApi()
-            .then((data: StartEndApiResponse) => {
-                currPage = firstPage = data.start;
-                endPage = data.end;
-                timerComponent.startTimer();
-                fetchWikiPage();
-                path.push(currPage);
-                pathString += currPage + ' → ';
-                console.log(`START:"${currPage}", END: "${endPage}"`);
-            });
+        currPage = firstPage = origStart;
+        endPage = origEnd;
+        timerComponent.startTimer();
+        fetchWikiPage();
+        path.push(currPage);
+        pathString += currPage + ' → ';
+        console.log(`START:"${currPage}", END: "${endPage}"`);
     }
 
     function restartGame(): void {
@@ -146,6 +146,10 @@
             statsBar.style.right = "-5%";
         }
     }
+console.log("here")
+onMount(() => {
+    start();
+});
 </script>
 
 <style>
@@ -311,68 +315,63 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <main on:click={clickLink}>
-    {#if !startCheck}
-        <button id="start-button" on:click={ start }>Start Game</button>
-    {:else}     
-        {#if isWin}
-            <h1 id="win-message">You Win!</h1>
-            <h2 id="win-caption">You found "{ endPage }"</h2>
-            <h2 id="win-time">in { elapsedTime.minutes } minutes and { elapsedTime.seconds } seconds!</h2>
-            <h3 id='win-clicks'>Final Score: { count } clicks</h3>
-            <div id='path-and-new-game-button-container'>
-                <strong>Path:</strong> 
-                {#if path.length < 15}
-                    {pathString}
-                {:else}
-                    {#each path.slice(0, 3) as page}
-                        {' '+page+' →'}
-                    {/each}
-                     ...{path.length - 7} more pages... →
-                    {#each path.slice(-4, -2) as page}
-                        {' '+page+' →'}
-                    {/each}
-                    {' '+path[path.length -1]}
-                {/if}
-                <h3 id='new-game-button-container'>
-                    <button id='new-game-button' on:click={ newGame }>New Game</button>
-                </h3>
-            </div>
-        {/if}
-        <!-- <input type="text" bind:value={ currPage } placeholder="Enter Wikipedia page title" /> -->
-        <!-- <button on:click={ fetchWikiPage }>Load Page</button> -->
-        <div 
-            id= "overlay-container"
-            style="filter: blur({isWin ? '5px' : '0px'})"
-            class="sidePanel"    
-        >
-            <!-- svelte-ignore a11y-invalid-attribute -->
-            <a href="javascript:void(0)" class="closeStats" on:click={ closeStats }>&gt;</a>
-            <img class="logoimage s-7IPF32Wcq3s8" src="src/lib/assets/wikilogo2.png" alt="Logo">
-            <p id="click-counter"><b> {count} clicks </b></p> <!-- counter is at the bottom, not formated the best-->
-            <p id="timer"><b><Timer bind:this={ timerComponent } /></b></p>
-            <p> <b> {firstPage} </b></p>
-            <p> <b>⬇️</b>
-            <p> <b> {endPage} </b> 
-            </p>
-            <button id='restart-button' on:click={ restartGame }>Restart Game</button>
-        </div>
-        <button class="openStats" on:click={ openStats }>&lt;</button>
-        <div 
-            id="main-container"
-            style="filter: blur({isWin ? '5px' : '0px'})"
-        >
-            {#if !isLoading}
-                <div id="wiki-page-container">
-                    {#if currPage}
-                        <h1>{ currPage }</h1>
-                    {/if}
-                    {@html pageContent} <!-- loads content -->
-                </div>
+    {#if isWin}
+        <h1 id="win-message">You Win!</h1>
+        <h2 id="win-caption">You found "{ endPage }"</h2>
+        <h2 id="win-time">in { elapsedTime.minutes } minutes and { elapsedTime.seconds } seconds!</h2>
+        <h3 id='win-clicks'>Final Score: { count } clicks</h3>
+        <div id='path-and-new-game-button-container'>
+            <strong>Path:</strong> 
+            {#if path.length < 15}
+                {pathString}
             {:else}
-                <div id="loading-container">
-                    <img id="loading-img" src="/loading.gif" alt="loading..." />
-                </div>
+                {#each path.slice(0, 3) as page}
+                    {' '+page+' →'}
+                {/each}
+                    ...{path.length - 7} more pages... →
+                {#each path.slice(-4, -2) as page}
+                    {' '+page+' →'}
+                {/each}
+                {' '+path[path.length -1]}
             {/if}
+            <h3 id='new-game-button-container'>
+                <button id='new-game-button' on:click={ newGame }>New Game</button>
+            </h3>
         </div>
     {/if}
+    <!-- <input type="text" bind:value={ currPage } placeholder="Enter Wikipedia page title" /> -->
+    <!-- <button on:click={ fetchWikiPage }>Load Page</button> -->
+    <div 
+        id= "overlay-container"
+        style="filter: blur({isWin ? '5px' : '0px'})"
+        class="sidePanel"    
+    >
+        <a href="javascript:void(0)" class="closeStats" on:click={ closeStats }>&gt;</a>
+        <img class="logoimage s-7IPF32Wcq3s8" src="src/lib/assets/wikilogo2.png" alt="Logo">
+        <p id="click-counter"><b> {count} clicks </b></p> <!-- counter is at the bottom, not formated the best-->
+        <p id="timer"><b><Timer bind:this={ timerComponent } /></b></p>
+        <p> <b> {firstPage} </b></p>
+        <p> <b>⬇️</b>
+        <p> <b> {endPage} </b> 
+        </p>
+        <button id='restart-button' on:click={ restartGame }>Restart Game</button>
+    </div>
+    <button class="openStats" on:click={ openStats }>&lt;</button>
+    <div 
+        id="main-container"
+        style="filter: blur({isWin ? '5px' : '0px'})"
+    >
+        {#if !isLoading}
+            <div id="wiki-page-container">
+                {#if currPage}
+                    <h1>{ currPage }</h1>
+                {/if}
+                {@html pageContent} <!-- loads content -->
+            </div>
+        {:else}
+            <div id="loading-container">
+                <img id="loading-img" src="/loading.gif" alt="loading..." />
+            </div>
+        {/if}
+    </div>
 </main>

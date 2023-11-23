@@ -1,4 +1,20 @@
-
+<script lang="ts">
+    import WikiGame from "../shared-components/WikiGame.svelte";
+    import { mediaWikiService } from "../services/MediaWikiService";  
+    import type { PageApiResponse, StartEndApiResponse } from "../constants/models";
+    let startCheck: boolean = false;
+    let fetchedFirstPage: string = "";
+    let fetchedEndPage: string | undefined = undefined; // has to be different than wikiPage initially
+    
+    function start(): void {
+        mediaWikiService.getDailyWordsFromApi()
+            .then((data: StartEndApiResponse) => {
+                fetchedFirstPage = data.start;
+                fetchedEndPage = data.end;
+                startCheck = true;
+            });
+    }
+</script>
 <style>
     .centered-container {
         text-align: center;
@@ -38,18 +54,29 @@
 
 </style>
 
-<div class="centered-container">
-    <h1>Welcome to WikiHunt!</h1>
-    <div class="page-content">
-        <p>Welcome to WikiHunt, a Wikipedia game where the player must navigate from one randomly selected article to another pre-selected article.</p>
-        <h1>Rules</h1>
-        <ul>
-            <li>The user can only navigate by only clicking through links within the same article. No search bar allowed!</li>
-            <li>The user must do this with as little time as possible and with the least amount of clicks.</li>
-            <li>No backtracking!</li>
-        </ul>
-    </div>
-</div>
+<main>
+    {#if !startCheck}
+        <div class="centered-container">
+            <h1>Welcome to WikiHunt!</h1>
+            <div class="page-content">
+                <p>Welcome to WikiHunt, a Wikipedia game where the player must navigate from one randomly selected article to another pre-selected article.</p>
+                <h1>Rules</h1>
+                <ul>
+                    <li>The user can only navigate by only clicking through links within the same article. No search bar allowed!</li>
+                    <li>The user must do this with as little time as possible and with the least amount of clicks.</li>
+                    <li>No backtracking!</li>
+                </ul>
+            </div>
+        </div>
+        <button id="start-button" on:click={ start }>Start Game</button>
+    {:else}
+        <WikiGame
+            origStart = {fetchedFirstPage}
+            origEnd = {fetchedEndPage}
+        />
+    {/if}
+</main>
+
 
 
 

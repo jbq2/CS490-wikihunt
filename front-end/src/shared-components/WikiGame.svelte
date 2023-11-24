@@ -1,7 +1,7 @@
 <script lang="ts">
     import { writeToCookie } from '../lib/CookieHelper';
     import { onMount } from "svelte";
-    import type { PageApiResponse, FinalTime, DateFormat, Stats } from "../constants/models";
+    import type { PageApiResponse, StartEndApiResponse, FinalTime, DateFormat, Stats } from "../constants/models";
     import { mediaWikiService } from "../services/MediaWikiService";  
     import Timer from "./Timer.svelte";
     
@@ -405,7 +405,6 @@
     }
 
 </style>
-
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->

@@ -86,7 +86,7 @@ function updateCookies(gameStats: Stats, today: DateFormat): CookieCollection | 
     };
 }
 
-function readFromCookie(inputCookie: string): any {
+export function readFromCookie(inputCookie: string): any {
     const cookies = document.cookie.split('; ');
     const targetCookie = cookies.find(row => row.startsWith(inputCookie));
     if (targetCookie) {

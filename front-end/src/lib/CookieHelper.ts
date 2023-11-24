@@ -1,13 +1,6 @@
 // import { _ } from "$env/static/private";
 import type { DateFormat, Stats, GameCount, CookieCollection } from "../constants/models";
 
-const date: Date = new Date();
-const today:DateFormat = {
-    'month': date.getMonth()+1,
-    'day': date.getDate(),
-    'year': date.getFullYear()
-}
-
 const dailyCookieName: string = `dailyStats`;
 const dailyStreakCookieName: string =  'dailyStreak';
 const lastPlayedCookieName: string = 'lastPlayed';
@@ -22,7 +15,7 @@ export function writeToCookie(gameStats: Stats): void {
     let dailyStreak: string;
     let ATBStats: string;
     if (currentCookie) { // cookies exist -> update them
-        let cookies: CookieCollection | undefined = updateCookies(gameStats); 
+        let cookies: CookieCollection | undefined = updateCookies(gameStats, gameStats.date); 
         if (!cookies)
             return;
 
@@ -34,18 +27,18 @@ export function writeToCookie(gameStats: Stats): void {
 
     else {
         dailyStats = JSON.stringify(gameStats);
-        lastPlayed = JSON.stringify(today);
+        lastPlayed = JSON.stringify(gameStats.date);
         dailyStreak = JSON.stringify({'count': 1});
         ATBStats = dailyStats;
     }
     
-    document.cookie = `${dailyCookieName}=${encodeURIComponent(dailyStats)};expires=${expiryDate.toUTCString()};path=/`;   
-    document.cookie = `${allTimeBestCookieName}=${encodeURIComponent(ATBStats)};expires=${expiryDate.toUTCString()};path=/`
-    document.cookie = `${dailyStreakCookieName}=${encodeURIComponent(dailyStreak)};expires=${expiryDate.toUTCString()};path=/`
-    document.cookie = `${lastPlayedCookieName}=${encodeURIComponent(lastPlayed)};expires=${expiryDate.toUTCString()};path=/`
+    document.cookie = `${dailyCookieName}=${encodeURIComponent(dailyStats)};expires=${expiryDate.toUTCString()};SameSite=Lax;path=/`;   
+    document.cookie = `${allTimeBestCookieName}=${encodeURIComponent(ATBStats)};expires=${expiryDate.toUTCString()};SameSite=Lax;path=/`
+    document.cookie = `${dailyStreakCookieName}=${encodeURIComponent(dailyStreak)};expires=${expiryDate.toUTCString()};SameSite=Lax;path=/`
+    document.cookie = `${lastPlayedCookieName}=${encodeURIComponent(lastPlayed)};expires=${expiryDate.toUTCString()};SameSite=Lax;path=/`
 }
 
-function updateCookies(gameStats: Stats): CookieCollection | undefined {
+function updateCookies(gameStats: Stats, today: DateFormat): CookieCollection | undefined {
     let lastPlayedDate: DateFormat = readFromCookie(lastPlayedCookieName);
     if (JSON.stringify(lastPlayedDate) === JSON.stringify(today))
         return;

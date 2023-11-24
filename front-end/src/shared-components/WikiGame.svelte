@@ -8,7 +8,7 @@
     const date: Date = new Date();
     const today:DateFormat = {
         'month': date.getMonth()+1,
-        'day': date.getDate(),
+        'day': date.getDate()+1+1,
         'year': date.getFullYear()
     }
 
@@ -97,8 +97,12 @@
         startCheck = true;
         mediaWikiService.getRandomWordsFromApi()
             .then((data: StartEndApiResponse) => {
-                currPage = firstPage = data.start;
-                endPage = data.end;
+                // currPage = firstPage = data.start;
+                // endPage = data.end;
+
+                currPage = firstPage = 'Apple';
+                endPage = 'Tree';
+
                 timerComponent.startTimer();
                 fetchWikiPage();
                 path.push(currPage);

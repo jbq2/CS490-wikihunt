@@ -327,6 +327,36 @@
         text-align: center;
         padding-top: 50px;
     }
+
+    #new-game-button {
+        margin: 10px;
+        padding: 10px;
+        background-color: #04AA6D;
+        color: white;
+        border-radius: 4px;
+        font-weight: bold; 
+        font-size: 20px;
+        transition: 0.5s;
+        /* border: solid black 2px; */
+        border-radius: 10px;
+    }
+
+    #new-game-button:hover {
+        transform: translateY(-3px);
+    }
+
+    @media (hover: hover) {
+        #new-game-button:hover {
+            background-color: #fff;
+            color: #04AA6D;
+        }
+    }
+
+    #new-game-button:active {
+        background-color: #fff;
+        color: #04AA6D;
+    }
+
 </style>
 
 

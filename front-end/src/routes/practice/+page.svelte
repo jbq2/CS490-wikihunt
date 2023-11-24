@@ -104,9 +104,9 @@
                 <img class="logoimage" src={'src/lib/assets/wikilogo3.png'} alt="Logo">
                 <!-- <h1 style="margin: 0 10px;">WikiHunt</h1> -->
             </a>
-            <h1>WikiHunt Practice Mode</h1>
+            <h1>Practice Mode</h1>
             <div class="page-content">
-                <h1>Practice Mode</h1>
+                <!-- <h1>Practice Mode</h1> -->
                 <p>Play WikiHunt for fun! </p>
                 <p>Two randomly selected words are chose each time you play.</p>
                 <!-- <h1>Rules</h1>

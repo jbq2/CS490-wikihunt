@@ -3,26 +3,40 @@
     import { mediaWikiService } from "../services/MediaWikiService";  
     import type { PageApiResponse, StartEndApiResponse } from "../constants/models";
     let startCheck: boolean = false;
+    let loading: boolean = false;
     let fetchedFirstPage: string = "";
     let fetchedEndPage: string | undefined = undefined; // has to be different than wikiPage initially
     
     function start(): void {
+        loading = true;
         mediaWikiService.getDailyWordsFromApi()
             .then((data: StartEndApiResponse) => {
                 fetchedFirstPage = data.start;
                 fetchedEndPage = data.end;
+                loading = false;
                 startCheck = true;
             });
     }
 </script>
 <style>
+    @import url('https://fonts.googleapis.com/css?family=Varela Round');
+
+    :global(body) { 
+        margin: 0; 
+        padding: 0; 
+    }
     .centered-container {
+        flex: 1;
+        height: 100%;
         text-align: center;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        padding: 50px;
+        background-color: #edf6f7;
+        font-family: 'Varela Round';
+        padding-top: 1%;
     }
 
     .page-content {
@@ -52,11 +66,44 @@
         margin: 10px 0;
     }
 
+    #start-button {
+        margin: 10px;
+        padding: 10px;
+        background-color: #04AA6D;
+        color: white;
+        border-radius: 4px;
+        font-weight: bold; 
+        font-size: 20px;
+        transition: 0.5s;
+        /* border: solid black 2px; */
+        border-radius: 10px;
+    }
+
+    #start-button:hover {
+        transform: translateY(-3px);
+    }
+
+    @media (hover: hover) {
+        #start-button:hover {
+            background-color: #fff;
+            color: #04AA6D;
+        }
+    }
+
+    #start-button:active {
+        background-color: #fff;
+        color: #04AA6D;
+    }
+
 </style>
 
 <main>
-    {#if !startCheck}
+    {#if !startCheck && !loading}
         <div class="centered-container">
+            <a class="logolink" href="/">
+                <img class="logoimage" src={'src/lib/assets/wikilogo3.png'} alt="Logo">
+                <!-- <h1 style="margin: 0 10px;">WikiHunt</h1> -->
+            </a>
             <h1>Welcome to WikiHunt!</h1>
             <div class="page-content">
                 <p>Welcome to WikiHunt, a Wikipedia game where the player must navigate from one randomly selected article to another pre-selected article.</p>
@@ -67,8 +114,19 @@
                     <li>No backtracking!</li>
                 </ul>
             </div>
+            <button id="start-button" on:click={ start }>Start Game</button>
         </div>
-        <button id="start-button" on:click={ start }>Start Game</button>
+    {:else if loading && !startCheck}
+        <div class="centered-container">
+            <a class="logolink" href="/">
+                <img class="logoimage" src={'src/lib/assets/wikilogo3.png'} alt="Logo">
+                <!-- <h1 style="margin: 0 10px;">WikiHunt</h1> -->
+            </a>
+            <h1>Welcome to WikiHunt!</h1>
+            <div class="page-content">
+                <h1>Loading Game...</h1>
+            </div>
+        </div>
     {:else}
         <WikiGame
             origStart = {fetchedFirstPage}

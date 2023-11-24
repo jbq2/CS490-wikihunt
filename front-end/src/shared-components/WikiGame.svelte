@@ -146,10 +146,10 @@
             statsBar.style.right = "-5%";
         }
     }
-console.log("here")
-onMount(() => {
-    start();
-});
+    
+    onMount(() => {
+        start();
+    });
 </script>
 
 <style>
@@ -239,7 +239,7 @@ onMount(() => {
         top: 0px;
         right:0px;
         height:100%;
-        width:125px; 
+        width: 125px; 
         padding: 5px 5px 5px 5px;
         z-index: 50;
         border-left-style: groove;

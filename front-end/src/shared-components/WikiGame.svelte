@@ -298,7 +298,25 @@
         color: white;
         border-radius: 4px;
         font-weight: bold; 
+        transition: 0.5s;
     }
+
+    #restart-button:hover {
+        transform: translateY(-3px);
+    }
+
+    @media (hover: hover) {
+        #restart-button:hover {
+            background-color: #fff;
+            color: #f44336;
+        }
+    }
+
+    #restart-button:active {
+        background-color: #fff;
+        color: #f44336;
+    }
+
     #loading-img {
         width: 40px;
         margin: auto;

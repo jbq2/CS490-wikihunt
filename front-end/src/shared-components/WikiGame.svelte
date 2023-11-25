@@ -26,6 +26,7 @@
     let elapsedTime: FinalTime;
     export let origEnd: string | undefined = undefined; // has to be different than wikiPage initially
     export let origStart:string = "";
+    export let dailyMode: boolean = false;
 
     let timerComponent: Timer;
 
@@ -87,7 +88,9 @@
             timerComponent.stop();
             isWin = true;
             elapsedTime = timerComponent.getTime();
-            writeToCookie(getGameStats());
+            if (dailyMode) {
+                writeToCookie(getGameStats());
+            }
         } else 
             pathString += temp + ' → ';
 

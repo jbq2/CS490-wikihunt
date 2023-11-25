@@ -134,6 +134,7 @@
         <WikiGame
             origStart = {fetchedFirstPage}
             origEnd = {fetchedEndPage}
+            dailyMode = {false}
         />
     {/if}
 </main>

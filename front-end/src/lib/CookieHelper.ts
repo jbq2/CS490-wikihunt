@@ -8,6 +8,14 @@ export const allTimeBestCookieName: string = 'allTimeBestStats';
 const expiryDate = new Date();
 expiryDate.setFullYear(expiryDate.getFullYear() + 1); // Set cookie to expire in one year
 
+
+const date: Date = new Date();
+export const today: DateFormat = {
+    'month': date.getMonth()+1,
+    'day': date.getDate(),
+    'year': date.getFullYear()
+}
+
 export function writeToCookie(gameStats: Stats): void {      
     let currentCookie: any = readFromCookie(dailyCookieName);
     let dailyStats: string = JSON.stringify(gameStats);

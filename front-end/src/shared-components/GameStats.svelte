@@ -1,8 +1,7 @@
 <script lang="ts">
 	import Modal from './Modal.svelte';
-	import { readFromCookie, dailyStreakCookieName, lastPlayedCookieName, allTimeBestCookieName } from '$lib/CookieHelper';
+	import { today, readFromCookie, dailyStreakCookieName, lastPlayedCookieName, allTimeBestCookieName } from '$lib/CookieHelper';
 	import type { DateFormat, Stats } from "../constants/models";
-	import today from './WikiGame.svelte';
 
 	let showModal: boolean = false;
 	let noCookies: boolean = false;
@@ -23,6 +22,18 @@
 		else
 			lastPlayed = dateFormatter(lastPlayed);
 		streak = readFromCookie(dailyStreakCookieName).count;
+
+		// let date: string = dateFormatter(allTimeBest.date);
+		// let path: string = allTimeBest.goal['start'] + ' → ' + allTimeBest.goal['end'];
+		// let count: string = allTimeBest.clicks;
+		// let time: string = allTimeBest.playTime.minutes + ' minutes and ' + allTimeBest.playTime.seconds + ' seconds'
+		// allTimeBest = `
+		// \nDate: ${date}
+		// \nPath: ${path}
+		// \nCount: ${count}
+		// \nTime: ${time}
+		// `;
+		// console.log(allTimeBest)
 	}
 
 	function dateFormatter(date: DateFormat): string  {
@@ -42,15 +53,18 @@
 		<div id='last-and-streak'><b>Last Played</b>: {lastPlayed}</div>
 		<div id='last-and-streak'><b>Daily Streak</b>: {streak}{streak ? fireEmoji : ''}</div>
 		<!-- <div id='all-time-best'>
-			All Time Best:
+			<b>All Time Best</b>:<br>{allTimeBest}
+		</div> -->
+		<div id='all-time-best'>
+			<b>All Time Best</b>:
 			{#if noCookies}
 				{allTimeBest}
 			{:else}
-				Date: {dateFormatter(allTimeBest.date)}
-				Path: {allTimeBest.path.start} → {allTimeBest.path.end}
-				Count: {allTimeBest.clicks}
-				Time: {allTimeBest.playTime.minutes} minutes and {allTimeBest.playTime.seconds}
+				<div>Date: {dateFormatter(allTimeBest.date)}</div>
+				<div>Path: {allTimeBest.goal['start']} → {allTimeBest.goal['end']}</div>
+				<div>Count: {allTimeBest.clicks}</div>
+				<div>Time: {allTimeBest.playTime.minutes} minutes and {allTimeBest.playTime.seconds} seconds</div>
 			{/if}
-		</div> -->
+		</div>
 	</div>
 </Modal>

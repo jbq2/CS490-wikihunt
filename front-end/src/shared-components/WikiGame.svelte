@@ -1,16 +1,12 @@
 <script lang="ts">
-    import { writeToCookie } from '../lib/CookieHelper';
+    // import { _ } from "$env/static/private";
+    import { today, writeToCookie } from '../lib/CookieHelper';
     import { onMount } from "svelte";
     import type { PageApiResponse, StartEndApiResponse, FinalTime, DateFormat, Stats } from "../constants/models";
     import { mediaWikiService } from "../services/MediaWikiService";  
     import Timer from "./Timer.svelte";
     
-    const date: Date = new Date();
-    const today:DateFormat = {
-        'month': date.getMonth()+1,
-        'day': date.getDate(),
-        'year': date.getFullYear()
-    }
+    
 
     let pageContent: string = "";
     let currPage: string = ""; 

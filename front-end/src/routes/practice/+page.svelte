@@ -37,6 +37,7 @@
         background-color: #edf6f7;
         font-family: 'Varela Round';
         padding-top: 1%;
+        padding-bottom: 1%;
     }
 
     .page-content {

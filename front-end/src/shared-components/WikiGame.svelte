@@ -155,42 +155,73 @@
 <style>
     @import '/public/wiki-common.css';
     @import url('https://fonts.googleapis.com/css?family=Varela Round');
+    
+    #win-container {
+        position: fixed;
+        width: 75%;
+        left: 12.5%; 
+        z-index: 100; 
+        text-align: center;
+        overflow: hidden; 
+        margin-top: 5%;
+        font-family: 'Varela Round';
+        border: 2px solid #5aa8a8; 
+        border-radius: 10px; 
+    }
+
+    #win-container::before {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(237, 246, 247, 0.75); 
+        z-index: -1;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    #win-message,
+    #win-caption,
+    #win-time,
+    #win-clicks,
+    #path-and-new-game-button-container {
+        position: relative;
+        z-index: 1;
+    }
+
     #win-message {
         font-size: 70px;
-        margin-top: 6rem;
+        margin-top: 24px;
     }
 
     #win-caption {
         font-size: 35px;
-        margin-top: 12rem;
+        margin-top: 12px; 
     }
 
     #win-time {
         font-size: 35px;
-        margin-top: 15rem;
+        margin-top: 12px; 
     }
 
     #win-clicks {
         font-size: 30px;
-        margin-top: 18rem;
+        margin-top: 12px;
     }
-
     #path-and-new-game-button-container {
         font-size: 20px;
-        margin-top: 21rem;
         text-align: center;
-        position: fixed;
-        width: 75%;
-        left: 12.5%; /* (100% - 75%) / 2 to center the element */
-        z-index: 100; /* chose some random large number to put this message above every other element*/
     }
 
-    #win-message, #win-caption, #win-time, #win-clicks {
+    /* #win-message, #win-caption, #win-time, #win-clicks {
         text-align: center;
         position: fixed;
         width: 100%;
-        z-index: 100; /* chose some random large number to put this message above every other element*/
-    }
+        z-index: 100; 
+    } */
 
     #wiki-page-container {
         align-items: center;
@@ -364,27 +395,29 @@
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <main on:click={clickLink}>
     {#if isWin}
-        <h1 id="win-message">You Win!</h1>
-        <h2 id="win-caption">You found "{ endPage }"</h2>
-        <h2 id="win-time">in { elapsedTime.minutes } minutes and { elapsedTime.seconds } seconds!</h2>
-        <h3 id='win-clicks'>Final Score: { count } clicks</h3>
-        <div id='path-and-new-game-button-container'>
-            <strong>Path:</strong> 
-            {#if path.length < 15}
-                {pathString}
-            {:else}
-                {#each path.slice(0, 3) as page}
-                    {' '+page+' →'}
-                {/each}
-                    ...{path.length - 7} more pages... →
-                {#each path.slice(-4, -2) as page}
-                    {' '+page+' →'}
-                {/each}
-                {' '+path[path.length -1]}
-            {/if}
-            <h3 id='new-game-button-container'>
-                <button id='new-game-button' on:click={ newGame }>New Game</button>
-            </h3>
+        <div id="win-container">
+            <h1 id="win-message">You Win!</h1>
+            <h2 id="win-caption">You found "{ endPage }"</h2>
+            <h2 id="win-time">in { elapsedTime.minutes } minutes and { elapsedTime.seconds } seconds!</h2>
+            <h3 id='win-clicks'>Final Score: { count } clicks</h3>
+            <div id='path-and-new-game-button-container'>
+                <strong>Path:</strong> 
+                {#if path.length < 15}
+                    {pathString}
+                {:else}
+                    {#each path.slice(0, 3) as page}
+                        {' '+page+' →'}
+                    {/each}
+                        ...{path.length - 7} more pages... →
+                    {#each path.slice(-4, -2) as page}
+                        {' '+page+' →'}
+                    {/each}
+                    {' '+path[path.length -1]}
+                {/if}
+                <h3 id='new-game-button-container'>
+                    <button id='new-game-button' on:click={ newGame }>Replay Game</button>
+                </h3>
+            </div>
         </div>
     {/if}
     <!-- <input type="text" bind:value={ currPage } placeholder="Enter Wikipedia page title" /> -->

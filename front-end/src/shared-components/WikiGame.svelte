@@ -229,28 +229,42 @@
     #wiki-page-container {
         align-items: center;
         justify-items: center;
-        padding-left: 12.5%;
-        padding-right: 12.5%;
-        width: 75%;
+        /* padding-left: 10.0%;
+        padding-right: 10.0%; */
+        width: 90%;
         position: relative;
         grid-template-columns: repeat(2, 50fr);
         grid-column-gap: 1px; /* Adjust the gap as needed */
-        margin-right: 125px; /* Add margin to account for the overlay container width */
+        /* margin-right: 125px; Add margin to account for the overlay container width */
+        /* overflow-x: scroll; */
+        margin: auto;
+        margin-bottom: 25px;
     }
 
+    #wiki-page-container :global(.sidebox) {
+        overflow-x: scroll;
+    }
     #wiki-page-container :global(table.wikitable), :global(figure), :global(li.gallerybox) {
         background-color: #f8f9fa;
         border: 1px solid #a2a9b1;     
         padding: 5px;  
+        /* overflow-x: scroll; */
     }
     #wiki-page-container :global(li.gallerybox) {
         margin: 3px;
         display: inline-block;
+        /* overflow-x: scroll; */
     }
 
     #wiki-page-container :global(table.wikitable) {
         background-color: #f8f9fa;
         border: 1px solid #a2a9b1;
+        /* width: 100%; */
+    }
+
+    #wiki-page-container :global(table) {
+        overflow-x: scroll;
+        /* width: 100%; */
     }
 
     #wiki-page-container :global(figure) {
@@ -267,13 +281,19 @@
     #wiki-page-container :global(figcaption) {
         width:20rem
     }
+
+    #wiki-page-container :global(div.navbox) {
+        width: 100%;
+        overflow-x: scroll;
+    }
+
     #overlay-container {
         position: fixed;
         text-align: center;
         top: 0px;
         right:0px;
         height:100%;
-        width: 125px; 
+        /* width:125px;  */
         padding: 5px 5px 5px 5px;
         z-index: 50;
         border-left-style: groove;
@@ -283,7 +303,7 @@
         font-family: 'Varela Round';
         font-size: 1em;
         color: black;
-        overflow-x: hidden;
+        /* overflow-x: scroll; */
         transition: 0.5s;
     }
 
@@ -323,6 +343,7 @@
     #timer {
         margin-bottom: 35%;
     }
+
     #restart-button {
         position: fixed;
         top: 85%;

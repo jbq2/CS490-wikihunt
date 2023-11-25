@@ -1,10 +1,9 @@
 import Router from 'express';
-import { wordCollection } from '../server.js';
 import { daily } from '../DAO/daily.js'
 import fetch from 'node-fetch';
 import { ArticleEnhancerUtil } from '../util/ArticleEnhancerUtil.js';
 import { JSDOM } from 'jsdom';
-import { mediaWikiUrlRoot, wordList } from '../constants/constants.js';
+import { mediaWikiUrlRoot } from '../constants/constants.js';
 import { ArticleContent } from '../constants/models.js';
 export const mediawikiRouter = Router();
 

@@ -6,7 +6,6 @@
     }
 
     function clickOff(event: any): void {
-        console.log(event)
         if (isSidebarOpen){
             let tag: string = event.target.tagName;
             const tags: string[] = ['BUTTON', 'ASIDE', 'UL', 'LI']

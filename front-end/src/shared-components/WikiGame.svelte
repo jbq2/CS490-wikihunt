@@ -1,9 +1,17 @@
 <script lang="ts">
-    import type { PageApiResponse, StartEndApiResponse } from "../constants/models";
+    // import { _ } from "$env/static/private";
+    import { writeToCookie } from '../lib/CookieHelper';
+    import type { PageApiResponse, StartEndApiResponse, FinalTime, DateFormat, Stats, GameCount, CookieCollection } from "../constants/models";
     import { mediaWikiService } from "../services/MediaWikiService";  
     import Timer from "./Timer.svelte";
     
-    
+    const date: Date = new Date();
+    const today:DateFormat = {
+        'month': date.getMonth()+1,
+        'day': date.getDate(),
+        'year': date.getFullYear()
+    }
+
     let pageContent: string = "";
     let currPage: string = ""; 
     let endPage: string | undefined = undefined; // has to be different than wikiPage initially
@@ -14,8 +22,25 @@
     let path:string[] = [];
     let pathString:string = "";
     let isLoading = false;
+    let elapsedTime: FinalTime;
 
     let timerComponent: Timer;
+
+
+    function getGameStats(): Stats {
+        let wordPair: object = {
+            'start': firstPage,
+            'end': endPage
+        };  
+
+        return {
+            'date':today,
+            'goal': wordPair,
+            'playTime': elapsedTime,
+            'clicks':count,
+            'winPath': path
+        };
+    }
 
     function clickLink (event: any) {
         event.preventDefault(); // prevents default (navigate to a new page)
@@ -49,17 +74,21 @@
         let temp:string = page.getAttribute('title')!
         if (!temp)
             return;
+        
+        path.push(temp);
+        currPage = temp;
+        count++;
 
         if (temp == endPage){
             pathString += endPage;
             timerComponent.stop();
             isWin = true;
+            elapsedTime = timerComponent.getTime();
+            writeToCookie(getGameStats());
         } else 
             pathString += temp + ' → ';
 
-        path.push(temp);
-        currPage = temp;
-        count++;
+        
         console.log("Navigating to Page: ", currPage);
         fetchWikiPage(); // show new page
     }
@@ -288,7 +317,7 @@
         {#if isWin}
             <h1 id="win-message">You Win!</h1>
             <h2 id="win-caption">You found "{ endPage }"</h2>
-            <h2 id="win-time">in { timerComponent.getTime() }</h2>
+            <h2 id="win-time">in { elapsedTime.minutes } minutes and { elapsedTime.seconds } seconds!</h2>
             <h3 id='win-clicks'>Final Score: { count } clicks</h3>
             <div id='path-and-new-game-button-container'>
                 <strong>Path:</strong> 
@@ -316,6 +345,7 @@
             style="filter: blur({isWin ? '5px' : '0px'})"
             class="sidePanel"    
         >
+            <!-- svelte-ignore a11y-invalid-attribute -->
             <a href="javascript:void(0)" class="closeStats" on:click={ closeStats }>&gt;</a>
             <img class="logoimage s-7IPF32Wcq3s8" src="src/lib/assets/wikilogo2.png" alt="Logo">
             <p id="click-counter"><b> {count} clicks </b></p> <!-- counter is at the bottom, not formated the best-->

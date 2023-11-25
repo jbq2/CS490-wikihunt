@@ -1,10 +1,10 @@
 // import { _ } from "$env/static/private";
 import type { DateFormat, Stats, GameCount, CookieCollection } from "../constants/models";
 
-const dailyCookieName: string = `dailyStats`;
-const dailyStreakCookieName: string =  'dailyStreak';
-const lastPlayedCookieName: string = 'lastPlayed';
-const allTimeBestCookieName: string = 'allTimeBestStats';
+export const dailyCookieName: string = `dailyStats`;
+export const dailyStreakCookieName: string =  'dailyStreak';
+export const lastPlayedCookieName: string = 'lastPlayed';
+export const allTimeBestCookieName: string = 'allTimeBestStats';
 const expiryDate = new Date();
 expiryDate.setFullYear(expiryDate.getFullYear() + 1); // Set cookie to expire in one year
 

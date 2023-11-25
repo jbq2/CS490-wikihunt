@@ -1,4 +1,5 @@
 <script lang='ts'>
+    import GameStats from './../shared-components/GameStats.svelte';
     let isSidebarOpen = false;
 
     function toggleSidebar(): void {
@@ -14,6 +15,8 @@
         }
     }
 </script>
+
+<GameStats></GameStats>
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <main on:click={clickOff}>

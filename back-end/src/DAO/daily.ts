@@ -54,8 +54,8 @@ class Daily {
     async getDailyWords(): Promise<string[]> { // Retrieves Daily words in the document, called when playing daily game
         let words = await dailyWords.findOne();
         // console.log("words: ", words)
-        let startWord = words.start;
-        let endWord = words.end;
+        let startWord = words.start.title;
+        let endWord = words.end.title;
         // console.log("start: ", startWord, " end: ", endWord);
         return [startWord, endWord];
     }

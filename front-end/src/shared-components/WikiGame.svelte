@@ -1,6 +1,7 @@
 <script lang="ts">
     // import { _ } from "$env/static/private";
     import { writeToCookie } from '../lib/CookieHelper';
+    import { onMount } from "svelte";
     import type { PageApiResponse, StartEndApiResponse, FinalTime, DateFormat, Stats, GameCount, CookieCollection } from "../constants/models";
     import { mediaWikiService } from "../services/MediaWikiService";  
     import Timer from "./Timer.svelte";
@@ -23,6 +24,9 @@
     let pathString:string = "";
     let isLoading = false;
     let elapsedTime: FinalTime;
+    export let origEnd: string | undefined = undefined; // has to be different than wikiPage initially
+    export let origStart:string = "";
+    export let dailyMode: boolean = false;
 
     let timerComponent: Timer;
 
@@ -84,7 +88,9 @@
             timerComponent.stop();
             isWin = true;
             elapsedTime = timerComponent.getTime();
-            writeToCookie(getGameStats());
+            if (dailyMode) {
+                writeToCookie(getGameStats());
+            }
         } else 
             pathString += temp + ' → ';
 
@@ -95,16 +101,13 @@
 
     function start(): void {
         startCheck = true;
-        mediaWikiService.getRandomWordsFromApi()
-            .then((data: StartEndApiResponse) => {
-                currPage = firstPage = data.start;
-                endPage = data.end;
-                timerComponent.startTimer();
-                fetchWikiPage();
-                path.push(currPage);
-                pathString += currPage + ' → ';
-                console.log(`START:"${currPage}", END: "${endPage}"`);
-            });
+        currPage = firstPage = origStart;
+        endPage = origEnd;
+        timerComponent.startTimer();
+        fetchWikiPage();
+        path.push(currPage);
+        pathString += currPage + ' → ';
+        console.log(`START:"${currPage}", END: "${endPage}"`);
     }
 
     function restartGame(): void {
@@ -146,47 +149,82 @@
             statsBar.style.right = "-5%";
         }
     }
+    
+    onMount(() => {
+        start();
+    });
 </script>
 
 <style>
     @import '/public/wiki-common.css';
     @import url('https://fonts.googleapis.com/css?family=Varela Round');
+    
+    #win-container {
+        position: fixed;
+        width: 75%;
+        left: 12.5%; 
+        z-index: 100; 
+        text-align: center;
+        overflow: hidden; 
+        margin-top: 5%;
+        font-family: 'Varela Round';
+        border: 2px solid #5aa8a8; 
+        border-radius: 10px; 
+    }
+
+    #win-container::before {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(237, 246, 247, 0.75); 
+        z-index: -1;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    #win-message,
+    #win-caption,
+    #win-time,
+    #win-clicks,
+    #path-and-new-game-button-container {
+        position: relative;
+        z-index: 1;
+    }
+
     #win-message {
         font-size: 70px;
-        margin-top: 6rem;
+        margin-top: 24px;
     }
 
     #win-caption {
         font-size: 35px;
-        margin-top: 12rem;
+        margin-top: 12px; 
     }
 
     #win-time {
         font-size: 35px;
-        margin-top: 15rem;
+        margin-top: 12px; 
     }
 
     #win-clicks {
         font-size: 30px;
-        margin-top: 18rem;
+        margin-top: 12px;
     }
-
     #path-and-new-game-button-container {
         font-size: 20px;
-        margin-top: 21rem;
         text-align: center;
-        position: fixed;
-        width: 75%;
-        left: 12.5%; /* (100% - 75%) / 2 to center the element */
-        z-index: 100; /* chose some random large number to put this message above every other element*/
     }
 
-    #win-message, #win-caption, #win-time, #win-clicks {
+    /* #win-message, #win-caption, #win-time, #win-clicks {
         text-align: center;
         position: fixed;
         width: 100%;
-        z-index: 100; /* chose some random large number to put this message above every other element*/
-    }
+        z-index: 100; 
+    } */
 
     #wiki-page-container {
         align-items: center;
@@ -235,7 +273,7 @@
         top: 0px;
         right:0px;
         height:100%;
-        width:125px; 
+        width: 125px; 
         padding: 5px 5px 5px 5px;
         z-index: 50;
         border-left-style: groove;
@@ -294,7 +332,25 @@
         color: white;
         border-radius: 4px;
         font-weight: bold; 
+        transition: 0.5s;
     }
+
+    #restart-button:hover {
+        transform: translateY(-3px);
+    }
+
+    @media (hover: hover) {
+        #restart-button:hover {
+            background-color: #fff;
+            color: #f44336;
+        }
+    }
+
+    #restart-button:active {
+        background-color: #fff;
+        color: #f44336;
+    }
+
     #loading-img {
         width: 40px;
         margin: auto;
@@ -305,16 +361,44 @@
         text-align: center;
         padding-top: 50px;
     }
+
+    #new-game-button {
+        margin: 10px;
+        padding: 10px;
+        background-color: #04AA6D;
+        color: white;
+        border-radius: 4px;
+        font-weight: bold; 
+        font-size: 20px;
+        transition: 0.5s;
+        /* border: solid black 2px; */
+        border-radius: 10px;
+    }
+
+    #new-game-button:hover {
+        transform: translateY(-3px);
+    }
+
+    @media (hover: hover) {
+        #new-game-button:hover {
+            background-color: #fff;
+            color: #04AA6D;
+        }
+    }
+
+    #new-game-button:active {
+        background-color: #fff;
+        color: #04AA6D;
+    }
+
 </style>
 
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <main on:click={clickLink}>
-    {#if !startCheck}
-        <button id="start-button" on:click={ start }>Start Game</button>
-    {:else}     
-        {#if isWin}
+    {#if isWin}
+        <div id="win-container">
             <h1 id="win-message">You Win!</h1>
             <h2 id="win-caption">You found "{ endPage }"</h2>
             <h2 id="win-time">in { elapsedTime.minutes } minutes and { elapsedTime.seconds } seconds!</h2>
@@ -327,52 +411,51 @@
                     {#each path.slice(0, 3) as page}
                         {' '+page+' →'}
                     {/each}
-                     ...{path.length - 7} more pages... →
+                        ...{path.length - 7} more pages... →
                     {#each path.slice(-4, -2) as page}
                         {' '+page+' →'}
                     {/each}
                     {' '+path[path.length -1]}
                 {/if}
                 <h3 id='new-game-button-container'>
-                    <button id='new-game-button' on:click={ newGame }>New Game</button>
+                    <button id='new-game-button' on:click={ newGame }>Replay Game</button>
                 </h3>
             </div>
-        {/if}
-        <!-- <input type="text" bind:value={ currPage } placeholder="Enter Wikipedia page title" /> -->
-        <!-- <button on:click={ fetchWikiPage }>Load Page</button> -->
-        <div 
-            id= "overlay-container"
-            style="filter: blur({isWin ? '5px' : '0px'})"
-            class="sidePanel"    
-        >
-            <!-- svelte-ignore a11y-invalid-attribute -->
-            <a href="javascript:void(0)" class="closeStats" on:click={ closeStats }>&gt;</a>
-            <img class="logoimage s-7IPF32Wcq3s8" src="src/lib/assets/wikilogo2.png" alt="Logo">
-            <p id="click-counter"><b> {count} clicks </b></p> <!-- counter is at the bottom, not formated the best-->
-            <p id="timer"><b><Timer bind:this={ timerComponent } /></b></p>
-            <p> <b> {firstPage} </b></p>
-            <p> <b>⬇️</b>
-            <p> <b> {endPage} </b> 
-            </p>
-            <button id='restart-button' on:click={ restartGame }>Restart Game</button>
-        </div>
-        <button class="openStats" on:click={ openStats }>&lt;</button>
-        <div 
-            id="main-container"
-            style="filter: blur({isWin ? '5px' : '0px'})"
-        >
-            {#if !isLoading}
-                <div id="wiki-page-container">
-                    {#if currPage}
-                        <h1>{ currPage }</h1>
-                    {/if}
-                    {@html pageContent} <!-- loads content -->
-                </div>
-            {:else}
-                <div id="loading-container">
-                    <img id="loading-img" src="/loading.gif" alt="loading..." />
-                </div>
-            {/if}
         </div>
     {/if}
+    <!-- <input type="text" bind:value={ currPage } placeholder="Enter Wikipedia page title" /> -->
+    <!-- <button on:click={ fetchWikiPage }>Load Page</button> -->
+    <div 
+        id= "overlay-container"
+        style="filter: blur({isWin ? '5px' : '0px'})"
+        class="sidePanel"    
+    >
+        <a href="javascript:void(0)" class="closeStats" on:click={ closeStats }>&gt;</a>
+        <img class="logoimage s-7IPF32Wcq3s8" src="src/lib/assets/wikilogo2.png" alt="Logo">
+        <p id="click-counter"><b> {count} clicks </b></p> <!-- counter is at the bottom, not formated the best-->
+        <p id="timer"><b><Timer bind:this={ timerComponent } /></b></p>
+        <p> <b> {firstPage} </b></p>
+        <p> <b>⬇️</b>
+        <p> <b> {endPage} </b> 
+        </p>
+        <button id='restart-button' on:click={ restartGame }>Restart Game</button>
+    </div>
+    <button class="openStats" on:click={ openStats }>&lt;</button>
+    <div 
+        id="main-container"
+        style="filter: blur({isWin ? '5px' : '0px'})"
+    >
+        {#if !isLoading}
+            <div id="wiki-page-container">
+                {#if currPage}
+                    <h1>{ currPage }</h1>
+                {/if}
+                {@html pageContent} <!-- loads content -->
+            </div>
+        {:else}
+            <div id="loading-container">
+                <img id="loading-img" src="/loading.gif" alt="loading..." />
+            </div>
+        {/if}
+    </div>
 </main>

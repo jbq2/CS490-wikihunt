@@ -22,24 +22,20 @@
             {#if !isSidebarOpen}
                 <button class="hamburger-menu" on:click={toggleSidebar}>☰</button>
             {/if}
-            <a class="logolink" href="/">
-                <img class="logoimage" src={'src/lib/assets/wikilogo2.png'} alt="Logo">
-                <!-- <h1 style="margin: 0 10px;">WikiHunt</h1> -->
-            </a>
         </div>
         <nav class="nav-bar" style="text-align: center">
             <ul style="padding: 0 0 0 20px;" id="nav-bar">
-                <a id="left-link" href="/"><li style="left: 1.6rem" id="nav-bar-link1">Home</li></a>
-                <a href="/wiki"><li id="nav-bar-link2">Play</li></a>
-                <a id="right-link" href="/leaderboard"><li style="right: 1.6rem" id="nav-bar-link3">Leaderboard</li></a>
+                <a id="left-link" href="/"><li style="left: 1.6rem" id="nav-bar-link1">Daily</li></a>
+                <a href="/practice"><li id="nav-bar-link2">Practice</li></a>
+                <a id="right-link" href="/stats"><li style="right: 1.6rem" id="nav-bar-link3">Stats</li></a>
             </ul>
         </nav>
         <aside class="sidebar {isSidebarOpen ? 'open' : ''}">
             <button class="close-btn" on:click={toggleSidebar}>×</button>
             <ul style="list-style-type: none; margin-right: 5rem; padding-left: 1rem">
-                <a on:click={toggleSidebar} href="/"><li>Home</li></a>
-                <a on:click={toggleSidebar} href="/wiki"><li>Play</li></a>
-                <a on:click={toggleSidebar} href="/leaderboard"><li>Leaderboard</li></a>
+                <a on:click={toggleSidebar} href="/"><li>Daily</li></a>
+                <a on:click={toggleSidebar} href="/practice"><li>Practice</li></a>
+                <a on:click={toggleSidebar} href="/stats"><li>Stats</li></a>
             </ul>
         </aside>
     </div>
@@ -54,6 +50,7 @@
         border-style: groove;
         position: relative;
         margin: 0;
+        text-align: center;
     }
     nav ul li::before {
         content: "";

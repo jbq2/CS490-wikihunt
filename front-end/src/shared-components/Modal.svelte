@@ -24,9 +24,11 @@
 </dialog>
 
 <style>
+	@import url('https://fonts.googleapis.com/css?family=Varela Round');
+
 	dialog {
 		max-width: 32em;
-		border-radius: 0.2em;
+		border-radius: 1em;
 		border: none;
 		padding: 0;
 	}
@@ -37,7 +39,7 @@
 		padding: 1em;
 	}
 	dialog[open] {
-		animation: zoom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+		animation: zoom 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 	}
 	@keyframes zoom {
 		from {
@@ -48,7 +50,7 @@
 		}
 	}
 	dialog[open]::backdrop {
-		animation: fade 0.2s ease-out;
+		animation: fade 0.5s ease-out;
 	}
 	@keyframes fade {
 		from {
@@ -60,5 +62,7 @@
 	}
 	button {
 		display: block;
+		font-family: "Varela Round"
 	}
+    
 </style>

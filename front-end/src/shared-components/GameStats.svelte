@@ -3,13 +3,12 @@
 	import { today, readFromCookie, dailyCookieName, dailyStreakCookieName, lastPlayedCookieName, allTimeBestCookieName } from '$lib/CookieHelper';
 	import type { DateFormat, Stats } from "../constants/models";
 	import { onMount } from 'svelte';
-	import { tick } from 'svelte';
 
 	const fireEmoji: string = '🔥';
 	export let showModal: boolean = false;
 	let noCookies: boolean = false;
 	let allTimeBest: Stats | any;
-	let allTimeBestString: string;
+	let allTimeBestString: string, dailyString: string = 'No Records!';
 	let cookieCheck: boolean = false;
 	let lastPlayed: DateFormat | any;
 	let streak: number;
@@ -33,8 +32,10 @@
 				lastPlayed = dateFormatter(lastPlayed);
 			streak = readFromCookie(dailyStreakCookieName).count;
 			dailyGame = readFromCookie(dailyCookieName);
-			if (JSON.stringify(today) !== JSON.stringify(dailyGame.date))
+			if (JSON.stringify(today) !== JSON.stringify(dailyGame.date)){
 				dailyGame = undefined;
+				dailyString = 'No Records!';
+			}
 		}
 	});
 
@@ -44,7 +45,13 @@
 
 </script>
 
-<button on:click={() => (showModal = true)}>Stats</button>
+<style>
+    @import url('https://fonts.googleapis.com/css?family=Varela Round');
+    
+	h2, div {
+		font-family: 'Varela Round';
+	}
+</style>
 
 <Modal bind:showModal>
 	<h2 slot="header">
@@ -69,5 +76,12 @@
 	<hr/>
 	<h2 id="daily-game-header">Daily Game Results</h2>
 	<div id="daily-game-body">
+		{#if !dailyGame}
+			{dailyString}
+		{:else}
+			<div>Goal: {dailyGame.goal['start']} → {dailyGame.goal['end']}</div>
+			<div>Clicks: {dailyGame.clicks}</div>
+			<div>Time: {dailyGame.playTime.minutes} minutes and {dailyGame.playTime.seconds} seconds</div>
+		{/if}
 	</div>
 </Modal>

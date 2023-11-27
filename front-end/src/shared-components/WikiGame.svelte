@@ -221,12 +221,19 @@
     #wiki-page-container {
         align-items: center;
         justify-items: center;
-        width: 90%;
+        width: 75%;
         position: relative;
         grid-template-columns: repeat(2, 50fr);
         grid-column-gap: 1px;
         margin: auto;
         margin-bottom: 25px;
+    }
+
+    @media(max-width: 450px) {
+        #wiki-page-container {
+            font-size: 14.5px;
+            width: 85%;
+        }
     }
 
     #wiki-page-container :global(.sidebox) {
@@ -235,13 +242,11 @@
     #wiki-page-container :global(table.wikitable), :global(figure), :global(li.gallerybox) {
         background-color: #f8f9fa;
         border: 1px solid #a2a9b1;     
-        padding: 5px;  
-        /* overflow-x: scroll; */
+        padding: 5px;
     }
     #wiki-page-container :global(li.gallerybox) {
         margin: 3px;
         display: inline-block;
-        /* overflow-x: scroll; */
     }
 
     #wiki-page-container :global(table.wikitable) {
@@ -454,6 +459,7 @@
         style="filter: blur({isWin ? '5px' : '0px'})"
     >
         {#if !isLoading}
+            {#if window.innerWidth < 450}<br>{/if}
             <div id="wiki-page-container">
                 {#if currPage}
                     <h1>{ currPage }</h1>

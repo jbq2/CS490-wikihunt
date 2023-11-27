@@ -1,8 +1,7 @@
 <script lang="ts">
-    // import { _ } from "$env/static/private";
     import { writeToCookie } from '../lib/CookieHelper';
     import { onMount } from "svelte";
-    import type { PageApiResponse, StartEndApiResponse, FinalTime, DateFormat, Stats, GameCount, CookieCollection } from "../constants/models";
+    import type { PageApiResponse, FinalTime, DateFormat, Stats } from "../constants/models";
     import { mediaWikiService } from "../services/MediaWikiService";  
     import Timer from "./Timer.svelte";
     
@@ -219,29 +218,31 @@
         text-align: center;
     }
 
-    /* #win-message, #win-caption, #win-time, #win-clicks {
-        text-align: center;
-        position: fixed;
-        width: 100%;
-        z-index: 100; 
-    } */
-
     #wiki-page-container {
         align-items: center;
         justify-items: center;
-        padding-left: 12.5%;
-        padding-right: 12.5%;
         width: 75%;
         position: relative;
         grid-template-columns: repeat(2, 50fr);
-        grid-column-gap: 1px; /* Adjust the gap as needed */
-        margin-right: 125px; /* Add margin to account for the overlay container width */
+        grid-column-gap: 1px;
+        margin: auto;
+        margin-bottom: 25px;
     }
 
+    @media(max-width: 450px) {
+        #wiki-page-container {
+            font-size: 14.5px;
+            width: 85%;
+        }
+    }
+
+    #wiki-page-container :global(.sidebox) {
+        overflow-x: scroll;
+    }
     #wiki-page-container :global(table.wikitable), :global(figure), :global(li.gallerybox) {
         background-color: #f8f9fa;
         border: 1px solid #a2a9b1;     
-        padding: 5px;  
+        padding: 5px;
     }
     #wiki-page-container :global(li.gallerybox) {
         margin: 3px;
@@ -251,6 +252,14 @@
     #wiki-page-container :global(table.wikitable) {
         background-color: #f8f9fa;
         border: 1px solid #a2a9b1;
+    }
+
+    #wiki-page-container :global(table) {
+        overflow-x: scroll;
+    }
+
+    #wiki-page-container :global(table.multicol) {
+        overflow-x: scroll;
     }
 
     #wiki-page-container :global(figure) {
@@ -267,13 +276,18 @@
     #wiki-page-container :global(figcaption) {
         width:20rem
     }
+
+    #wiki-page-container :global(div.navbox) {
+        width: 100%;
+        overflow-x: scroll;
+    }
+
     #overlay-container {
         position: fixed;
         text-align: center;
         top: 0px;
         right:0px;
         height:100%;
-        width: 125px; 
         padding: 5px 5px 5px 5px;
         z-index: 50;
         border-left-style: groove;
@@ -283,7 +297,6 @@
         font-family: 'Varela Round';
         font-size: 1em;
         color: black;
-        overflow-x: hidden;
         transition: 0.5s;
     }
 
@@ -323,6 +336,7 @@
     #timer {
         margin-bottom: 35%;
     }
+
     #restart-button {
         position: fixed;
         top: 85%;
@@ -371,7 +385,6 @@
         font-weight: bold; 
         font-size: 20px;
         transition: 0.5s;
-        /* border: solid black 2px; */
         border-radius: 10px;
     }
 
@@ -446,6 +459,7 @@
         style="filter: blur({isWin ? '5px' : '0px'})"
     >
         {#if !isLoading}
+            {#if window.innerWidth < 450}<br>{/if}
             <div id="wiki-page-container">
                 {#if currPage}
                     <h1>{ currPage }</h1>

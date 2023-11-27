@@ -19,6 +19,7 @@
     }
 </script>
 <style>
+    @import '/public/global.css';
     @import url('https://fonts.googleapis.com/css?family=Varela Round');
 
     :global(body) { 
@@ -65,35 +66,6 @@
 
     li {
         margin: 10px 0;
-    }
-
-    #start-button {
-        margin: 10px;
-        padding: 10px;
-        background-color: #04AA6D;
-        color: white;
-        border-radius: 4px;
-        font-weight: bold; 
-        font-size: 20px;
-        transition: 0.5s;
-        /* border: solid black 2px; */
-        border-radius: 10px;
-    }
-
-    #start-button:hover {
-        transform: translateY(-3px);
-    }
-
-    @media (hover: hover) {
-        #start-button:hover {
-            background-color: #fff;
-            color: #04AA6D;
-        }
-    }
-
-    #start-button:active {
-        background-color: #fff;
-        color: #04AA6D;
     }
 
 </style>

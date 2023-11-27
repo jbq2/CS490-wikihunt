@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Modal from './Modal.svelte';
+	import CopyButton from './CopyButton.svelte'
 	import { today, readFromCookie, dailyCookieName, dailyStreakCookieName, lastPlayedCookieName, allTimeBestCookieName, copyText, dateFormatter } from '$lib/CookieHelper';
 	import type { DateFormat, Stats } from "../constants/models";
 	import { onMount } from 'svelte';
@@ -42,18 +43,11 @@
 </script>
 
 <style>
+	@import '/public/global.css';
     @import url('https://fonts.googleapis.com/css?family=Varela Round');
     
 	h2, div {
 		font-family: 'Varela Round';
-	}
-
-	#copy-text, #daily-time {
-		display: inline-flex
-	}
-
-	#copy-text {
-		margin-left: 2rem;
 	}
 </style>
 
@@ -88,8 +82,6 @@
 			<div>Clicks: {dailyGame.clicks}</div>
 			<div id='daily-time'>Time: {dailyGame.playTime.minutes} minutes and {dailyGame.playTime.seconds} seconds</div>
 		{/if}
-		<!-- svelte-ignore a11y-missing-attribute -->
-		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<a id='copy-text' style="cursor: pointer" on:click={copyText}>Click here to copy results!</a>
+		<CopyButton />
 	</div>
 </Modal>

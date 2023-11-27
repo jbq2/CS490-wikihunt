@@ -110,7 +110,6 @@ export function dateFormatter(date: DateFormat): string  {
 }
 
 export async function copyText(): Promise<void> {
-    console.log("here");
     let startEnd: StartEndApiResponse = await mediaWikiService.getDailyWordsFromApi();
     let dailyGame: Stats = readFromCookie(dailyCookieName);
     let clicks: string | number = 'X';

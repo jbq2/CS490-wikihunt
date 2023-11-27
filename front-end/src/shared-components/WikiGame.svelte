@@ -334,6 +334,7 @@
     }
 
     #restart-button {
+        cursor: pointer;
         position: fixed;
         top: 85%;
         width: 110px;
@@ -373,6 +374,7 @@
     }
 
     #new-game-button {
+        cursor: pointer;
         margin: 10px;
         padding: 10px;
         background-color: #04AA6D;

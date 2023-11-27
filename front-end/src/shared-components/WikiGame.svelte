@@ -232,9 +232,6 @@
     #wiki-page-container :global(.sidebox) {
         overflow-x: scroll;
     }
-    #wiki-page-container :global(.sidebox) {
-        overflow-x: scroll;
-    }
     #wiki-page-container :global(table.wikitable), :global(figure), :global(li.gallerybox) {
         background-color: #f8f9fa;
         border: 1px solid #a2a9b1;     
@@ -250,18 +247,6 @@
     #wiki-page-container :global(table.wikitable) {
         background-color: #f8f9fa;
         border: 1px solid #a2a9b1;
-    }
-
-    #wiki-page-container :global(table) {
-        overflow-x: scroll;
-    }
-
-    #wiki-page-container :global(table) {
-        overflow-x: scroll;
-    }
-
-    #wiki-page-container :global(table.multicol) {
-        overflow-x: scroll;
     }
 
     #wiki-page-container :global(table) {

@@ -57,7 +57,7 @@
         font-size: 16px;
     }
 
-    ul {
+    /* ul {
         color: #666;
         list-style-type: square;
         padding-left: 20px;
@@ -65,7 +65,7 @@
 
     li {
         margin: 10px 0;
-    }
+    } */
 
     #start-button {
         margin: 10px;

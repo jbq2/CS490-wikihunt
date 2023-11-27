@@ -1,5 +1,6 @@
 // import { _ } from "$env/static/private";
-import type { DateFormat, Stats, GameCount, CookieCollection } from "../constants/models";
+import type { DateFormat, Stats, FinalTime, GameCount, CookieCollection, StartEndApiResponse } from "../constants/models";
+import { mediaWikiService } from "../services/MediaWikiService";
 
 export const dailyCookieName: string = `dailyStats`;
 export const dailyStreakCookieName: string =  'dailyStreak';
@@ -95,7 +96,7 @@ function updateCookies(gameStats: Stats, today: DateFormat): CookieCollection | 
 }
 
 export function readFromCookie(inputCookie: string): any {
-    const cookies = document.cookie.split('; ');
+    const cookies =  document.cookie.split('; ');
     const targetCookie = cookies.find(row => row.startsWith(inputCookie));
     if (targetCookie) {
         const encodedData = targetCookie.split('=')[1];
@@ -103,3 +104,27 @@ export function readFromCookie(inputCookie: string): any {
         return JSON.parse(decodedData);
     }
 }
+
+export function dateFormatter(date: DateFormat): string  {
+    return `${date.month}/${date.day}/${date.year}`
+}
+
+export async function copyText(): Promise<void> {
+    console.log("here");
+    let startEnd: StartEndApiResponse = await mediaWikiService.getDailyWordsFromApi();
+    let dailyGame: Stats = readFromCookie(dailyCookieName);
+    let clicks: string | number = 'X';
+    let minutes: string | number = 'X';
+    let seconds: string | number = 'X';
+    if (JSON.stringify(today) === JSON.stringify(dailyGame.date)){
+        clicks = dailyGame.clicks;
+        minutes = dailyGame.playTime.minutes;
+        seconds = dailyGame.playTime.seconds;
+    }
+    const textToCopy: string = `WikiHunt - ${dateFormatter(today)}
+🏁: ${startEnd.start} ➡️ ${startEnd.end}
+🖱️: ${clicks} clicks
+🕐 ${minutes} Minutes ${seconds} seconds`
+
+    navigator.clipboard.writeText(textToCopy);
+} 

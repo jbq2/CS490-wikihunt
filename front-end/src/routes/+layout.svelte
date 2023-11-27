@@ -37,18 +37,20 @@
                 <a id="left-link" href="/"><li style="left: 1.6rem" id="nav-bar-link1">Daily</li></a>
                 <a href="/practice"><li id="nav-bar-link2">Practice</li></a>
                 <!-- svelte-ignore a11y-no-static-element-interactions -->
-                <a id="right-link" on:click={toggleStats}><li style="right: 1.6rem" id="nav-bar-link3">Stats</li></a>
+                <a id="right-link" on:click={toggleStats}><li style="right: 1.6rem; cursor: pointer" id="nav-bar-link3" on:click={toggleStats}>Stats</li></a>
             </ul>
         </nav>
         <aside class="sidebar {isSidebarOpen ? 'open' : ''}">
             <button class="close-btn" on:click={toggleSidebar}>×</button>
+            <!-- svelte-ignore a11y-missing-attribute -->
             <ul style="list-style-type: none; margin-right: 5rem; padding-left: 1rem">
                 <a on:click={toggleSidebar} href="/"><li>Daily</li></a>
                 <a on:click={toggleSidebar} href="/practice"><li>Practice</li></a>
+                <!-- svelte-ignore a11y-no-static-element-interactions -->
                 <a on:click={()=>{
                     toggleStats();
                     toggleSidebar();
-                }}><li>Stats</li></a>
+                }}><li style="cursor: pointer">Stats</li></a>
             </ul>
         </aside>
     </div>

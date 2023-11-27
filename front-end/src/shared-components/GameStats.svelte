@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Modal from './Modal.svelte';
-	import { today, readFromCookie, dailyCookieName, dailyStreakCookieName, lastPlayedCookieName, allTimeBestCookieName } from '$lib/CookieHelper';
+	import { today, readFromCookie, dailyCookieName, dailyStreakCookieName, lastPlayedCookieName, allTimeBestCookieName, copyText, dateFormatter } from '$lib/CookieHelper';
 	import type { DateFormat, Stats } from "../constants/models";
 	import { onMount } from 'svelte';
 
@@ -39,10 +39,6 @@
 		}
 	});
 
-	function dateFormatter(date: DateFormat): string  {
-		return `${date.month}/${date.day}/${date.year}`
-	}
-
 </script>
 
 <style>
@@ -50,6 +46,14 @@
     
 	h2, div {
 		font-family: 'Varela Round';
+	}
+
+	#copy-text, #daily-time {
+		display: inline-flex
+	}
+
+	#copy-text {
+		margin-left: 2rem;
 	}
 </style>
 
@@ -74,14 +78,18 @@
 		</div>
 	</div>
 	<hr/>
-	<h2 id="daily-game-header">Daily Game Results</h2>
+	<h2 id="daily-game-header">Daily Game Results 📅</h2>
+	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div id="daily-game-body">
 		{#if !dailyGame}
 			{dailyString}
 		{:else}
 			<div>Goal: {dailyGame.goal['start']} → {dailyGame.goal['end']}</div>
 			<div>Clicks: {dailyGame.clicks}</div>
-			<div>Time: {dailyGame.playTime.minutes} minutes and {dailyGame.playTime.seconds} seconds</div>
+			<div id='daily-time'>Time: {dailyGame.playTime.minutes} minutes and {dailyGame.playTime.seconds} seconds</div>
 		{/if}
+		<!-- svelte-ignore a11y-missing-attribute -->
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<a id='copy-text' style="cursor: pointer" on:click={copyText}>Click here to copy results!</a>
 	</div>
 </Modal>

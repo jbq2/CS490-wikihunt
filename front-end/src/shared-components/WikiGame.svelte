@@ -438,6 +438,7 @@
         style="filter: blur({isWin ? '5px' : '0px'})"
         class="sidePanel"    
     >
+        <!-- svelte-ignore a11y-invalid-attribute -->
         <a href="javascript:void(0)" class="closeStats" on:click={ closeStats }>&gt;</a>
         <img class="logoimage s-7IPF32Wcq3s8" src="src/lib/assets/wikilogo2.png" alt="Logo">
         <p id="click-counter"><b> {count} clicks </b></p> <!-- counter is at the bottom, not formated the best-->

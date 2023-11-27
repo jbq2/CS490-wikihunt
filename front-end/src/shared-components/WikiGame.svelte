@@ -1,8 +1,7 @@
 <script lang="ts">
-    // import { _ } from "$env/static/private";
     import { writeToCookie } from '../lib/CookieHelper';
     import { onMount } from "svelte";
-    import type { PageApiResponse, StartEndApiResponse, FinalTime, DateFormat, Stats, GameCount, CookieCollection } from "../constants/models";
+    import type { PageApiResponse, FinalTime, DateFormat, Stats } from "../constants/models";
     import { mediaWikiService } from "../services/MediaWikiService";  
     import Timer from "./Timer.svelte";
     
@@ -219,24 +218,13 @@
         text-align: center;
     }
 
-    /* #win-message, #win-caption, #win-time, #win-clicks {
-        text-align: center;
-        position: fixed;
-        width: 100%;
-        z-index: 100; 
-    } */
-
     #wiki-page-container {
         align-items: center;
         justify-items: center;
-        /* padding-left: 10.0%;
-        padding-right: 10.0%; */
         width: 90%;
         position: relative;
         grid-template-columns: repeat(2, 50fr);
-        grid-column-gap: 1px; /* Adjust the gap as needed */
-        /* margin-right: 125px; Add margin to account for the overlay container width */
-        /* overflow-x: scroll; */
+        grid-column-gap: 1px;
         margin: auto;
         margin-bottom: 25px;
     }
@@ -248,23 +236,23 @@
         background-color: #f8f9fa;
         border: 1px solid #a2a9b1;     
         padding: 5px;  
-        /* overflow-x: scroll; */
     }
     #wiki-page-container :global(li.gallerybox) {
         margin: 3px;
         display: inline-block;
-        /* overflow-x: scroll; */
     }
 
     #wiki-page-container :global(table.wikitable) {
         background-color: #f8f9fa;
         border: 1px solid #a2a9b1;
-        /* width: 100%; */
     }
 
     #wiki-page-container :global(table) {
         overflow-x: scroll;
-        /* width: 100%; */
+    }
+
+    #wiki-page-container :global(table.multicol) {
+        overflow-x: scroll;
     }
 
     #wiki-page-container :global(figure) {
@@ -293,7 +281,6 @@
         top: 0px;
         right:0px;
         height:100%;
-        /* width:125px;  */
         padding: 5px 5px 5px 5px;
         z-index: 50;
         border-left-style: groove;
@@ -303,7 +290,6 @@
         font-family: 'Varela Round';
         font-size: 1em;
         color: black;
-        /* overflow-x: scroll; */
         transition: 0.5s;
     }
 
@@ -392,7 +378,6 @@
         font-weight: bold; 
         font-size: 20px;
         transition: 0.5s;
-        /* border: solid black 2px; */
         border-radius: 10px;
     }
 

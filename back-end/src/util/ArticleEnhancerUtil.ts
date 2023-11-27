@@ -9,6 +9,8 @@ export class ArticleEnhancerUtil {
         this.eraseElements(doc.querySelectorAll("div[class^='reflist'], div[class='refbegin']"));
         this.eraseElements(doc.querySelectorAll("sup[class^='noprint']"))
 
+        this.formatMulticolTables(doc);
+
         const otherCitations: NodeListOf<Element> = doc.querySelectorAll("sup");
         for (let otherCitation of otherCitations){
             if (otherCitation.textContent?.trim() === "[citation needed]")
@@ -16,6 +18,15 @@ export class ArticleEnhancerUtil {
         }
 
         return doc.body.innerHTML;
+    }
+
+    private static formatMulticolTables(doc: Document): void {
+        const multicolTables: Element[] = Array.from(doc.querySelectorAll('.multicol'))
+            .map((mt) => mt.parentElement);
+
+        for(let mt of multicolTables) {
+            mt.setAttribute('style', 'overflow-x: scroll; text-align: left; align-items: center;');
+        }
     }
 
     private static eraseElements(elements: NodeListOf<Element>): void {

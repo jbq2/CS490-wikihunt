@@ -111,19 +111,20 @@ export function dateFormatter(date: DateFormat): string  {
 
 export async function copyText(): Promise<void> {
     let startEnd: StartEndApiResponse = await mediaWikiService.getDailyWordsFromApi();
-    let dailyGame: Stats = readFromCookie(dailyCookieName);
+    let dailyGame: Stats | undefined = readFromCookie(dailyCookieName);
     let clicks: string | number = 'X';
     let minutes: string | number = 'X';
     let seconds: string | number = 'X';
-    if (JSON.stringify(today) === JSON.stringify(dailyGame.date)){
+    if (dailyGame && JSON.stringify(today) === JSON.stringify(dailyGame.date)){
         clicks = dailyGame.clicks;
         minutes = dailyGame.playTime.minutes;
         seconds = dailyGame.playTime.seconds;
     }
-    const textToCopy: string = `WikiHunt - ${dateFormatter(today)}
+    const textToCopy: string = `WikiHunt - ${dateFormatter(today)}` + (dailyGame ? `
 🏁: ${startEnd.start} ➡️ ${startEnd.end}
 🖱️: ${clicks} clicks
-🕐 ${minutes} Minutes ${seconds} seconds`
+🕐 ${minutes} Minutes ${seconds} seconds` : `
+No Records!`);
 
     navigator.clipboard.writeText(textToCopy);
 } 

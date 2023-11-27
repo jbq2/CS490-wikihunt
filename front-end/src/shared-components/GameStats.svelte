@@ -73,6 +73,8 @@
 	</div>
 	<hr/>
 	<h2 id="daily-game-header">Daily Game Results 📅</h2>
+	<hr/>
+	<div>WikiHunt - {dateFormatter(today)}</div>
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div id="daily-game-body">
 		{#if !dailyGame}

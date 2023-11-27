@@ -19,12 +19,20 @@
 		<slot />
 		<hr />
 		<!-- svelte-ignore a11y-autofocus -->
-		<button autofocus on:click={() => dialog.close()}>Close</button>
+		<button id="close-button" autofocus on:click={() => dialog.close()}>Close</button>
 	</div>
 </dialog>
 
 <style>
+	@import 'public/global.css';
 	@import url('https://fonts.googleapis.com/css?family=Varela Round');
+
+	#close-button {
+		font-size: 15px;
+		background-color: rgb(186, 186, 186);
+		color: black;
+		font-weight: 100;
+	}
 
 	dialog {
 		max-width: 32em;

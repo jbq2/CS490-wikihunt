@@ -1,12 +1,21 @@
 // import { _ } from "$env/static/private";
-import type { DateFormat, Stats, GameCount, CookieCollection } from "../constants/models";
+import type { DateFormat, Stats, FinalTime, GameCount, CookieCollection, StartEndApiResponse } from "../constants/models";
+import { mediaWikiService } from "../services/MediaWikiService";
 
-const dailyCookieName: string = `dailyStats`;
-const dailyStreakCookieName: string =  'dailyStreak';
-const lastPlayedCookieName: string = 'lastPlayed';
-const allTimeBestCookieName: string = 'allTimeBestStats';
+export const dailyCookieName: string = `dailyStats`;
+export const dailyStreakCookieName: string =  'dailyStreak';
+export const lastPlayedCookieName: string = 'lastPlayed';
+export const allTimeBestCookieName: string = 'allTimeBestStats';
 const expiryDate = new Date();
 expiryDate.setFullYear(expiryDate.getFullYear() + 1); // Set cookie to expire in one year
+
+
+const date: Date = new Date();
+export const today: DateFormat = {
+    'month': date.getMonth()+1,
+    'day': date.getDate(),
+    'year': date.getFullYear()
+}
 
 export function writeToCookie(gameStats: Stats): void {      
     let currentCookie: any = readFromCookie(dailyCookieName);
@@ -86,8 +95,8 @@ function updateCookies(gameStats: Stats, today: DateFormat): CookieCollection | 
     };
 }
 
-function readFromCookie(inputCookie: string): any {
-    const cookies = document.cookie.split('; ');
+export function readFromCookie(inputCookie: string): any {
+    const cookies =  document.cookie.split('; ');
     const targetCookie = cookies.find(row => row.startsWith(inputCookie));
     if (targetCookie) {
         const encodedData = targetCookie.split('=')[1];
@@ -95,3 +104,26 @@ function readFromCookie(inputCookie: string): any {
         return JSON.parse(decodedData);
     }
 }
+
+export function dateFormatter(date: DateFormat): string  {
+    return `${date.month}/${date.day}/${date.year}`
+}
+
+export async function copyText(): Promise<void> {
+    let startEnd: StartEndApiResponse = await mediaWikiService.getDailyWordsFromApi();
+    let dailyGame: Stats = readFromCookie(dailyCookieName);
+    let clicks: string | number = 'X';
+    let minutes: string | number = 'X';
+    let seconds: string | number = 'X';
+    if (JSON.stringify(today) === JSON.stringify(dailyGame.date)){
+        clicks = dailyGame.clicks;
+        minutes = dailyGame.playTime.minutes;
+        seconds = dailyGame.playTime.seconds;
+    }
+    const textToCopy: string = `WikiHunt - ${dateFormatter(today)}
+🏁: ${startEnd.start} ➡️ ${startEnd.end}
+🖱️: ${clicks} clicks
+🕐 ${minutes} Minutes ${seconds} seconds`
+
+    navigator.clipboard.writeText(textToCopy);
+} 

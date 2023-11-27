@@ -1,16 +1,12 @@
 <script lang="ts">
-    import { writeToCookie } from '../lib/CookieHelper';
+    // import { _ } from "$env/static/private";
+    import { today, writeToCookie } from '../lib/CookieHelper';
     import { onMount } from "svelte";
-    import type { PageApiResponse, FinalTime, DateFormat, Stats } from "../constants/models";
+    import type { PageApiResponse, StartEndApiResponse, FinalTime, DateFormat, Stats } from "../constants/models";
     import { mediaWikiService } from "../services/MediaWikiService";  
     import Timer from "./Timer.svelte";
     
-    const date: Date = new Date();
-    const today:DateFormat = {
-        'month': date.getMonth()+1,
-        'day': date.getDate(),
-        'year': date.getFullYear()
-    }
+    
 
     let pageContent: string = "";
     let currPage: string = ""; 
@@ -338,6 +334,7 @@
     }
 
     #restart-button {
+        cursor: pointer;
         position: fixed;
         top: 85%;
         width: 110px;
@@ -377,6 +374,7 @@
     }
 
     #new-game-button {
+        cursor: pointer;
         margin: 10px;
         padding: 10px;
         background-color: #04AA6D;
@@ -405,7 +403,6 @@
     }
 
 </style>
-
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
@@ -443,6 +440,7 @@
         style="filter: blur({isWin ? '5px' : '0px'})"
         class="sidePanel"    
     >
+        <!-- svelte-ignore a11y-invalid-attribute -->
         <a href="javascript:void(0)" class="closeStats" on:click={ closeStats }>&gt;</a>
         <img class="logoimage s-7IPF32Wcq3s8" src="src/lib/assets/wikilogo2.png" alt="Logo">
         <p id="click-counter"><b> {count} clicks </b></p> <!-- counter is at the bottom, not formated the best-->

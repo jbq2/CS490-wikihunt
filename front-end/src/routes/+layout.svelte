@@ -1,5 +1,7 @@
 <script lang='ts'>
+    import GameStats from './../shared-components/GameStats.svelte';
     let isSidebarOpen = false;
+    let showStats: boolean = false;
 
     function toggleSidebar(): void {
         isSidebarOpen = !isSidebarOpen;
@@ -13,7 +15,14 @@
                 toggleSidebar();
         }
     }
+    function toggleStats(): void {
+        showStats = !showStats;
+    }
 </script>
+
+<GameStats 
+    showModal = {showStats}
+/>
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <main on:click={clickOff}>
@@ -27,15 +36,21 @@
             <ul style="padding: 0 0 0 20px;" id="nav-bar">
                 <a id="left-link" href="/"><li style="left: 1.6rem" id="nav-bar-link1">Daily</li></a>
                 <a href="/practice"><li id="nav-bar-link2">Practice</li></a>
-                <a id="right-link" href="/stats"><li style="right: 1.6rem" id="nav-bar-link3">Stats</li></a>
+                <!-- svelte-ignore a11y-no-static-element-interactions -->
+                <a id="right-link" on:click={toggleStats}><li style="right: 1.6rem; cursor: pointer" id="nav-bar-link3" on:click={toggleStats}>Stats</li></a>
             </ul>
         </nav>
         <aside class="sidebar {isSidebarOpen ? 'open' : ''}">
             <button class="close-btn" on:click={toggleSidebar}>×</button>
+            <!-- svelte-ignore a11y-missing-attribute -->
             <ul style="list-style-type: none; margin-right: 5rem; padding-left: 1rem">
                 <a on:click={toggleSidebar} href="/"><li>Daily</li></a>
                 <a on:click={toggleSidebar} href="/practice"><li>Practice</li></a>
-                <a on:click={toggleSidebar} href="/stats"><li>Stats</li></a>
+                <!-- svelte-ignore a11y-no-static-element-interactions -->
+                <a on:click={()=>{
+                    toggleStats();
+                    toggleSidebar();
+                }}><li style="cursor: pointer">Stats</li></a>
             </ul>
         </aside>
     </div>
@@ -44,7 +59,10 @@
 <style>
     @import '/public/global.css';
 
+    @import url('https://fonts.googleapis.com/css?family=Varela Round');
+
     nav ul li {
+        font-family: 'Varela Round';
         border-radius: 0px;
         border: 2px #dedede;
         border-style: groove;
@@ -108,7 +126,7 @@
 
     @media screen and (max-width: 450px) {
         .nav-bar { display: none; }
-        .hamburger-menu, .logoimage, .logolink { display: inline-block; }
+        .hamburger-menu { display: inline-block; }
     }
 
 </style>

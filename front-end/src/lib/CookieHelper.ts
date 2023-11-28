@@ -123,7 +123,7 @@ export async function copyText(): Promise<void> {
     const textToCopy: string = `WikiHunt - ${dateFormatter(today)}` + (dailyGame ? `
 🏁: ${startEnd.start} ➡️ ${startEnd.end}
 🖱️: ${clicks} clicks
-🕐 ${minutes} Minutes ${seconds} seconds` : `
+🕐: ${minutes} minutes ${seconds} seconds` : `
 No Records!`);
 
     navigator.clipboard.writeText(textToCopy);

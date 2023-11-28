@@ -5,8 +5,6 @@
     import { mediaWikiService } from "../services/MediaWikiService";  
     import Timer from "./Timer.svelte";
     
-    
-
     let pageContent: string = "";
     let currPage: string = ""; 
     let endPage: string | undefined = undefined; // has to be different than wikiPage initially
@@ -21,6 +19,7 @@
     export let origEnd: string | undefined = undefined; // has to be different than wikiPage initially
     export let origStart:string = "";
     export let dailyMode: boolean = false;
+    export let returnHome: any;
 
     let timerComponent: Timer;
 
@@ -115,8 +114,9 @@
     function newGame(): void {
         clearGame();
         timerComponent.restart();
-        start();
-        fetchWikiPage();
+        returnHome();
+        // start();
+        // fetchWikiPage();
     }
 
     function clearGame(): void {
@@ -128,19 +128,25 @@
     
     function openStats() {
         let statsBar = document.getElementById("overlay-container");
-
-        if (statsBar) {
+        var width = document.body.clientWidth;
+        if (width <= 450 && statsBar) {
             statsBar.style.width = "125px";
+            statsBar.style.right = "0";
+        } else if (statsBar) {
+            statsBar.style.width = "8.5%";
             statsBar.style.right = "0";
         }
     }
 
     function closeStats() {
         let statsBar = document.getElementById("overlay-container");
-
-        if (statsBar) {
+        var width = document.body.clientWidth;
+        if (width <= 450 && statsBar) {
             statsBar.style.width = "0";
-            statsBar.style.right = "-5%";
+            statsBar.style.right = "-125px";
+        } else if (statsBar) {
+            statsBar.style.width = "0";
+            statsBar.style.right = "-8.5%";
         }
     }
     
@@ -150,7 +156,7 @@
 </script>
 
 <style>
-    @import '/public/wiki-common.css';
+    @import '../../public/wiki-common.css';
     @import url('https://fonts.googleapis.com/css?family=Varela Round');
     
     #win-container {
@@ -160,10 +166,16 @@
         z-index: 100; 
         text-align: center;
         overflow: hidden; 
-        margin-top: 5%;
         font-family: 'Varela Round';
         border: 2px solid #5aa8a8; 
         border-radius: 10px; 
+    }
+
+    
+    @media(max-width: 450px) {
+        #win-container{
+            margin-top: 15%;
+        }
     }
 
     #win-container::before {
@@ -281,6 +293,14 @@
         font-size: 1em;
         color: black;
         transition: 0.5s;
+        width: 8.5%;
+    }
+
+    @media(max-width: 450px) {
+        #overlay-container {
+            transition: 0.55s;
+            width: 125px; 
+        }
     }
 
     .sidePanel .closeStats {
@@ -323,10 +343,10 @@
     #restart-button {
         cursor: pointer;
         position: fixed;
-        top: 85%;
+        top: 75%;
         width: 110px;
         left: 10%;
-        background-color: #f44336;
+        background-color: #008CBA;
         color: white;
         border-radius: 4px;
         font-weight: bold; 
@@ -337,8 +357,29 @@
         transform: translateY(-3px);
     }
 
+    #quit-button {
+        cursor: pointer;
+        position: fixed;
+        top: 85%;
+        width: 110px;
+        left: 10%;
+        background-color: #f44336;
+        color: white;
+        border-radius: 4px;
+        font-weight: bold; 
+        transition: 0.5s;
+    }
+
+    #quit-button:hover {
+        transform: translateY(-3px);
+    }
+    
     @media (hover: hover) {
         #restart-button:hover {
+            background-color: #fff;
+            color: #008CBA;
+        }
+        #quit-button:hover {
             background-color: #fff;
             color: #f44336;
         }
@@ -415,7 +456,7 @@
                     {' '+path[path.length -1]}
                 {/if}
                 <h3 id='new-game-button-container'>
-                    <button id='new-game-button' on:click={ newGame }>Replay Game</button>
+                    <button id='new-game-button' on:click={ newGame }>New Game</button>
                 </h3>
             </div>
         </div>
@@ -437,6 +478,7 @@
         <p> <b> {endPage} </b> 
         </p>
         <button id='restart-button' on:click={ restartGame }>Restart Game</button>
+        <button id='quit-button' on:click={ newGame }>Quit Game</button>
     </div>
     <button class="openStats" on:click={ openStats }>&lt;</button>
     <div 

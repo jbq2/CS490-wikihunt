@@ -15,7 +15,18 @@
                 fetchedEndPage = data.end;
                 loading = false;
                 startCheck = true;
+                changeBgColor("#FFFFFF");
             });
+    }
+
+    function returnHome(): any {
+        startCheck = false;
+        loading = false;
+        changeBgColor("#edf6f7");
+    }
+
+    function changeBgColor(color: string): void {
+        document.body.style.backgroundColor = color;
     }
 </script>
 <style>
@@ -24,7 +35,8 @@
 
     :global(body) { 
         margin: 0; 
-        padding: 0; 
+        padding: 0;
+        background-color: #edf6f7; 
     }
     .centered-container {
         flex: 1;
@@ -40,7 +52,11 @@
         padding-top: 1%;
         padding-bottom: 1%;
     }
-
+    @media(max-width: 450px) {
+        .centered-container {
+            margin-top: 5%;
+        }
+    }
     .page-content {
         margin: 20px;
         background-color: #ffffff;
@@ -105,6 +121,7 @@
             origStart = {fetchedFirstPage}
             origEnd = {fetchedEndPage}
             dailyMode = {true}
+            returnHome = {returnHome}
         />
     {/if}
 </main>

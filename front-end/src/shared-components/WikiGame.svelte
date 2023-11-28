@@ -167,10 +167,16 @@
         z-index: 100; 
         text-align: center;
         overflow: hidden; 
-        margin-top: 2.5%;
         font-family: 'Varela Round';
         border: 2px solid #5aa8a8; 
         border-radius: 10px; 
+    }
+
+    
+    @media(max-width: 450px) {
+        #win-container{
+            margin-top: 15%;
+        }
     }
 
     #win-container::before {

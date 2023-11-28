@@ -43,7 +43,7 @@
 </script>
 
 <style>
-	@import '/public/global.css';
+	@import '../../public/global.css';
     @import url('https://fonts.googleapis.com/css?family=Varela Round');
     
 	h2, div {

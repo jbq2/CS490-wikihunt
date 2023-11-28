@@ -22,6 +22,7 @@
     export let origEnd: string | undefined = undefined; // has to be different than wikiPage initially
     export let origStart:string = "";
     export let dailyMode: boolean = false;
+    export let returnHome: any;
 
     let timerComponent: Timer;
 
@@ -116,8 +117,9 @@
     function newGame(): void {
         clearGame();
         timerComponent.restart();
-        start();
-        fetchWikiPage();
+        returnHome();
+        // start();
+        // fetchWikiPage();
     }
 
     function clearGame(): void {
@@ -151,7 +153,7 @@
 </script>
 
 <style>
-    @import '/public/wiki-common.css';
+    @import '../../public/wiki-common.css';
     @import url('https://fonts.googleapis.com/css?family=Varela Round');
     
     #win-container {
@@ -428,7 +430,7 @@
                     {' '+path[path.length -1]}
                 {/if}
                 <h3 id='new-game-button-container'>
-                    <button id='new-game-button' on:click={ newGame }>Replay Game</button>
+                    <button id='new-game-button' on:click={ newGame }>New Game</button>
                 </h3>
             </div>
         </div>

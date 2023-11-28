@@ -24,7 +24,7 @@
 </dialog>
 
 <style>
-	@import 'public/global.css';
+	@import '../../public/global.css';
 	@import url('https://fonts.googleapis.com/css?family=Varela Round');
 
 	#close-button {

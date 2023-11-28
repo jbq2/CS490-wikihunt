@@ -17,6 +17,11 @@
                 startCheck = true;
             });
     }
+
+    function returnHome(): any {
+        startCheck = false;
+        loading = false;
+    }
 </script>
 <style>
     @import '/public/global.css';
@@ -105,6 +110,7 @@
             origStart = {fetchedFirstPage}
             origEnd = {fetchedEndPage}
             dailyMode = {true}
+            returnHome = {returnHome}
         />
     {/if}
 </main>

@@ -14,7 +14,7 @@
 </script>
 
 <style>
-    @import '/public/global.css';
+    @import '../../public/global.css';
     .fade {
         opacity: 0;
         transition: opacity 1s ease-in-out;

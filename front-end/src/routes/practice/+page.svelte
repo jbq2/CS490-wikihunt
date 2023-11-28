@@ -17,6 +17,11 @@
                 startCheck = true;
             });
     }
+
+    function returnHome(): any {
+        startCheck = false;
+        loading = false;
+    }
 </script>
 <style>
     @import url('https://fonts.googleapis.com/css?family=Varela Round');
@@ -134,6 +139,7 @@
             origStart = {fetchedFirstPage}
             origEnd = {fetchedEndPage}
             dailyMode = {false}
+            returnHome = {returnHome}
         />
     {/if}
 </main>

@@ -151,10 +151,6 @@
         }
     }
     
-    function quitGame() {
-        returnHome();
-    }
-    
     onMount(() => {
         start();
     });
@@ -489,7 +485,7 @@
         <p> <b> {endPage} </b> 
         </p>
         <button id='restart-button' on:click={ restartGame }>Restart Game</button>
-        <button id='quit-button' on:click={ quitGame }>Quit Game</button>
+        <button id='quit-button' on:click={ newGame }>Quit Game</button>
     </div>
     <button class="openStats" on:click={ openStats }>&lt;</button>
     <div 

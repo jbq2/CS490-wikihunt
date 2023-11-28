@@ -131,9 +131,11 @@
     
     function openStats() {
         let statsBar = document.getElementById("overlay-container");
-
-        if (statsBar) {
-            statsBar.style.width = "125px";
+        if (window.innerWidth <= 450 && statsBar) {
+            statsBar.style.width = "33%";
+            statsBar.style.right = "0";
+        } else if (statsBar) {
+            statsBar.style.width = "8.5%";
             statsBar.style.right = "0";
         }
     }
@@ -141,9 +143,12 @@
     function closeStats() {
         let statsBar = document.getElementById("overlay-container");
 
-        if (statsBar) {
+        if (window.innerWidth <= 450 && statsBar) {
             statsBar.style.width = "0";
-            statsBar.style.right = "-5%";
+            statsBar.style.right = "-33%";
+        } else if (statsBar) {
+            statsBar.style.width = "0";
+            statsBar.style.right = "-8.5%";
         }
     }
     
@@ -296,6 +301,14 @@
         font-size: 1em;
         color: black;
         transition: 0.5s;
+        width: 8.25%;
+    }
+
+    @media(max-width: 450px) {
+        #overlay-container {
+            transition: 0.55s;
+            width: 33%; 
+        }
     }
 
     .sidePanel .closeStats {

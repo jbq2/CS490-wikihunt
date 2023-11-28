@@ -1,8 +1,7 @@
 <script lang="ts">
-    // import { _ } from "$env/static/private";
     import { today, writeToCookie } from '../lib/CookieHelper';
     import { onMount } from "svelte";
-    import type { PageApiResponse, StartEndApiResponse, FinalTime, DateFormat, Stats } from "../constants/models";
+    import type { PageApiResponse, FinalTime, Stats } from "../constants/models";
     import { mediaWikiService } from "../services/MediaWikiService";  
     import Timer from "./Timer.svelte";
     
@@ -232,9 +231,10 @@
         }
     }
 
-    #wiki-page-container :global(.sidebox) {
+    #wiki-page-container :global(.mw-content-ltr) {
         overflow-x: scroll;
     }
+    
     #wiki-page-container :global(table.wikitable), :global(figure), :global(li.gallerybox) {
         background-color: #f8f9fa;
         border: 1px solid #a2a9b1;     
@@ -250,14 +250,6 @@
         border: 1px solid #a2a9b1;
     }
 
-    #wiki-page-container :global(table) {
-        overflow-x: scroll;
-    }
-
-    #wiki-page-container :global(table.multicol) {
-        overflow-x: scroll;
-    }
-
     #wiki-page-container :global(figure) {
         padding:5px;
         text-align: center;
@@ -271,11 +263,6 @@
 
     #wiki-page-container :global(figcaption) {
         width:20rem
-    }
-
-    #wiki-page-container :global(div.navbox) {
-        width: 100%;
-        overflow-x: scroll;
     }
 
     #overlay-container {

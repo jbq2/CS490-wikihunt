@@ -129,9 +129,9 @@
     
     function openStats() {
         let statsBar = document.getElementById("overlay-container");
-        var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+        var width = document.body.clientWidth;
         if (width <= 450 && statsBar) {
-            statsBar.style.width = "30%";
+            statsBar.style.width = "125px";
             statsBar.style.right = "0";
         } else if (statsBar) {
             statsBar.style.width = "8.5%";
@@ -141,10 +141,10 @@
 
     function closeStats() {
         let statsBar = document.getElementById("overlay-container");
-        var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+        var width = document.body.clientWidth;
         if (width <= 450 && statsBar) {
             statsBar.style.width = "0";
-            statsBar.style.right = "-30%";
+            statsBar.style.right = "-125px";
         } else if (statsBar) {
             statsBar.style.width = "0";
             statsBar.style.right = "-8.5%";
@@ -167,7 +167,7 @@
         z-index: 100; 
         text-align: center;
         overflow: hidden; 
-        margin-top: 5%;
+        margin-top: 2.5%;
         font-family: 'Varela Round';
         border: 2px solid #5aa8a8; 
         border-radius: 10px; 
@@ -306,7 +306,7 @@
     @media(max-width: 450px) {
         #overlay-container {
             transition: 0.55s;
-            width: 30%; 
+            width: 125px; 
         }
     }
 

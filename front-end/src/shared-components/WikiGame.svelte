@@ -6,8 +6,6 @@
     import { mediaWikiService } from "../services/MediaWikiService";  
     import Timer from "./Timer.svelte";
     
-    
-
     let pageContent: string = "";
     let currPage: string = ""; 
     let endPage: string | undefined = undefined; // has to be different than wikiPage initially
@@ -131,8 +129,9 @@
     
     function openStats() {
         let statsBar = document.getElementById("overlay-container");
-        if (window.innerWidth <= 450 && statsBar) {
-            statsBar.style.width = "33%";
+        var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+        if (width <= 450 && statsBar) {
+            statsBar.style.width = "30%";
             statsBar.style.right = "0";
         } else if (statsBar) {
             statsBar.style.width = "8.5%";
@@ -142,14 +141,18 @@
 
     function closeStats() {
         let statsBar = document.getElementById("overlay-container");
-
-        if (window.innerWidth <= 450 && statsBar) {
+        var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+        if (width <= 450 && statsBar) {
             statsBar.style.width = "0";
-            statsBar.style.right = "-33%";
+            statsBar.style.right = "-30%";
         } else if (statsBar) {
             statsBar.style.width = "0";
             statsBar.style.right = "-8.5%";
         }
+    }
+    
+    function quitGame() {
+        returnHome();
     }
     
     onMount(() => {
@@ -301,13 +304,13 @@
         font-size: 1em;
         color: black;
         transition: 0.5s;
-        width: 8.25%;
+        width: 8.5%;
     }
 
     @media(max-width: 450px) {
         #overlay-container {
             transition: 0.55s;
-            width: 33%; 
+            width: 30%; 
         }
     }
 
@@ -351,10 +354,10 @@
     #restart-button {
         cursor: pointer;
         position: fixed;
-        top: 85%;
+        top: 75%;
         width: 110px;
         left: 10%;
-        background-color: #f44336;
+        background-color: #008CBA;
         color: white;
         border-radius: 4px;
         font-weight: bold; 
@@ -365,8 +368,29 @@
         transform: translateY(-3px);
     }
 
+    #quit-button {
+        cursor: pointer;
+        position: fixed;
+        top: 85%;
+        width: 110px;
+        left: 10%;
+        background-color: #f44336;
+        color: white;
+        border-radius: 4px;
+        font-weight: bold; 
+        transition: 0.5s;
+    }
+
+    #quit-button:hover {
+        transform: translateY(-3px);
+    }
+    
     @media (hover: hover) {
         #restart-button:hover {
+            background-color: #fff;
+            color: #008CBA;
+        }
+        #quit-button:hover {
             background-color: #fff;
             color: #f44336;
         }
@@ -465,6 +489,7 @@
         <p> <b> {endPage} </b> 
         </p>
         <button id='restart-button' on:click={ restartGame }>Restart Game</button>
+        <button id='quit-button' on:click={ quitGame }>Quit Game</button>
     </div>
     <button class="openStats" on:click={ openStats }>&lt;</button>
     <div 

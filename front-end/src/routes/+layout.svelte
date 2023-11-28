@@ -103,17 +103,19 @@
         display: none; 
         left: 1rem;
         position: absolute;
+        z-index: 50;
     }
 
     .sidebar {
         position: fixed;
+        z-index: 50;
         width: 100px;
         top: 0;
         left: -300px;
         height: 100%;
         background: white;
         transition: left 0.3s;
-        opacity: 0.9
+        opacity: 0.9;
     }
 
     .sidebar.open {

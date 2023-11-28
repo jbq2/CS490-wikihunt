@@ -51,7 +51,11 @@
         padding-top: 1%;
         padding-bottom: 1%;
     }
-
+    @media(max-width: 450px) {
+        .centered-container {
+            margin-top: 5%;
+        }
+    }
     .page-content {
         margin: 20px;
         background-color: #ffffff;

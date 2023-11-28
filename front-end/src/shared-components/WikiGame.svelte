@@ -3,8 +3,9 @@
     import { onMount } from "svelte";
     import type { PageApiResponse, FinalTime, Stats } from "../constants/models";
     import { mediaWikiService } from "../services/MediaWikiService";  
-    import Timer from "./Timer.svelte";
-    
+    import Timer from "./Timer.svelte";   
+    import CopyButton from './CopyButton.svelte';    
+
     let pageContent: string = "";
     let currPage: string = ""; 
     let endPage: string | undefined = undefined; // has to be different than wikiPage initially
@@ -456,7 +457,10 @@
                     {' '+path[path.length -1]}
                 {/if}
                 <h3 id='new-game-button-container'>
-                    <button id='new-game-button' on:click={ newGame }>New Game</button>
+                    <button id='new-game-button' on:click={ newGame }>Replay Game</button>
+                    {#if dailyMode}
+                        <CopyButton/>
+                    {/if}
                 </h3>
             </div>
         </div>

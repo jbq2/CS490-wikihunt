@@ -17,6 +17,7 @@
     let pathString:string = "";
     let isLoading = false;
     let elapsedTime: FinalTime;
+    let isMobile: boolean = false;
     export let origEnd: string | undefined = undefined; // has to be different than wikiPage initially
     export let origStart:string = "";
     export let dailyMode: boolean = false;
@@ -102,6 +103,12 @@
         path.push(currPage);
         pathString += currPage + ' → ';
         console.log(`START:"${currPage}", END: "${endPage}"`);
+        var width = document.body.clientWidth;
+        if (width <= 450) {
+            isMobile = true;
+        } else {
+            isMobile = false;
+        }
     }
 
     function restartGame(): void {
@@ -131,8 +138,7 @@
         let statsBar = document.getElementById("overlay-container");
         var width = document.body.clientWidth;
         if (width <= 450 && statsBar) {
-            statsBar.style.width = "125px";
-            statsBar.style.right = "0";
+            statsBar.style.transform = "translateY(87vh)";
         } else if (statsBar) {
             statsBar.style.width = "8.5%";
             statsBar.style.right = "0";
@@ -143,8 +149,7 @@
         let statsBar = document.getElementById("overlay-container");
         var width = document.body.clientWidth;
         if (width <= 450 && statsBar) {
-            statsBar.style.width = "0";
-            statsBar.style.right = "-125px";
+            statsBar.style.transform = "translateY(100vh)";
         } else if (statsBar) {
             statsBar.style.width = "0";
             statsBar.style.right = "-8.5%";
@@ -297,13 +302,6 @@
         width: 8.5%;
     }
 
-    @media(max-width: 450px) {
-        #overlay-container {
-            transition: 0.55s;
-            width: 125px; 
-        }
-    }
-
     .sidePanel .closeStats {
         position: absolute;
         top: 0;
@@ -431,6 +429,102 @@
         color: #04AA6D;
     }
 
+    @media(max-width: 450px) {
+        #overlay-container {
+            width: 100%;
+            height: 110px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            /* align-items: center; */
+            font-size: 0.75em;
+            transform: translateY(87vh);
+            border-top-color: #94d4d0;
+            border-top-style: groove;
+            
+        }
+        .logoimage {
+            z-index: 30;
+            width: 25%;
+            height: 90%;
+            transform: translate(-18vh, -0.5vh);
+            position: fixed;
+        }
+        
+        #click-counter {
+            z-index: 35;
+            transform: translate(-10vh, -0.75vh);
+            text-align: left;
+            position: fixed;
+        }
+
+        #timer {
+            z-index: 35;
+            transform: translate(-9.2vh, 2vh);
+            text-align: left;
+            position: fixed;
+        }
+
+        #start-page{
+            z-index: 35;
+            transform: translate(1.5vh, -0.75vh);
+            display: flex;
+            max-width: 25vw;
+            padding-right: 10px;
+            text-align: center;
+            position: fixed;
+        } 
+        #to-page {
+            z-index: 35;
+            transform: translate(8vh, -0.75vh);
+            max-width: 3vh;
+            text-align: left;
+            position: fixed;
+        }
+        #end-page {
+            z-index: 35;
+            transform: translate(15vh, -0.75vh);
+            max-width: 25vw;
+            text-align: center;
+            position: fixed;
+        }
+
+        #restart-button, #quit-button {
+            z-index: 35;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        
+        #restart-button {
+            top: 8.15vh;
+            left: 11vh;
+            position: fixed;
+        }
+        
+        #quit-button {
+            transform: translate(25vh, -4.1vh);
+            position: fixed;
+        }
+
+        .openStats {
+            transform: translateY(96vh);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .sidePanel .closeStats {
+            transform: translateX(38vh);
+            z-index: 51;
+            text-align: center;
+            position: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+
 </style>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -473,18 +567,37 @@
         class="sidePanel"    
     >
         <!-- svelte-ignore a11y-invalid-attribute -->
-        <a href="javascript:void(0)" class="closeStats" on:click={ closeStats }>&gt;</a>
+        <a href="javascript:void(0)" class="closeStats" on:click={ closeStats }>
+            {#if isMobile} 
+            x
+            {:else}
+            &gt;
+            {/if}
+        </a>
         <img class="logoimage s-7IPF32Wcq3s8" src="src/lib/assets/wikilogo2.png" alt="Logo">
         <p id="click-counter"><b> {count} clicks </b></p> <!-- counter is at the bottom, not formated the best-->
         <p id="timer"><b><Timer bind:this={ timerComponent } /></b></p>
-        <p> <b> {firstPage} </b></p>
-        <p> <b>⬇️</b>
-        <p> <b> {endPage} </b> 
+        <p id="start-page"> <b> {firstPage} </b></p>
+        <p id="to-page"> 
+            <b>
+                {#if isMobile} 
+                ➡️
+                {:else}
+                ⬇️
+                {/if}
+            </b> </p>
+        <p id="end-page"> <b> {endPage} </b> 
         </p>
         <button id='restart-button' on:click={ restartGame }>Restart Game</button>
         <button id='quit-button' on:click={ newGame }>Quit Game</button>
     </div>
-    <button class="openStats" on:click={ openStats }>&lt;</button>
+    <button class="openStats" on:click={ openStats }>
+        {#if isMobile} 
+        ^
+        {:else}
+        &lt;
+        {/if}
+    </button>
     <div 
         id="main-container"
         style="filter: blur({isWin ? '5px' : '0px'})"

@@ -506,7 +506,7 @@
         }
 
         .openStats {
-            transform: translateY(95vh);
+            transform: translateY(96vh);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -514,9 +514,13 @@
         }
 
         .sidePanel .closeStats {
-            transform: translateX(-4.5vh);
+            transform: translateX(38vh);
             z-index: 51;
+            text-align: center;
             position: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
     }
 

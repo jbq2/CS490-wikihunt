@@ -15,8 +15,14 @@
                 toggleSidebar();
         }
     }
+
     function toggleStats(): void {
         showStats = !showStats;
+    }
+
+    function resetBgColor(): void {
+        let color = "#edf6f7"
+        document.body.style.backgroundColor = color;
     }
 </script>
 
@@ -34,8 +40,8 @@
         </div>
         <nav class="nav-bar" style="text-align: center">
             <ul style="padding: 0 0 0 20px;" id="nav-bar">
-                <a id="left-link" href="/"><li style="left: 1.6rem" id="nav-bar-link1">Daily</li></a>
-                <a href="/practice"><li id="nav-bar-link2">Practice</li></a>
+                <a id="left-link" on:click={resetBgColor} href="/"><li style="left: 1.6rem" id="nav-bar-link1">Daily</li></a>
+                <a on:click={resetBgColor} href="/practice"><li id="nav-bar-link2">Practice</li></a>
                 <!-- svelte-ignore a11y-no-static-element-interactions -->
                 <a id="right-link" on:click={toggleStats}><li style="right: 1.6rem; cursor: pointer" id="nav-bar-link3" on:click={toggleStats}>Stats</li></a>
             </ul>

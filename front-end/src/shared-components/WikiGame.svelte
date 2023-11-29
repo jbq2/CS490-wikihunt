@@ -495,10 +495,11 @@
         }
         
         #restart-button {
-            transform: translate(6vh, -2.5vh);
+            top: 8.15vh;
+            left: 11vh;
             position: fixed;
         }
-
+        
         #quit-button {
             transform: translate(25vh, -4.1vh);
             position: fixed;

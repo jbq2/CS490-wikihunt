@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Modal from './Modal.svelte';
 	import CopyButton from './CopyButton.svelte'
-	import { today, readFromCookie, dailyCookieName, dailyStreakCookieName, lastPlayedCookieName, allTimeBestCookieName, copyText, dateFormatter } from '$lib/CookieHelper';
+	import { today, readFromCookie, bestStreakCookieName, gamesPlayedCookieName, dailyCookieName, dailyStreakCookieName, lastPlayedCookieName, allTimeBestCookieName, copyText, dateFormatter } from '$lib/CookieHelper';
 	import type { DateFormat, Stats } from "../constants/models";
 	import { onMount } from 'svelte';
 
@@ -13,6 +13,8 @@
 	let cookieCheck: boolean = false;
 	let lastPlayed: DateFormat | any;
 	let streak: number;
+	let bestStreak: number;
+	let gamesPlayed: number;
 	let dailyGame: Stats | any;
 	onMount(() => {
 		updateStats();
@@ -32,6 +34,9 @@
 			allTimeBestString = "No Records!";
 			lastPlayed = 'No Records!';
 			streak = 0;
+			bestStreak = 0;
+			dailyGame = 0;
+			gamesPlayed = 0;
 		}
 		else{
 			noCookies = true;
@@ -46,6 +51,8 @@
 				dailyGame = undefined;
 				dailyString = 'No Records!';
 			}
+			bestStreak = readFromCookie(bestStreakCookieName).count;
+			gamesPlayed = readFromCookie(gamesPlayedCookieName).count;
 		}
 	}
 
@@ -68,6 +75,8 @@
 	<div style="list-style-type" class="grid">
 		<div id='last-and-streak'><b>Last Played</b>: {lastPlayed}</div>
 		<div id='last-and-streak'><b>Daily Streak</b>: {streak}{streak ? fireEmoji : ''}</div>
+		<div><b>Best Daily Streak</b>: {bestStreak}{bestStreak ? fireEmoji : ''}</div>
+		<div><b>Games Played</b>: {gamesPlayed}</div>
 		<div id='all-time-best'>
 			<div><b>All Time Best</b>:
 			{#if !noCookies}

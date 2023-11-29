@@ -6,6 +6,8 @@ export const dailyCookieName: string = `dailyStats`;
 export const dailyStreakCookieName: string =  'dailyStreak';
 export const lastPlayedCookieName: string = 'lastPlayed';
 export const allTimeBestCookieName: string = 'allTimeBestStats';
+export const gamesPlayedCookieName: string = 'gamesPlayed';
+export const bestStreakCookieName: string = 'bestStreak';
 const expiryDate = new Date();
 expiryDate.setFullYear(expiryDate.getFullYear() + 1); // Set cookie to expire in one year
 
@@ -22,6 +24,8 @@ export function writeToCookie(gameStats: Stats): void {
     let dailyStats: string = JSON.stringify(gameStats);
     let lastPlayed: string;
     let dailyStreak: string;
+    let gamesPlayed: string;
+    let bestStreak: string;
     let ATBStats: string;
     if (currentCookie) { // cookies exist -> update them
         let cookies: CookieCollection | undefined = updateCookies(gameStats, gameStats.date); 
@@ -32,6 +36,8 @@ export function writeToCookie(gameStats: Stats): void {
         lastPlayed = JSON.stringify(cookies.lastPlayed);
         dailyStreak = JSON.stringify(cookies.dailyStreak);
         ATBStats = JSON.stringify(cookies.allTimeBest);
+        gamesPlayed = JSON.stringify(cookies.gamesPlayed);
+        bestStreak = JSON.stringify(cookies.bestStreak);
     } 
 
     else {
@@ -39,12 +45,16 @@ export function writeToCookie(gameStats: Stats): void {
         lastPlayed = JSON.stringify(gameStats.date);
         dailyStreak = JSON.stringify({'count': 1});
         ATBStats = dailyStats;
+        gamesPlayed = JSON.stringify({'count': 1})
+        bestStreak = JSON.stringify({'count': 1})
     }
     
     document.cookie = `${dailyCookieName}=${encodeURIComponent(dailyStats)};expires=${expiryDate.toUTCString()};SameSite=Lax;path=/`;   
     document.cookie = `${allTimeBestCookieName}=${encodeURIComponent(ATBStats)};expires=${expiryDate.toUTCString()};SameSite=Lax;path=/`
     document.cookie = `${dailyStreakCookieName}=${encodeURIComponent(dailyStreak)};expires=${expiryDate.toUTCString()};SameSite=Lax;path=/`
     document.cookie = `${lastPlayedCookieName}=${encodeURIComponent(lastPlayed)};expires=${expiryDate.toUTCString()};SameSite=Lax;path=/`
+    document.cookie = `${bestStreakCookieName}=${encodeURIComponent(bestStreak)};expires=${expiryDate.toUTCString()};SameSite=Lax;path=/`
+    document.cookie = `${gamesPlayedCookieName}=${encodeURIComponent(gamesPlayed)};expires=${expiryDate.toUTCString()};SameSite=Lax;path=/`
 }
 
 function updateCookies(gameStats: Stats, today: DateFormat): CookieCollection | undefined {
@@ -86,12 +96,20 @@ function updateCookies(gameStats: Stats, today: DateFormat): CookieCollection | 
     else if (allTimeBest.playTime.minutes === thisGameStats.playTime.minutes)
         betterStats = allTimeBest.playTime.seconds > thisGameStats.playTime.seconds ? thisGameStats : allTimeBest;
 
+    let bestStreak: GameCount = readFromCookie(bestStreakCookieName);
+    if (bestStreak.count < currentStreak.count)
+        bestStreak = currentStreak;
+
+    let gamesPlayed: GameCount = readFromCookie(gamesPlayedCookieName).count + 1;
+
     return {
         'dailyStats': thisGameStats,
         // 'allTimeBest': allTimeBest.clicks < thisGameStats.clicks ? allTimeBest : thisGameStats,
         'allTimeBest': betterStats,
         'dailyStreak': currentStreak,
-        'lastPlayed': today
+        'lastPlayed': today,
+        'bestStreak': bestStreak,
+        'gamesPlayed': gamesPlayed
     };
 }
 

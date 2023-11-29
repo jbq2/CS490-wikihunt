@@ -2,6 +2,7 @@
     import GameStats from './../shared-components/GameStats.svelte';
     let isSidebarOpen = false;
     let showStats: boolean = false;
+    let shekhmus: GameStats;
 
     function toggleSidebar(): void {
         isSidebarOpen = !isSidebarOpen;
@@ -17,10 +18,12 @@
     }
     function toggleStats(): void {
         showStats = !showStats;
+        shekhmus.updateStats();
     }
 </script>
 
 <GameStats 
+    bind:this={ shekhmus }
     showModal = {showStats}
 />
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -41,7 +44,7 @@
             </ul>
         </nav>
         <aside class="sidebar {isSidebarOpen ? 'open' : ''}">
-            <button class="close-btn" on:click={toggleSidebar}>×</button>
+            <button class="close-button" on:click={toggleSidebar}>×</button>
             <!-- svelte-ignore a11y-missing-attribute -->
             <ul style="list-style-type: none; margin-right: 5rem; padding-left: 1rem">
                 <a on:click={toggleSidebar} href="/"><li>Daily</li></a>
@@ -104,9 +107,11 @@
         left: 1rem;
         position: absolute;
         z-index: 50;
+        margin-top: 15px;
     }
 
     .sidebar {
+        font-family: 'Varela Round';
         position: fixed;
         z-index: 50;
         width: 100px;
@@ -122,7 +127,7 @@
         left: 0;
     }
 
-    .close-btn {
+    .close-button {
         margin-right: 2.5rem;
     }
 

@@ -29,7 +29,7 @@
 
 	#close-button {
 		font-size: 15px;
-		background-color: rgb(186, 186, 186);
+		background-color: rgb(212, 212, 212);
 		color: black;
 		font-weight: 100;
 	}

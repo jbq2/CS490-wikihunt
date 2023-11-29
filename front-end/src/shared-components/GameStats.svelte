@@ -15,6 +15,15 @@
 	let streak: number;
 	let dailyGame: Stats | any;
 	onMount(() => {
+		updateStats();
+	});
+
+	export function updateStats(): void {
+		dailyGame = undefined;
+		noCookies = false;
+		allTimeBestString = 'No Records!', dailyString = 'No Records!';
+		cookieCheck = false;
+		console.log('here')
 		allTimeBest = readFromCookie(allTimeBestCookieName);
 		if (allTimeBest)
 			cookieCheck = true;
@@ -38,7 +47,7 @@
 				dailyString = 'No Records!';
 			}
 		}
-	});
+	}
 
 </script>
 

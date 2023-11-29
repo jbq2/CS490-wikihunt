@@ -105,18 +105,30 @@ nav ul li {
 	border-radius: 10px;
 }
 
-#close-button:hover, #copy-button:hover, #start-button:hover {
+.hamburger-menu, .close-button {
+	cursor: pointer;
+	background-color: #04AA6D;
+	color: white;
+	border-radius: 4px;
+	font-weight: bold; 
+	font-size: 20px;
+	transition: 0.5s;
+	/* border: solid black 2px; */
+	border-radius: 10px;
+}
+
+.hamburger-menu:hover, .close-button:hover, #close-button:hover, #copy-button:hover, #start-button:hover {
 	transform: translateY(-3px);
 }
 
 @media (hover: hover) {
-	#close-button:hover, #copy-button:hover, #start-button:hover {
+	.hamburger-menu:hover, .close-button:hover, #close-button:hover, #copy-button:hover, #start-button:hover {
 		background-color: #fff;
 		color: #04AA6D;
 	}
 }
 
-#close-button:active, #copy-button:active, #start-button:active {
+.hamburger-menu:active, .close-button:active, #close-button:active, #copy-button:active, #start-button:active {
 	background-color: #fff;
 	color: #04AA6D;
 }

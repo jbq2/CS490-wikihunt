@@ -574,7 +574,7 @@
             &gt;
             {/if}
         </a>
-        <img class="logoimage s-7IPF32Wcq3s8" src="src/lib/assets/wikilogo2.png" alt="Logo">
+        <img class="logoimage s-7IPF32Wcq3s8" src="/assets/wikilogo2.png" alt="Logo">
         <p id="click-counter"><b> {count} clicks </b></p> <!-- counter is at the bottom, not formated the best-->
         <p id="timer"><b><Timer bind:this={ timerComponent } /></b></p>
         <p id="start-page"> <b> {firstPage} </b></p>

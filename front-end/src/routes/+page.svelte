@@ -2,6 +2,7 @@
     import WikiGame from "../shared-components/WikiGame.svelte";
     import { mediaWikiService } from "../services/MediaWikiService";  
     import type { PageApiResponse, StartEndApiResponse } from "../constants/models";
+    import CopyButton from "../shared-components/CopyButton.svelte";
     let startCheck: boolean = false;
     let loading: boolean = false;
     let fetchedFirstPage: string = "";

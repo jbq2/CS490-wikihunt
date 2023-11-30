@@ -1,5 +1,6 @@
 <script lang='ts'>
     import GameStats from './../shared-components/GameStats.svelte';
+    
     let isSidebarOpen = false;
     let showStats: boolean = false;
     let shekhmus: GameStats;
@@ -67,7 +68,7 @@
 </main>
 <style>
     @import '/public/global.css';
-
+    @import "../app.css";
     @import url('https://fonts.googleapis.com/css?family=Varela Round');
 
     nav ul li {

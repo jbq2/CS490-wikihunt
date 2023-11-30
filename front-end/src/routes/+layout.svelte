@@ -1,9 +1,17 @@
 <script lang='ts'>
-    import GameStats from './../shared-components/GameStats.svelte';
-    
+    import GameStats from './../shared-components/GameStats.svelte'; 
+    import DarkModeToggle from '../shared-components/DarkModeToggle.svelte';
     let isSidebarOpen = false;
     let showStats: boolean = false;
     let shekhmus: GameStats;
+    let isDarkMode = false;
+
+
+    function toggleDarkMode() :void {
+    isDarkMode = !isDarkMode;
+    // Toggle dark mode styles here
+    document.documentElement.classList.toggle('dark', isDarkMode);
+  }
 
     function toggleSidebar(): void {
         isSidebarOpen = !isSidebarOpen;
@@ -35,7 +43,8 @@
 />
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-<main on:click={clickOff}>
+<main on:click={clickOff}  class="{isDarkMode ? 'dark' : ''}">
+    <DarkModeToggle {isDarkMode} {toggleDarkMode } />
     <div id="header">
         <div id="hamburger-and-logo">
             {#if !isSidebarOpen}

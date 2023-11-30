@@ -4,7 +4,8 @@
     import type { PageApiResponse, FinalTime, Stats } from "../constants/models";
     import { mediaWikiService } from "../services/MediaWikiService";  
     import Timer from "./Timer.svelte";   
-    import CopyButton from './CopyButton.svelte';    
+    import CopyButton from './CopyButton.svelte';  
+    import DarkModeToggle from './DarkModeToggle.svelte';  
 
     let pageContent: string = "";
     let currPage: string = ""; 
@@ -24,6 +25,14 @@
     export let returnHome: any;
 
     let timerComponent: Timer;
+    let isDarkMode = false;
+
+
+    function toggleDarkMode() :void {
+    isDarkMode = !isDarkMode;
+    // Toggle dark mode styles here
+    document.documentElement.classList.toggle('dark', isDarkMode);
+  }
 
 
     function getGameStats(): Stats {
@@ -164,6 +173,7 @@
 <style>
     @import '../../public/wiki-common.css';
     @import url('https://fonts.googleapis.com/css?family=Varela Round');
+    @import "../app.css";
     
     #win-container {
         position: fixed;
@@ -525,11 +535,16 @@
         }
     }
 
+
+
+
+
 </style>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-<main on:click={clickLink}>
+<main on:click={clickLink}  class="{isDarkMode ? 'dark' : ''}">
+    <DarkModeToggle {isDarkMode} {toggleDarkMode} />
     {#if isWin}
         <div id="win-container">
             <h1 id="win-message">You Win!</h1>

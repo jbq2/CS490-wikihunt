@@ -93,7 +93,8 @@
                 <img class="logoimage" src="/assets/wikilogo3.png" alt="Logo">
                 <!-- <h1 style="margin: 0 10px;">WikiHunt</h1> -->
             </a>
-            <h1>Welcome to WikiHunt!</h1>
+            <h1>
+                Welcome to WikiHunt!</h1>
             <div class="page-content">
                 <p>Welcome to WikiHunt, a Wikipedia game where the player must navigate from one randomly selected article to another pre-selected article.</p>
                 <h1>Rules</h1>

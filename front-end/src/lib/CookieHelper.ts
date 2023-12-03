@@ -136,6 +136,7 @@ export function copyText(): void {
         clicks = dailyGame.clicks;
         minutes = dailyGame.playTime.minutes;
         seconds = dailyGame.playTime.seconds;
+        startEnd = dailyGame.goal;
     }
     const textToCopy: string = `WikiHunt - ${dateFormatter(today)}` + (dailyGame ? `
 🏁: ${startEnd.start} ➡️ ${startEnd.end}

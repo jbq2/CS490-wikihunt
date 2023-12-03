@@ -1,6 +1,6 @@
 export type StartEndApiResponse = {
     start: string,
-    end: string
+    end: string | undefined
 };
 
 export type PageApiResponse = {

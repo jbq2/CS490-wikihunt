@@ -17,6 +17,9 @@
 
     function start(): void {
         loading = true;
+
+    
+        
         mediaWikiService.getDailyWordsFromApi()
             .then((data: StartEndApiResponse) => {
                 fetchedFirstPage = data.start;
@@ -27,10 +30,14 @@
             });
     }
 
+   
+
+
     function returnHome(): any {
         startCheck = false;
         loading = false;
-        changeBgColor();
+       
+       // changeBgColor();
     }
 
   
@@ -52,21 +59,28 @@
 
     onMount(() => {
     darkMode.subscribe(value => {
-      const centeredContainer = document.querySelector('.centered-container');
-      if (centeredContainer) {
+        document.body.style.color = value ? "#fff" : "#1a1a1a";
+    
+
+        
+      const centeredContainer = document.querySelectorAll('.centered-container');
+      centeredContainer.forEach(centeredContainer => {
         centeredContainer.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+
+      });
+    
         // Add more styles or adjustments as needed
-      }
-      const pageContent = document.querySelector('.page-content');
-            if (pageContent) {
+      
+      const pageContent = document.querySelectorAll('.page-content');
+      pageContent.forEach(pageContent => {
                 pageContent.style.backgroundColor = value ? "#1a1a1a" : "#FFFFFF";
                 // Add more styles or adjustments as needed
-            }
+            });
 
         const h1style = document.querySelectorAll('h1');
         h1style.forEach(h1style => {
                 h1style.style.color= value? "#fff" : "#333";
-                //h1style.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+                h1style.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
                 
             });
             
@@ -76,6 +90,8 @@
                 p.style.backgroundColor = value ? "#1a1a1a" : "#fff";
                 
             });
+
+            
 
             const li = document.querySelectorAll('li');
             li.forEach(li => {
@@ -89,6 +105,9 @@
                 logoImageSrc = value ? 'src/lib/assets/wikilogo3transparent.png' : 'src/lib/assets/wikilogo3.png';
                 logoImage.src = logoImageSrc;
             });
+
+        
+    
            
            
            
@@ -98,6 +117,7 @@
 
 
     });
+
   });
 
 
@@ -146,7 +166,7 @@
     
 
     h1 {
-        color: #333;
+        color:#333
     }
 
     p {

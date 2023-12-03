@@ -28,6 +28,7 @@
     function returnHome(): any {
         startCheck = false;
         loading = false;
+
         //changeBgColor();
     }
 
@@ -44,6 +45,9 @@
 
     onMount(() => {
     darkMode.subscribe(value => {
+
+
+        
       const centeredContainer = document.querySelector('.centered-container');
       if (centeredContainer) {
         centeredContainer.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
@@ -64,7 +68,7 @@
             const p = document.querySelectorAll('p');
             p.forEach(p => {
                 p.style.color= value? "#fff" : "#333";
-                p.style.backgroundColor = value ? "#1a1a1a" : "#fff";
+               // p.style.backgroundColor = value ? "#1a1a1a" : "#fff";
                 
             });
 
@@ -159,18 +163,7 @@
         border-radius: 10px;
     }
 
-   .dark #start-button {
-        margin: 10px;
-        padding: 10px;
-        background-color: black;
-        color: black;
-        border-radius: 4px;
-        font-weight: bold; 
-        font-size: 20px;
-        transition: 0.5s;
-        /* border: solid black 2px; */
-        border-radius: 10px;
-    }
+
 
 
     #start-button:hover {
@@ -184,19 +177,9 @@
         }
     }
 
-    @media (hover: hover) {
-        .dark #start-button:hover {
-            background-color: #1a1a1a;
-            color: #ccc;
-        }
-    }
 
     #start-button:active {
         background-color: #fff;
-        color: #04AA6D;
-    }
-    .dark #start-button:active {
-        background-color: #1a1a1a;
         color: #04AA6D;
     }
 </style>

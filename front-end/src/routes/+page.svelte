@@ -13,6 +13,8 @@
     let fetchedEndPage: string | undefined = undefined; // has to be different than wikiPage initially
 
 
+    let logoImageSrc = 'src/lib/assets/wikilogo3.png'; 
+
     function start(): void {
         loading = true;
         mediaWikiService.getDailyWordsFromApi()
@@ -21,7 +23,7 @@
                 fetchedEndPage = data.end;
                 loading = false;
                 startCheck = true;
-                changeBgColor();
+                //changeBgColor();
             });
     }
 
@@ -47,6 +49,56 @@
         darkMode.update((value) => !value);
   //  }
     }
+
+    onMount(() => {
+    darkMode.subscribe(value => {
+      const centeredContainer = document.querySelector('.centered-container');
+      if (centeredContainer) {
+        centeredContainer.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+        // Add more styles or adjustments as needed
+      }
+      const pageContent = document.querySelector('.page-content');
+            if (pageContent) {
+                pageContent.style.backgroundColor = value ? "#1a1a1a" : "#FFFFFF";
+                // Add more styles or adjustments as needed
+            }
+
+        const h1style = document.querySelectorAll('h1');
+        h1style.forEach(h1style => {
+                h1style.style.color= value? "#fff" : "#333";
+                //h1style.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+                
+            });
+            
+            const p = document.querySelectorAll('p');
+            p.forEach(p => {
+                p.style.color= value? "#fff" : "#333";
+                p.style.backgroundColor = value ? "#1a1a1a" : "#fff";
+                
+            });
+
+            const li = document.querySelectorAll('li');
+            li.forEach(li => {
+                li.style.color= value? "#fff" : "#333";
+                //p.style.backgroundColor = value ? "#1a1a1a" : "#fff";
+                
+            });
+            
+            const logoImage = document.querySelectorAll('.logoimage');
+            logoImage.forEach(logoImage => {
+                logoImageSrc = value ? 'src/lib/assets/wikilogo3transparent.png' : 'src/lib/assets/wikilogo3.png';
+                logoImage.src = logoImageSrc;
+            });
+           
+           
+           
+      
+     
+
+
+
+    });
+  });
 
 
 </script>
@@ -91,14 +143,7 @@
         padding: 20px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
-    .dark .page-content {
-        margin: 20px;
-        background-color: #1a1a1a;
-        border-radius: 10px;
-        padding: 20px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-   
+    
 
     h1 {
         color: #333;
@@ -131,7 +176,7 @@
     {#if !startCheck && !loading}
         <div class="centered-container">
             <a class="logolink" href="/">
-                <img class="logoimage" src="/assets/wikilogo3.png" alt="Logo">
+                <img class="logoimage" src={'src/lib/assets/wikilogo3transparent.png'} alt="Logo">
                 <!-- <h1 style="margin: 0 10px;">WikiHunt</h1> -->
             </a>
             <h1>

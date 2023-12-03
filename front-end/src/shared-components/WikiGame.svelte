@@ -5,6 +5,9 @@
     import { mediaWikiService } from "../services/MediaWikiService";  
     import Timer from "./Timer.svelte";   
     import CopyButton from './CopyButton.svelte';  
+    
+
+    import { darkMode } from '$lib/darkModeStore';
     let pageContent: string = "";
     let currPage: string = ""; 
     let endPage: string | undefined = undefined; // has to be different than wikiPage initially
@@ -25,7 +28,7 @@
     let timerComponent: Timer;
 
 
-
+    let logoImageSrc = 'src/lib/assets/wikilogo2.png'; 
  
 
 
@@ -160,6 +163,34 @@
     }
     
     onMount(() => {
+
+        darkMode.subscribe(value => {
+      document.body.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+      
+
+      const h1style = document.querySelector('h1');
+            if(h1style){
+                h1style.style.color= value? "#fff" : "#333";
+                h1style.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+                
+            }
+
+
+            const logoImage = document.querySelector('.logoimage');
+            if (logoImage) {
+                logoImageSrc = value ? 'src/lib/assets/wikilogo3transparent.png' : 'src/lib/assets/wikilogo3.png';
+                logoImage.src = logoImageSrc;
+            }
+           
+    });
+
+  
+        
+
+
+          
+
+
         start();
     });
 </script>

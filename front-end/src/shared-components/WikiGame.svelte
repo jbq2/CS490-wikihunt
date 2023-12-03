@@ -5,8 +5,6 @@
     import { mediaWikiService } from "../services/MediaWikiService";  
     import Timer from "./Timer.svelte";   
     import CopyButton from './CopyButton.svelte';  
-    import DarkModeToggle from './DarkModeToggle.svelte';  
-
     let pageContent: string = "";
     let currPage: string = ""; 
     let endPage: string | undefined = undefined; // has to be different than wikiPage initially
@@ -25,14 +23,10 @@
     export let returnHome: any;
 
     let timerComponent: Timer;
-    let isDarkMode = false;
 
 
-    function toggleDarkMode() :void {
-    isDarkMode = !isDarkMode;
-    // Toggle dark mode styles here
-    document.documentElement.classList.toggle('dark', isDarkMode);
-  }
+
+ 
 
 
     function getGameStats(): Stats {
@@ -186,7 +180,6 @@
         border: 2px solid #5aa8a8; 
         border-radius: 10px; 
     }
-
     
     @media(max-width: 450px) {
         #win-container{
@@ -207,6 +200,8 @@
         border-radius: 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
+
+    
 
     #win-message,
     #win-caption,
@@ -251,6 +246,17 @@
         margin: auto;
         margin-bottom: 25px;
     }
+   .dark #wiki-page-container {
+        align-items: center;
+        justify-items: center;
+        width: 75%;
+        position: relative;
+        grid-template-columns: repeat(2, 50fr);
+        grid-column-gap: 1px;
+        margin: auto;
+        margin-bottom: 25px;
+        background-color: #1a1a1a;
+    }
 
     @media(max-width: 450px) {
         #wiki-page-container {
@@ -268,13 +274,32 @@
         border: 1px solid #a2a9b1;     
         padding: 5px;
     }
+
+    .dark #wiki-page-container :global(table.wikitable),.dark :global(figure), .dark :global(li.gallerybox) {
+        background-color: #1a1a1a;
+        border: 1px solid #a2a9b1;     
+        padding: 5px;
+    }
+    
     #wiki-page-container :global(li.gallerybox) {
         margin: 3px;
         display: inline-block;
     }
+    #wiki-page-container :global(li.gallerybox) {
+        margin: 3px;
+        display: inline-block;
+        background-color: #1a1a1a;
+
+    }
+
 
     #wiki-page-container :global(table.wikitable) {
         background-color: #f8f9fa;
+        border: 1px solid #a2a9b1;
+    }
+
+    .dark  #wiki-page-container :global(table.wikitable) {
+        background-color: #1a1a1a;
         border: 1px solid #a2a9b1;
     }
 
@@ -308,6 +333,25 @@
         font-family: 'Varela Round';
         font-size: 1em;
         color: black;
+        transition: 0.5s;
+        width: 8.5%;
+    }
+
+    .dark  #overlay-container {
+        position: fixed;
+        text-align: center;
+        top: 0px;
+        right:0px;
+        height:100%;
+        padding: 5px 5px 5px 5px;
+        z-index: 50;
+        border-left-style: groove;
+        border-left-color: #94d4d0;
+        border-left-width: 7px;
+        background-color: #1a1a1a;
+        font-family: 'Varela Round';
+        font-size: 1em;
+        color: white;
         transition: 0.5s;
         width: 8.5%;
     }
@@ -543,8 +587,8 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-<main on:click={clickLink}  class="{isDarkMode ? 'dark' : ''}">
-    <DarkModeToggle {isDarkMode} {toggleDarkMode} />
+<main on:click={clickLink} >
+
     {#if isWin}
         <div id="win-container">
             <h1 id="win-message">You Win!</h1>

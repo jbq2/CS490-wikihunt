@@ -10,6 +10,9 @@
     import {darkMode} from '../../lib/darkModeStore'
     import CopyButton from "../../shared-components/CopyButton.svelte";
     import { onMount } from "svelte";
+
+    let logoImageSrc = 'src/lib/assets/wikilogo3.png'; 
+
     function start(): void {
         loading = true;
         mediaWikiService.getRandomWordsFromApi()
@@ -18,18 +21,23 @@
                 fetchedEndPage = data.end;
                 loading = false;
                 startCheck = true;
-                changeBgColor();
+                //changeBgColor();
             });
     }
 
     function returnHome(): any {
         startCheck = false;
         loading = false;
-        changeBgColor();
+        //changeBgColor();
     }
 
     function changeBgColor(): void {
         darkMode.update((value) => !value);
+        const centeredContainer = document.querySelector('.centered-container');
+        if (centeredContainer) {
+            centeredContainer.style.backgroundColor = value ? "#1a1a1a" : "#FFFFFF";
+            // Add more styles or adjustments as needed
+        }
        
     }
 
@@ -38,9 +46,40 @@
     darkMode.subscribe(value => {
       const centeredContainer = document.querySelector('.centered-container');
       if (centeredContainer) {
-        centeredContainer.style.backgroundColor = value ? "#1a1a1a" : "#FFFFFF";
+        centeredContainer.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
         // Add more styles or adjustments as needed
       }
+      const pageContent = document.querySelector('.page-content');
+            if (pageContent) {
+                pageContent.style.backgroundColor = value ? "#1a1a1a" : "#FFFFFF";
+                // Add more styles or adjustments as needed
+            }
+
+        const h1style = document.querySelectorAll('h1');
+        h1style.forEach(h1style => {
+               h1style.style.color= value? "#fff" : "#333";
+                h1style.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+                
+            });
+            const p = document.querySelectorAll('p');
+            p.forEach(p => {
+                p.style.color= value? "#fff" : "#333";
+                p.style.backgroundColor = value ? "#1a1a1a" : "#fff";
+                
+            });
+
+            const logoImage = document.querySelectorAll('.logoimage');
+            logoImage.forEach(logoImage => {
+                logoImageSrc = value ? 'src/lib/assets/wikilogo3transparent.png' : 'src/lib/assets/wikilogo3.png';
+                logoImage.src = logoImageSrc;
+            });
+           
+           
+      
+     
+
+
+
     });
   });
 </script>
@@ -85,13 +124,6 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
-    .dark .page-content {
-        margin: 20px;
-        background-color: #1a1a1a;
-        border-radius: 10px;
-        padding: 20px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
 
     h1 {
         color: #333;
@@ -102,14 +134,7 @@
         font-size: 16px;
     }
 
-   .dark h1 {
-        color: #fff;
-    }
-
-   .dark p {
-        color: #666;
-        font-size: 16px;
-    }
+ 
 
     /* ul {
         color: #666;

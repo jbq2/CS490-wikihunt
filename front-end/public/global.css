@@ -75,6 +75,78 @@ nav ul li {
     margin: 0 10px; 
 }
 
+nav ul li {
+	font-family: 'Varela Round';
+	border-radius: 0px;
+	border: 2px #dedede;
+	border-style: groove;
+	position: relative;
+	margin: 0;
+	text-align: center;
+}
+nav ul li::before {
+	content: "";
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 4px;
+	background-color: green; 
+	opacity: 0;
+	transition: opacity 0.3s ease;
+}
+
+nav ul li:hover::before {
+	opacity: 1;
+}
+
+#nav-bar-link1, #nav-bar-link2, #nav-bar-link3 {
+	list-style-position: relative;
+	width: 5rem;
+}   
+
+#nav-bar-link1, #nav-bar-link2 {
+	text-indent: -1rem;
+}
+
+#nav-bar-link3 {
+	text-indent: -0.25rem;
+}
+
+.hamburger-menu {
+	display: none; 
+	left: 1rem;
+	position: absolute;
+	z-index: 50;
+	margin-top: 15px;
+}
+
+.sidebar {
+	font-family: 'Varela Round';
+	position: fixed;
+	z-index: 50;
+	width: 100px;
+	top: 0;
+	left: -300px;
+	height: 100%;
+	background: white;
+	transition: left 0.3s;
+	opacity: 0.9;
+}
+
+.sidebar.open {
+	left: 0;
+}
+
+.close-button {
+	margin-right: 2.5rem;
+}
+
+@media screen and (max-width: 450px) {
+	.nav-bar { display: none; }
+	.hamburger-menu { display: inline-block; }
+}
+
 #header {
     display: flex;
     flex-direction: column; 

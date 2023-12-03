@@ -1,6 +1,5 @@
 // import { _ } from "$env/static/private";
 import type { DateFormat, Stats, FinalTime, GameCount, CookieCollection, StartEndApiResponse } from "../constants/models";
-import { mediaWikiService } from "../services/MediaWikiService";
 
 export const dailyCookieName: string = `dailyStats`;
 export const dailyStreakCookieName: string =  'dailyStreak';
@@ -10,7 +9,6 @@ export const gamesPlayedCookieName: string = 'gamesPlayed';
 export const bestStreakCookieName: string = 'bestStreak';
 const expiryDate = new Date();
 expiryDate.setFullYear(expiryDate.getFullYear() + 1); // Set cookie to expire in one year
-
 
 const date: Date = new Date();
 export const today: DateFormat = {
@@ -127,9 +125,10 @@ export function dateFormatter(date: DateFormat): string  {
     return `${date.month}/${date.day}/${date.year}`
 }
 
-export async function copyText(): Promise<void> {
-    let startEnd: StartEndApiResponse = await mediaWikiService.getDailyWordsFromApi();
+export function copyText(): void {
+    // let startEnd: StartEndApiResponse = await mediaWikiService.getDailyWordsFromApi();
     let dailyGame: Stats | undefined = readFromCookie(dailyCookieName);
+    let startEnd: StartEndApiResponse | any ;
     let clicks: string | number = 'X';
     let minutes: string | number = 'X';
     let seconds: string | number = 'X';

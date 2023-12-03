@@ -1,12 +1,15 @@
 <script lang="ts">
     import WikiGame from "../../shared-components/WikiGame.svelte";
     import { mediaWikiService } from "../../services/MediaWikiService";  
+   // import DarkModeToggle from "../../shared-components/DarkModeToggle.svelte";
     import type { PageApiResponse, StartEndApiResponse } from "../../constants/models";
     let startCheck: boolean = false;
     let loading: boolean = false;
     let fetchedFirstPage: string = "";
     let fetchedEndPage: string | undefined = undefined; // has to be different than wikiPage initially
-    
+    import {darkMode} from '../../lib/darkModeStore'
+    import CopyButton from "../../shared-components/CopyButton.svelte";
+    import { onMount } from "svelte";
     function start(): void {
         loading = true;
         mediaWikiService.getRandomWordsFromApi()
@@ -15,28 +18,43 @@
                 fetchedEndPage = data.end;
                 loading = false;
                 startCheck = true;
-                changeBgColor("#FFFFFF");
+                changeBgColor();
             });
     }
 
     function returnHome(): any {
         startCheck = false;
         loading = false;
-        changeBgColor("#edf6f7");
+        changeBgColor();
     }
 
-    function changeBgColor(color: string): void {
-        document.body.style.backgroundColor = color;
+    function changeBgColor(): void {
+        darkMode.update((value) => !value);
+       
     }
+
+
+    onMount(() => {
+    darkMode.subscribe(value => {
+      const centeredContainer = document.querySelector('.centered-container');
+      if (centeredContainer) {
+        centeredContainer.style.backgroundColor = value ? "#1a1a1a" : "#FFFFFF";
+        // Add more styles or adjustments as needed
+      }
+    });
+  });
 </script>
 <style>
     @import url('https://fonts.googleapis.com/css?family=Varela Round');
+    @import '/public/global.css';
 
     :global(body) { 
         margin: 0; 
-        padding: 0; 
-        background-color: #edf6f7; 
+        padding: 0;
+        background-color: #edf6f7;
+      
     }
+    
     .centered-container {
         flex: 1;
         height: 100%;
@@ -51,6 +69,9 @@
         padding-top: 1%;
         padding-bottom: 1%;
     }
+   
+
+
     @media(max-width: 450px) {
         .centered-container {
             margin-top: 5%;
@@ -64,11 +85,28 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
+    .dark .page-content {
+        margin: 20px;
+        background-color: #1a1a1a;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
     h1 {
         color: #333;
     }
 
     p {
+        color: #666;
+        font-size: 16px;
+    }
+
+   .dark h1 {
+        color: #fff;
+    }
+
+   .dark p {
         color: #666;
         font-size: 16px;
     }
@@ -96,6 +134,20 @@
         border-radius: 10px;
     }
 
+   .dark #start-button {
+        margin: 10px;
+        padding: 10px;
+        background-color: black;
+        color: black;
+        border-radius: 4px;
+        font-weight: bold; 
+        font-size: 20px;
+        transition: 0.5s;
+        /* border: solid black 2px; */
+        border-radius: 10px;
+    }
+
+
     #start-button:hover {
         transform: translateY(-3px);
     }
@@ -107,13 +159,25 @@
         }
     }
 
+    @media (hover: hover) {
+        .dark #start-button:hover {
+            background-color: #1a1a1a;
+            color: #ccc;
+        }
+    }
+
     #start-button:active {
         background-color: #fff;
+        color: #04AA6D;
+    }
+    .dark #start-button:active {
+        background-color: #1a1a1a;
         color: #04AA6D;
     }
 </style>
 
 <main>
+    
     {#if !startCheck && !loading}
         <div class="centered-container">
             <a class="logolink" href="/">

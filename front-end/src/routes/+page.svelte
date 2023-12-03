@@ -3,11 +3,16 @@
     import { mediaWikiService } from "../services/MediaWikiService";  
     import type { PageApiResponse, StartEndApiResponse } from "../constants/models";
     import CopyButton from "../shared-components/CopyButton.svelte";
+    //import DarkModeToggle from "../shared-components/DarkModeToggle.svelte";
+    import { onMount } from 'svelte'
+   // import {darkMode} from 
+    import {darkMode} from '../lib/darkModeStore'
     let startCheck: boolean = false;
     let loading: boolean = false;
     let fetchedFirstPage: string = "";
     let fetchedEndPage: string | undefined = undefined; // has to be different than wikiPage initially
-    
+
+
     function start(): void {
         loading = true;
         mediaWikiService.getDailyWordsFromApi()
@@ -16,48 +21,69 @@
                 fetchedEndPage = data.end;
                 loading = false;
                 startCheck = true;
-                changeBgColor("#FFFFFF");
+                changeBgColor();
             });
     }
 
     function returnHome(): any {
         startCheck = false;
         loading = false;
-        changeBgColor("#edf6f7");
+        changeBgColor();
     }
 
-    function changeBgColor(color: string): void {
-        document.body.style.backgroundColor = color;
+  
+
+    
+
+    function changeBgColor(): void {
+       // if (document.body.classList.contains('dark')) {
+        // Dark mode background color
+       // document.body.style.backgroundColor = "#1a1a1a"; // Adjust this to the desired dark mode background color
+        // Add more dark mode specific color updates as needed
+   // } else {
+        // Light mode background color
+       // document.body.style.backgroundColor = "#FFFFFF";
+        // Add more light mode specific color updates as needed
+        darkMode.update((value) => !value);
+  //  }
     }
+
+
 </script>
 <style>
-    @import '/public/global.css';
-    @import url('https://fonts.googleapis.com/css?family=Varela Round');
 
-    :global(body) { 
-        margin: 0; 
-        padding: 0;
-        background-color: #edf6f7; 
-    }
+    @import url('https://fonts.googleapis.com/css?family=Varela Round');
+    @import "../app.css";
+    @import '/public/global.css';
+
+    
     .centered-container {
         flex: 1;
         height: 100%;
         text-align: center;
-        display: flex;
+        
         flex-direction: column;
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        background-color: #edf6f7;
         font-family: 'Varela Round';
         padding-top: 1%;
         padding-bottom: 1%;
     }
+  
+    
+
+    
+   
     @media(max-width: 450px) {
         .centered-container {
             margin-top: 5%;
         }
     }
+     
+
+
+
     .page-content {
         margin: 20px;
         background-color: #ffffff;
@@ -65,6 +91,14 @@
         padding: 20px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
+    .dark .page-content {
+        margin: 20px;
+        background-color: #1a1a1a;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+   
 
     h1 {
         color: #333;
@@ -84,6 +118,12 @@
     li {
         margin: 10px 0;
     }
+
+   
+
+
+
+
 
 </style>
 

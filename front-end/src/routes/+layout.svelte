@@ -48,13 +48,23 @@
     }
     onMount(() => {
     darkMode.subscribe(value => {
+
       document.body.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
-      
+      document.body.style.color = value ? "#fff" : "#1a1a1a";
 
       const navItems = document.querySelectorAll('.nav-bar li');
       navItems.forEach(item => {
         item.style.backgroundColor = value ? "#444" : "#fff"; // Adjust this to the desired color
       });
+
+
+      const sidebar = document.querySelector('.sidebar');
+      if(sidebar){
+        sidebar.style.backgroundColor = value ? "black": "white";
+      }
+
+
+      
     });
   });
 

@@ -165,8 +165,9 @@
     onMount(() => {
 
         darkMode.subscribe(value => {
+            
       document.body.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
-      
+      document.body.style.color = value ? "#fff" : "#1a1a1a";
 
       const h1style = document.querySelector('h1');
             if(h1style){
@@ -181,11 +182,54 @@
                 logoImageSrc = value ? 'src/lib/assets/wikilogo3transparent.png' : 'src/lib/assets/wikilogo3.png';
                 logoImage.src = logoImageSrc;
             }
+
+           const closeStats = document.querySelector('  .sidePanel .closeStats   ');
+           if (closeStats){
+            closeStats.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+           }
+
+           const openStats = document.querySelector(' .openStats   ');
+           if (openStats){
+            openStats.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+           }
+
+
+           const overlay= document.querySelector('#overlay-container');
+           if(overlay){
+            overlay.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+           }
+
+           const b = document.querySelectorAll('b');
+            b.forEach(b => {
+                 b.style.color= value? "#fff" : "#333";
+               b.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+                
+               
+            });
+
+            const p = document.querySelectorAll('p');
+            p.forEach(p => {
+                 p.style.color= value? "#fff" : "#333";
+               p.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+                
+            });
+
+            const wikipage = document.querySelectorAll( " #wiki-page-container");
+            wikipage.forEach(wikipage => {
+                wikipage.style.color= value? "#fff" : "#333";
+                wikipage.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+                
+            });
+
+
+
+
+
+
+            
+   
            
     });
-
-  
-        
 
 
           
@@ -277,17 +321,7 @@
         margin: auto;
         margin-bottom: 25px;
     }
-   .dark #wiki-page-container {
-        align-items: center;
-        justify-items: center;
-        width: 75%;
-        position: relative;
-        grid-template-columns: repeat(2, 50fr);
-        grid-column-gap: 1px;
-        margin: auto;
-        margin-bottom: 25px;
-        background-color: #1a1a1a;
-    }
+   
 
     @media(max-width: 450px) {
         #wiki-page-container {
@@ -368,24 +402,7 @@
         width: 8.5%;
     }
 
-    .dark  #overlay-container {
-        position: fixed;
-        text-align: center;
-        top: 0px;
-        right:0px;
-        height:100%;
-        padding: 5px 5px 5px 5px;
-        z-index: 50;
-        border-left-style: groove;
-        border-left-color: #94d4d0;
-        border-left-width: 7px;
-        background-color: #1a1a1a;
-        font-family: 'Varela Round';
-        font-size: 1em;
-        color: white;
-        transition: 0.5s;
-        width: 8.5%;
-    }
+ 
 
     .sidePanel .closeStats {
         position: absolute;

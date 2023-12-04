@@ -15,6 +15,13 @@
 
     function start(): void {
         loading = true;
+       // if(loading){
+     //   const loadingContainer = document.querySelectorAll('.loading-container');
+      //      loadingContainer.forEach(loadingContainer => {
+       //         loadingContainer.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+   //         });
+
+        }
         mediaWikiService.getRandomWordsFromApi()
             .then((data: StartEndApiResponse) => {
                 fetchedFirstPage = data.start;
@@ -32,6 +39,26 @@
         //changeBgColor();
     }
 
+    function updateStyles(value: boolean): void {
+        const centeredContainer = document.querySelector('.centered-container');
+        if (centeredContainer) {
+            centeredContainer.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+        }
+
+        const pageContent = document.querySelector('.page-content');
+        if (pageContent) {
+            pageContent.style.backgroundColor = value ? "#1a1a1a" : "#FFFFFF";
+        }
+
+        const h1style = document.querySelectorAll('h1');
+        h1style.forEach(h1style => {
+            h1style.style.color = value ? "#fff" : "#333";
+            h1style.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+        });
+
+        // Add more styles or adjustments as needed
+    }
+
     function changeBgColor(): void {
         darkMode.update((value) => !value);
         const centeredContainer = document.querySelector('.centered-container');
@@ -45,8 +72,7 @@
 
     onMount(() => {
     darkMode.subscribe(value => {
-
-
+        
         
       const centeredContainer = document.querySelector('.centered-container');
       if (centeredContainer) {
@@ -77,6 +103,8 @@
                 logoImageSrc = value ? 'src/lib/assets/wikilogo3transparent.png' : 'src/lib/assets/wikilogo3.png';
                 logoImage.src = logoImageSrc;
             });
+
+           
            
            
       
@@ -86,6 +114,7 @@
 
     });
   });
+  
 </script>
 <style>
     @import url('https://fonts.googleapis.com/css?family=Varela Round');
@@ -96,6 +125,18 @@
         padding: 0;
         background-color: #edf6f7;
       
+    }
+
+    .loading-container {
+        /* Add styles for the loading container */
+        background-color: #fff; /* Customize the background color */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .loading-container h1 {
+        color: #333; /* Customize the text color */
     }
     
     .centered-container {
@@ -207,7 +248,7 @@
             <button id="start-button" on:click={ start }>Start Practice</button>
         </div>
     {:else if loading && !startCheck}
-        <div class="centered-container">
+        <div class="loading-container centered-container">
             <a class="logolink" href="/">
                 <img class="logoimage" src={'src/lib/assets/wikilogo3.png'} alt="Logo">
                 <!-- <h1 style="margin: 0 10px;">WikiHunt</h1> -->

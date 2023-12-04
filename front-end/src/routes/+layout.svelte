@@ -57,11 +57,11 @@
         item.style.backgroundColor = value ? "#444" : "#fff"; // Adjust this to the desired color
       });
 
-
       const sidebar = document.querySelector('.sidebar');
       if(sidebar){
         sidebar.style.backgroundColor = value ? "black": "white";
       }
+      
 
 
       

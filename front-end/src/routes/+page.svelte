@@ -41,7 +41,7 @@
     }
 
   
-
+  
     
 
     function changeBgColor(): void {
@@ -57,13 +57,8 @@
   //  }
     }
 
-    onMount(() => {
-    darkMode.subscribe(value => {
-        document.body.style.color = value ? "#fff" : "#1a1a1a";
-    
-
-        
-      const centeredContainer = document.querySelectorAll('.centered-container');
+    function updateStyles(value: boolean): void {
+        const centeredContainer = document.querySelectorAll('.centered-container');
       centeredContainer.forEach(centeredContainer => {
         centeredContainer.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
 
@@ -84,13 +79,20 @@
                 
             });
             
-            const p = document.querySelectorAll('p');
-            p.forEach(p => {
-                p.style.color= value? "#fff" : "#333";
-                p.style.backgroundColor = value ? "#1a1a1a" : "#fff";
-                
-            });
 
+            const h2 = document.querySelector('h2');
+        if(h2){
+        h2.style.backgroundColor = value ? "black": "white";
+          }
+
+          const p = document.querySelector('p');
+        if(p){
+        p.style.backgroundColor = value ? "#1a1a1a": "#fff";
+        p.style.color = value ? "#fff" : "#333";
+          }
+
+
+           
             
 
             const li = document.querySelectorAll('li');
@@ -99,6 +101,18 @@
                 //p.style.backgroundColor = value ? "#1a1a1a" : "#fff";
                 
             });
+
+
+    }
+
+
+    onMount(() => {
+    darkMode.subscribe(value => {
+        document.body.style.color = value ? "#fff" : "#1a1a1a";
+    
+        updateStyles(value);
+
+        
             
             const logoImage = document.querySelectorAll('.logoimage');
             logoImage.forEach(logoImage => {
@@ -203,7 +217,7 @@
                 Welcome to WikiHunt!</h1>
             <div class="page-content">
                 <p>Welcome to WikiHunt, a Wikipedia game where the player must navigate from one randomly selected article to another pre-selected article.</p>
-                <h1>Rules</h1>
+                <h2>Rules</h2>
                 <ul>
                     <li>The user can only navigate by only clicking through links within the same article. No search bar allowed!</li>
                     <li>The user must do this with as little time as possible and with the least amount of clicks.</li>

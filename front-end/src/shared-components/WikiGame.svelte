@@ -23,7 +23,54 @@
     export let dailyMode: boolean = false;
     export let returnHome: any;
 
-    let timerComponent: Timer;
+    let minutes = 0;
+    let seconds = 0;
+    let timer: number;
+    let isRestart = false;
+
+    type FinalTime = {
+        minutes: number,
+        seconds: number
+    }
+
+    function startTimer(): void {
+        stop();
+        minutes = 0;
+        seconds = 0;
+
+        timer = setInterval(() => {
+            if (seconds === 59) {
+                minutes++;
+                seconds = 0;
+            } 
+            else {
+                seconds++;
+            }
+
+
+            if(isRestart){
+                isRestart = false;
+                minutes = 0;
+                seconds = 0;
+            }
+        }, 1000);
+    }
+
+    function stopTimer(): void {
+        clearInterval(timer);
+    }
+
+    function restartTimer(): void {
+        isRestart = true;
+    }
+    
+    function getTime(): FinalTime {
+        let time: FinalTime = {
+            'minutes': minutes,
+            'seconds': seconds
+        }
+        return time;
+    }
 
 
     function getGameStats(): Stats {
@@ -56,12 +103,27 @@
         }
     }
 
-    function fetchWikiPage(): void {
-        isLoading = true;
-        mediaWikiService.getPageFromApi(currPage)
-            .then((data: PageApiResponse) => {
-                pageContent = data.html;
-                isLoading = false;
+    function fetchWikiPage() {
+        // Figured out URL from here: https://www.mediawiki.org/w/api.php?action=parse&format=json&origin=*&page=Project%3ASandbox&formatversion=2
+        // on https://www.mediawiki.org/wiki/API:Parsing_wikitext and API sandbox
+        // console.log(currPage);
+        mediaWikiService.getPagePromise(currPage)
+            .then((data) => { // get data
+                if (data && data.parse && data.parse.text) { // gets all data, parsed data, and parsed text
+                    console.log(data)
+                    // let tempData = ArticleEnhancerUtil.cleanArticle(data.parse.text["*"]);
+                    let tempData = cleanArticle(data.parse.text["*"]);
+                    if (isRedirectPage(tempData)){  
+                        fetchWikiPage();
+                    }
+                    else{
+                        pageContent = tempData;
+                    }
+
+                }
+            })
+            .catch((error) => { // errors
+                console.error("Error fetching Wikipedia content:", error);
             });
         window.scrollTo({ // resets the page to view the top
             top: 0,
@@ -80,25 +142,40 @@
 
         if (temp == endPage){
             pathString += endPage;
-            timerComponent.stop();
+            stopTimer();
             isWin = true;
-            elapsedTime = timerComponent.getTime();
+            elapsedTime = getTime();
             if (dailyMode) {
+                console.log('here');
                 writeToCookie(getGameStats());
             }
         } else 
             pathString += temp + ' → ';
-
         
-        console.log("Navigating to Page: ", currPage);
         fetchWikiPage(); // show new page
     }
+
+    function isRedirectPage(pageContent: string): boolean {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(pageContent, 'text/html');
+
+        const check = doc.querySelector('div[class="redirectMsg"]');
+        if (check){
+            currPage = String(doc.querySelector('a')?.getAttribute('title'));
+            if (currPage == endPage){
+                isWin = true;
+            }
+        }
+
+        return !!check;
+    }
+
 
     function start(): void {
         startCheck = true;
         currPage = firstPage = origStart;
         endPage = origEnd;
-        timerComponent.startTimer();
+        startTimer();
         fetchWikiPage();
         path.push(currPage);
         pathString += currPage + ' → ';
@@ -114,14 +191,14 @@
     function restartGame(): void {
         clearGame();
         currPage = firstPage;
-        timerComponent.restart();
+        restartTimer();
         fetchWikiPage();
-        timerComponent.startTimer();
+        startTimer();
     }
 
     function newGame(): void {
         clearGame();
-        timerComponent.restart();
+        restartTimer();
         returnHome();
         // start();
         // fetchWikiPage();
@@ -156,9 +233,45 @@
         }
     }
     
-    onMount(() => {
-        start();
-    });
+    function cleanArticle(pageContent: string): string {
+        const parser: DOMParser = new DOMParser();
+        const doc: Document = parser.parseFromString(pageContent, 'text/html');
+
+        eraseElements(doc.querySelectorAll("span.mw-editsection"));
+        eraseElements(doc.querySelectorAll("table[class^='box-']"));
+        eraseElements(doc.querySelectorAll("sup[id^='cite_ref'], sup[class='noprint Inline-Template Template-Fact']"));
+        eraseElements(doc.querySelectorAll("span[id='References'], span[id='Notes'], span[id='Citations'], span[id='Bibliography'], span[id='Further_reading']"))
+        eraseElements(doc.querySelectorAll("div[class^='reflist'], div[class='refbegin']"));
+        eraseElements(doc.querySelectorAll("sup[class^='noprint']"))
+
+        formatMulticolTables(doc);
+
+        const otherCitations: NodeListOf<Element> = doc.querySelectorAll("sup");
+        for (let otherCitation of otherCitations){
+            if (otherCitation.textContent?.trim() === "[citation needed]")
+                otherCitation.remove();
+        }
+
+        return doc.body.innerHTML;
+    }
+
+    function formatMulticolTables(doc: Document): void {
+        const multicolTables: Element[] | any = Array.from(doc.querySelectorAll('.multicol'))
+            .map((mt) => mt.parentElement);
+
+        for(let mt of multicolTables) {
+            mt.setAttribute('style', 'overflow-x: scroll; text-align: left; align-items: center;');
+        }
+    }
+
+    function eraseElements(elements: NodeListOf<Element>): void {
+        for(let e of elements) {
+            e.remove()
+        }
+    }
+
+    start();
+
 </script>
 
 <style>
@@ -576,7 +689,7 @@
         </a>
         <img class="logoimage s-7IPF32Wcq3s8" src="/assets/wikilogo2.png" alt="Logo">
         <p id="click-counter"><b> {count} clicks </b></p> <!-- counter is at the bottom, not formated the best-->
-        <p id="timer"><b><Timer bind:this={ timerComponent } /></b></p>
+        <p id="timer"><b>Time: {minutes}:{seconds < 10 ? `0${seconds}` : seconds}</b></p>
         <p id="start-page"> <b> {firstPage} </b></p>
         <p id="to-page"> 
             <b>

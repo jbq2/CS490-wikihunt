@@ -1,22 +1,17 @@
 <script lang="ts">
     import WikiGame from "../shared-components/WikiGame.svelte";
-    import { mediaWikiService } from "../services/MediaWikiService";  
-    import type { PageApiResponse, StartEndApiResponse } from "../constants/models";
     let startCheck: boolean = false;
     let loading: boolean = false;
     let fetchedFirstPage: string = "";
     let fetchedEndPage: string | undefined = undefined; // has to be different than wikiPage initially
     
     function start(): void {
-        loading = true;
-        mediaWikiService.getDailyWordsFromApi()
-            .then((data: StartEndApiResponse) => {
-                fetchedFirstPage = data.start;
-                fetchedEndPage = data.end;
-                loading = false;
-                startCheck = true;
-                changeBgColor("#FFFFFF");
-            });
+        loading = true;        
+        fetchedFirstPage = 'One Piece';
+        fetchedEndPage = 'LeBron James';
+        loading = false;
+        startCheck = true;
+        changeBgColor("#FFFFFF");
     }
 
     function returnHome(): any {

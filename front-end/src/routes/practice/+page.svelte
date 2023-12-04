@@ -1,22 +1,41 @@
 <script lang="ts">
     import WikiGame from "../../shared-components/WikiGame.svelte";
-    import { mediaWikiService } from "../../services/MediaWikiService";  
-    import type { PageApiResponse, StartEndApiResponse } from "../../constants/models";
     let startCheck: boolean = false;
     let loading: boolean = false;
     let fetchedFirstPage: string = "";
     let fetchedEndPage: string | undefined = undefined; // has to be different than wikiPage initially
     
+    import { wordList } from "../../constants/constants";
+
+    function getIdx(length: number) { // Gets two random indexes
+        let max = length;
+        let startIdx = Math.floor(Math.random() * max);
+        let endIdx = Math.floor(Math.random() * max);
+        while (startIdx == endIdx) { // Make sure they are not the same
+            startIdx = Math.floor(Math.random() * length);
+            endIdx = Math.floor(Math.random() * length);
+        }
+        return [startIdx, endIdx];
+    }
+
+
     function start(): void {
         loading = true;
-        mediaWikiService.getRandomWordsFromApi()
-            .then((data: StartEndApiResponse) => {
-                fetchedFirstPage = data.start;
-                fetchedEndPage = data.end;
-                loading = false;
-                startCheck = true;
-                changeBgColor("#FFFFFF");
-            });
+        startCheck = true;
+        const idxs = getIdx(wordList.length);
+        const startIdx = idxs[0];
+        const endIdx = idxs[1]
+        fetchedFirstPage = wordList[startIdx]; 
+        fetchedEndPage = wordList[endIdx];
+        changeBgColor("#FFFFFF");        
+        // mediaWikiService.getRandomWordsFromApi()
+        //     .then((data: StartEndApiResponse) => {
+        //         fetchedFirstPage = data.start;
+        //         fetchedEndPage = data.end;
+        //         loading = false;
+        //         startCheck = true;
+        //         changeBgColor("#FFFFFF");
+        //     });
     }
 
     function returnHome(): any {

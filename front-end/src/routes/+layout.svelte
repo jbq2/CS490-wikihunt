@@ -39,14 +39,14 @@
     darkMode.subscribe(value => {
 
       document.body.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
-      document.body.style.color = value ? "#fff" : "#1a1a1a";
+     // document.body.style.color = value ? "#fff" : "#1a1a1a";
 
 
      //nav bar
      const navItems = document.querySelectorAll('.nav-bar li');
       navItems.forEach(item => {
         item.style.backgroundColor = value ? "#444" : "#fff"; 
-        item.style.color = value ? "#fff" : "#1a1a1a"// Adjust this to the desired color
+       item.style.color = value ? "#fff" : "#1a1a1a"// Adjust this to the desired color
       });
 
       //mobile side bar
@@ -65,7 +65,7 @@
     darkMode.subscribe(value => {
 
       document.body.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
-      document.body.style.color = value ? "#fff" : "#1a1a1a";
+    //  document.body.style.color = value ? "#fff" : "#1a1a1a";
 
 
      //nav bar

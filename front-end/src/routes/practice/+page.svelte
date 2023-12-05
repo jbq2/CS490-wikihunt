@@ -76,10 +76,10 @@
                // h1style.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
                 
             });
-            const p = document.querySelectorAll('p');
+            const p = document.querySelectorAll('#forfun');
             p.forEach(p => {
                 p.style.color= value? "#fff" : "#333";
-              //  p.style.backgroundColor = value ? "#1a1a1a" : "#fff";
+                p.style.backgroundColor = value ? "#1a1a1a" : "#fff";
                 
             });
 
@@ -273,8 +273,8 @@
             <h1>Practice Mode</h1>
             <div id= "practice-pagecontent" class="page-content">
                 <!-- <h1>Practice Mode</h1> -->
-                <p>Play WikiHunt for fun! </p>
-                <p>Two randomly selected words are chose each time you play.</p>
+                <p id="forfun">Play WikiHunt for fun! </p>
+                <p id="forfun">Two randomly selected words are chose each time you play.</p>
                 <!-- <h1>Rules</h1>
                 <ul>
                     <li>The user can only navigate by only clicking through links within the same article. No search bar allowed!</li>

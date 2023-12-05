@@ -1,6 +1,6 @@
 <script lang="ts">
     import { today, writeToCookie } from '../lib/CookieHelper';
-    import { onMount } from "svelte";
+    import { afterUpdate, onMount } from "svelte";
     import type { PageApiResponse, FinalTime, Stats } from "../constants/models";
     import { mediaWikiService } from "../services/MediaWikiService";  
     import Timer from "./Timer.svelte";   
@@ -117,19 +117,7 @@
             isMobile = false;
         }
 
-        darkMode.subscribe(value => {
-            
-   
-            updateStylesWiki(value)
-                
-
-
-
-
-            
-   
-           
-    });
+       
 
     }
 
@@ -181,10 +169,19 @@
         }
     }
 
+    function applyDarkModeStyles() {
+    const value = $darkMode; // Get the current dark mode value
+    // Add your dark mode styling logic here
+    updateStylesWiki(value);
+  }
+  
+
 
     function updateStylesWiki(value: boolean): void{
+
+        darkMode.subscribe(value => {
         document.body.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
-      document.body.style.color = value ? "#fff" : "#1a1a1a";
+      //document.body.style.color = value ? "#fff" : "#1a1a1a";
 
     //  const h1style = document.querySelector('h1');
         //    if(h1style){
@@ -257,34 +254,55 @@
     }
 
    
+    const currentPage = document.querySelector('#current-page');
+    if (currentPage) {
+        currentPage.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+        currentPage.style.color = value ? "#fff" : "#1a1a1a";
+    }
     
 
 
 
-          //  const p = document.querySelectorAll('p');
-          //  p.forEach(p => {
-           //      p.style.color= value? "#fff" : "#333";
-         //      p.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+            const p = document.querySelectorAll('p');
+            p.forEach(p => {
+                 p.style.color= value? "#fff" : "#333";
+              p.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
                 
-         //   });
+            });
 
-            const wikipage = document.querySelectorAll( "#wiki-page-container");
+           // const div = document.querySelectorAll('');
+          //  div.forEach(p => {
+           //      p.style.color= value? "#fff" : "#333";
+           //   p.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+                
+          //  });
+
+
+            const wikipage = document.querySelectorAll( ".mw-content-ltr ");
             wikipage.forEach(wikipage => {
-                wikipage.style.color= value? "#fff" : "#1a1a1a";
+                wikipage.style.color= value? "#333" : "#1a1a1a";
               //  wikipage.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
                // wikipage.classList.toggle('dark-mode', value);
 
             });
+        })
     }
+
+    
     
     onMount(() => {
 
     
 
           
-
+        applyDarkModeStyles()
 
         start();
+    });
+
+    afterUpdate(() => {
+        applyDarkModeStyles()
+
     });
 </script>
 
@@ -369,6 +387,7 @@
         grid-column-gap: 1px;
         margin: auto;
         margin-bottom: 25px;
+        color: orange;
     }
    
 
@@ -381,12 +400,14 @@
 
     #wiki-page-container :global(.mw-content-ltr) {
         overflow-x: scroll;
+        
     }
     
     #wiki-page-container :global(table.wikitable), :global(figure), :global(li.gallerybox) {
         background-color: #f8f9fa;
         border: 1px solid #a2a9b1;     
         padding: 5px;
+        
     }
 
    
@@ -424,6 +445,7 @@
 
     #wiki-page-container :global(p) {
         clear: left;
+        
         
     }
 
@@ -762,7 +784,7 @@
             {#if window.innerWidth < 450}<br>{/if}
             <div id="wiki-page-container">
                 {#if currPage}
-                    <h1>{ currPage }</h1>
+                    <h1 id="current-page">{ currPage }</h1>
                 {/if}
                 {@html pageContent} <!-- loads content -->
             </div>

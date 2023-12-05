@@ -55,12 +55,11 @@
 
 
         darkMode.subscribe(value => {
-       // document.body.style.color = value ? "#fff" : "#1a1a1a";
+        //document.body.style.color = value ? "#fff" : "#1a1a1a";
     
        const centeredContainer = document.querySelectorAll('.centered-container');
       centeredContainer.forEach(centeredContainer => {
-       // centeredContainer.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
-
+        //centeredContainer.style.color = value ? "#fff" : "#1a1a1a";
       });
     
         // Add more styles or adjustments as needed
@@ -69,7 +68,7 @@
       pageContent.forEach(pageContent => {
                 pageContent.style.backgroundColor = value ? "#1a1a1a" : "#FFFFFF";
                
-                pageContent.style.color = value ? "#fff" : "#1a1a1a";
+            pageContent.style.color = value ? "#fff" : "#1a1a1a";
               const h2rule = document.querySelector('rule');
         if(h2rule){
             h2rule.style.color= value? "#fff" : "#333";
@@ -78,7 +77,7 @@
 
           const li = document.querySelectorAll('li');
             li.forEach(li => {
-                li.style.color= value? "#fff" : "#333";
+               li.style.color= value? "#fff" : "#333";
                 //p.style.backgroundColor = value ? "#1a1a1a" : "#fff";
                 
            }); 
@@ -115,7 +114,7 @@
 
            
 
-         const p = document.querySelector('p');
+         const p = document.querySelector('#welcometext');
         if(p){
         p.style.backgroundColor = value ? "#1a1a1a": "#fff";
         p.style.color = value ? "#fff" : "#333";
@@ -242,7 +241,7 @@
             <h1 id= "welcome">
                 Welcome to WikiHunt!</h1>
             <div class="page-content">
-                <p>Welcome to WikiHunt, a Wikipedia game where the player must navigate from one randomly selected article to another pre-selected article.</p>
+                <p id = "welcometext">Welcome to WikiHunt, a Wikipedia game where the player must navigate from one randomly selected article to another pre-selected article.</p>
                 <h2 id= "rule">Rules</h2>
                 <ul>
                     <li>The user can only navigate by only clicking through links within the same article. No search bar allowed!</li>

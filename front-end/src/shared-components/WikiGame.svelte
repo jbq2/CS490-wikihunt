@@ -278,14 +278,14 @@
           //  });
 
 
-            const wikipage = document.querySelectorAll( ".mw-content-ltr ");
-            wikipage.forEach(wikipage => {
-                wikipage.style.color= value? "#333" : "#1a1a1a";
+           // const wikipage = document.querySelectorAll( "");
+           // wikipage.forEach(wikipage => {
+             //   wikipage.style.color= value? "#333" : "#1a1a1a";
               //  wikipage.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
                // wikipage.classList.toggle('dark-mode', value);
 
-            });
-        })
+          //  });
+        });
     }
 
     
@@ -387,7 +387,7 @@
         grid-column-gap: 1px;
         margin: auto;
         margin-bottom: 25px;
-        color: orange;
+        color: grey;
     }
    
 

@@ -61,7 +61,7 @@
 </style>
 
 <Modal bind:showModal>
-	<h2 slot="header">
+	<h2 id= "player stats" slot="header">
 		Player Statistics 💯
 	</h2>
 

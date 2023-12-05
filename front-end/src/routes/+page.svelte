@@ -70,7 +70,7 @@
                 pageContent.style.backgroundColor = value ? "#1a1a1a" : "#FFFFFF";
                
                 pageContent.style.color = value ? "#fff" : "#1a1a1a";
-              const h2rule = document.querySelector('h2');
+              const h2rule = document.querySelector('rule');
         if(h2rule){
             h2rule.style.color= value? "#fff" : "#333";
 
@@ -243,7 +243,7 @@
                 Welcome to WikiHunt!</h1>
             <div class="page-content">
                 <p>Welcome to WikiHunt, a Wikipedia game where the player must navigate from one randomly selected article to another pre-selected article.</p>
-                <h2>Rules</h2>
+                <h2 id= "rule">Rules</h2>
                 <ul>
                     <li>The user can only navigate by only clicking through links within the same article. No search bar allowed!</li>
                     <li>The user must do this with as little time as possible and with the least amount of clicks.</li>

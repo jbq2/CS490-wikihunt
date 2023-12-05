@@ -180,7 +180,7 @@
     function updateStylesWiki(value: boolean): void{
 
         darkMode.subscribe(value => {
-        document.body.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+       // document.body.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
       //document.body.style.color = value ? "#fff" : "#1a1a1a";
 
     //  const h1style = document.querySelector('h1');
@@ -189,6 +189,11 @@
            //     h1style.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
                 
         //    }
+
+        const winMessage = document.querySelector('#win-message');
+        if (winMessage) {
+            winMessage.style.color = value ? "#1a1a1a" : "#333"; // Adjust the color as needed
+        }
 
 
             const logoImage = document.querySelector("#gameimage");
@@ -357,6 +362,7 @@
     #win-message {
         font-size: 70px;
         margin-top: 24px;
+        color:#1a1a1a
     }
 
     #win-caption {

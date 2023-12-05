@@ -6,6 +6,8 @@
 	import { onMount } from 'svelte';
 
 	const fireEmoji: string = '🔥';
+	const checkEmoji: string = '✅';
+	const strongEmoji: string = '💪';
 	export let showModal: boolean = false;
 	let noCookies: boolean = false;
 	let allTimeBest: Stats | any;
@@ -74,8 +76,8 @@
 	<div style="list-style-type" class="grid">
 		<div id='last-and-streak'><b>Last Played</b>: {lastPlayed}</div>
 		<div id='last-and-streak'><b>Daily Streak</b>: {streak}{streak ? fireEmoji : ''}</div>
-		<div><b>Best Daily Streak</b>: {bestStreak}{bestStreak ? fireEmoji : ''}</div>
-		<div><b>Games Played</b>: {gamesPlayed}</div>
+		<div><b>Best Daily Streak</b>: {bestStreak}{bestStreak ? strongEmoji : ''}</div>
+		<div><b>Games Played</b>: {gamesPlayed}{gamesPlayed ? checkEmoji : ''}</div>
 		<div id='all-time-best'>
 			<div><b>All Time Best</b>:
 			{#if !noCookies}

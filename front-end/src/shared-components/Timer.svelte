@@ -14,7 +14,8 @@
         minutes = 0;
         seconds = 0;
 
-        timer = setInterval(() => {
+        // timer = setInterval(() => {
+        setInterval(() => {
             if (seconds === 59) {
                 minutes++;
                 seconds = 0;
@@ -37,6 +38,7 @@
     }
     export function restart(): void {
         isRestart = true;
+        stop();
     }
 
     // export function getTime(): string {

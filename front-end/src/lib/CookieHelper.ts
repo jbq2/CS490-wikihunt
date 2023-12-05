@@ -98,7 +98,8 @@ function updateCookies(gameStats: Stats, today: DateFormat): CookieCollection | 
     if (bestStreak.count < currentStreak.count)
         bestStreak = currentStreak;
 
-    let gamesPlayed: GameCount = readFromCookie(gamesPlayedCookieName).count + 1;
+    let gamesPlayed: GameCount = readFromCookie(gamesPlayedCookieName);
+    gamesPlayed.count++;
 
     return {
         'dailyStats': thisGameStats,
@@ -138,7 +139,7 @@ export function copyText(): void {
         seconds = dailyGame.playTime.seconds;
         startEnd = dailyGame.goal;
     }
-    const textToCopy: string = `WikiHunt - ${dateFormatter(today)}` + (dailyGame ? `
+    const textToCopy: string = `WikiHunt - ${dateFormatter(today)}` + (startEnd ? `
 🏁: ${startEnd.start} ➡️ ${startEnd.end}
 🖱️: ${clicks} clicks
 🕐: ${minutes} minutes ${seconds} seconds` : `

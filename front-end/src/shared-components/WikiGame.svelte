@@ -3,6 +3,9 @@
     import type { Stats, StartEndApiResponse } from "../constants/models";
     import { mediaWikiService } from "../services/MediaWikiService";  
     import CopyButton from './CopyButton.svelte';    
+    import Timer from './Timer.svelte';
+    import { tick } from 'svelte';
+    let timerComponent: Timer;
 
     let pageContent: string = "";
     let currPage: string = ""; 
@@ -16,6 +19,7 @@
     let isLoading = false;
     let elapsedTime: FinalTime;
     let isMobile: boolean = false;
+    // let startedTimer: boolean = false;
     export let origEnd: string | undefined = undefined; // has to be different than wikiPage initially
     export let origStart:string = "";
     export let dailyMode: boolean = false;
@@ -31,45 +35,50 @@
         seconds: number
     }
 
-    function startTimer(): void {
-        stop();
-        minutes = 0;
-        seconds = 0;
+    // function startTimer(): void {
+    //     stop();
+    //     minutes = 0;
+    //     seconds = 0;
 
-        // timer = setInterval(() => {
-        setInterval(() => {
-            if (seconds === 59) {
-                minutes++;
-                seconds = 0;
-            } 
-            else {
-                seconds++;
-            }
+    //     // timer = setInterval(() => {
+    //     // if (!startedTimer)
+    //         // startedTimer = true;
+    //         const interval = setInterval(() => {
+    //             if (seconds === 59) {
+    //                 minutes++;
+    //                 seconds = 0;
+    //             } 
+    //             else {
+    //                 seconds++;
+    //             }
 
 
-            if(isRestart){
-                isRestart = false;
-                minutes = 0;
-                seconds = 0;
-            }
-        }, 1000);
-    }
+    //             if(isRestart){
+    //                 isRestart = false;
+    //                 minutes = 0;
+    //                 seconds = 0;
+    //             }
+    //         }, 1000);
+    // }
 
-    function stopTimer(): void {
-        clearInterval(timer);
-    }
+    // function stopTimer(): void {
+    //     clearInterval(timer);
+    // }
 
-    function restartTimer(): void {
-        isRestart = true;
-    }
+    // function restartTimer(): void {
+    //     // minutes = 0;
+    //     // seconds = 0;
+    //     isRestart = true;
+    //     stopTimer();
+    // }
     
-    function getTime(): FinalTime {
-        let time: FinalTime = {
-            'minutes': minutes,
-            'seconds': seconds
-        }
-        return time;
-    }
+    // function getTime(): FinalTime {
+    //     let time: FinalTime = {
+    //         'minutes': minutes,
+    //         'seconds': seconds
+    //     }
+    //     return time;
+    // }
 
 
     function getGameStats(): Stats {
@@ -137,9 +146,11 @@
 
         if (temp == endPage){
             pathString += endPage;
-            stopTimer();
+            // stopTimer();
+            timerComponent.stop();
             isWin = true;
-            elapsedTime = getTime();
+            // elapsedTime = getTime();
+            elapsedTime = timerComponent.getTime();
             if (dailyMode) {
                 writeToCookie(getGameStats());
             }
@@ -165,11 +176,52 @@
     }
 
 
-    function start(): void {
+    // function start(): void {
+    //     startCheck = true;
+    //     currPage = firstPage = origStart;
+    //     endPage = origEnd;
+    //     // startTimer();
+    //     timerComponent.startTimer();
+    //     fetchWikiPage();
+    //     path.push(currPage);
+    //     pathString += currPage + ' → ';
+    //     var width = document.body.clientWidth;
+    //     if (width <= 450) {
+    //         isMobile = true;
+    //     } else {
+    //         isMobile = false;
+    //     }
+    // }
+
+    // function restartGame(): void {
+    //     clearGame();
+    //     currPage = firstPage;
+    //     // restartTimer();
+    //     timerComponent.restart();
+    //     start();
+    // }
+
+    // function newGame(): void {
+    //     clearGame();
+    //     // startTimer();
+    //     // stopTimer();
+    //     timerComponent.restart();
+    //     returnHome();
+    // }
+
+    // function clearGame(): void {
+    //     isWin = false;
+    //     count = 0;
+    //     path = [];
+    //     pathString = "";
+    // }
+
+    async function start(): Promise<void> {
         startCheck = true;
         currPage = firstPage = origStart;
         endPage = origEnd;
-        startTimer();
+        await tick();
+        timerComponent.startTimer();
         fetchWikiPage();
         path.push(currPage);
         pathString += currPage + ' → ';
@@ -184,25 +236,25 @@
     function restartGame(): void {
         clearGame();
         currPage = firstPage;
-        restartTimer();
         fetchWikiPage();
-        start();
+        timerComponent.startTimer();
     }
 
     function newGame(): void {
         clearGame();
-        restartTimer();
         returnHome();
         // start();
         // fetchWikiPage();
     }
 
     function clearGame(): void {
+        timerComponent.restart();
         isWin = false;
         count = 0;
         path = [];
         pathString = "";
     }
+    
     
     function openStats() {
         let statsBar = document.getElementById("overlay-container");
@@ -682,7 +734,8 @@
         </a>
         <img class="logoimage s-7IPF32Wcq3s8" src="/assets/wikilogo2.png" alt="Logo">
         <p id="click-counter"><b> {count} clicks </b></p> <!-- counter is at the bottom, not formated the best-->
-        <p id="timer"><b>Time: {minutes}:{seconds < 10 ? `0${seconds}` : seconds}</b></p>
+        <!-- <p id="timer"><b>Time: {minutes}:{seconds < 10 ? `0${seconds}` : seconds}</b></p> -->
+        <p id="timer"><b><Timer bind:this={ timerComponent } /></b></p>
         <p id="start-page"> <b> {firstPage} </b></p>
         <p id="to-page"> 
             <b>

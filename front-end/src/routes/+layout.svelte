@@ -28,35 +28,27 @@
         shekhmus.updateStats();
     }
 
-    function resetBgColor(): void {
-        let color;
-        darkMode.subscribe(value => {
-            if (value) {
-                // Dark mode background color
-                color = "#1a1a1a"; // Adjust this to the desired dark mode background color
-            } else {
-                // Light mode background color
-                color = "#edf6f7";
-            }
-            document.body.style.backgroundColor = color;
-        });
-    }
+  
 
     function toggleDarkMode() {
         // Update the darkMode store on button click
         darkMode.update((value) => !value);
+        
     }
     onMount(() => {
     darkMode.subscribe(value => {
 
       document.body.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
-      document.body.style.color = value ? "#fff" : "#1a1a1a";
+     // document.body.style.color = value ? "#fff" : "#1a1a1a";
 
+
+     //nav bar
       const navItems = document.querySelectorAll('.nav-bar li');
       navItems.forEach(item => {
         item.style.backgroundColor = value ? "#444" : "#fff"; // Adjust this to the desired color
       });
 
+      //mobile side bar
       const sidebar = document.querySelector('.sidebar');
       if(sidebar){
         sidebar.style.backgroundColor = value ? "black": "white";

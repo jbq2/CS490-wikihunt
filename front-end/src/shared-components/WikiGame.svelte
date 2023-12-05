@@ -27,6 +27,7 @@
 
     let timerComponent: Timer;
 
+    export let updateStyles: any;
 
     let logoImageSrc = 'src/lib/assets/wikilogo2.png'; 
  
@@ -115,6 +116,21 @@
         } else {
             isMobile = false;
         }
+
+        darkMode.subscribe(value => {
+            
+   
+            updateStylesWiki(value)
+                
+
+
+
+
+            
+   
+           
+    });
+
     }
 
     function restartGame(): void {
@@ -128,7 +144,10 @@
     function newGame(): void {
         clearGame();
         timerComponent.restart();
+
         returnHome();
+     
+       
         // start();
         // fetchWikiPage();
     }
@@ -161,36 +180,34 @@
             statsBar.style.right = "-8.5%";
         }
     }
-    
-    onMount(() => {
 
-        darkMode.subscribe(value => {
-            
-      document.body.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+
+    function updateStylesWiki(value: boolean): void{
+        document.body.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
       document.body.style.color = value ? "#fff" : "#1a1a1a";
 
-      const h1style = document.querySelector('h1');
-            if(h1style){
-                h1style.style.color= value? "#fff" : "#333";
-                h1style.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+    //  const h1style = document.querySelector('h1');
+        //    if(h1style){
+         //       h1style.style.color= value? "#fff" : "#333";
+           //     h1style.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
                 
-            }
+        //    }
 
 
-            const logoImage = document.querySelector('.logoimage');
+            const logoImage = document.querySelector("#gameimage");
             if (logoImage) {
                 logoImageSrc = value ? 'src/lib/assets/wikilogo3transparent.png' : 'src/lib/assets/wikilogo3.png';
-                logoImage.src = logoImageSrc;
+            logoImage.src = logoImageSrc;
             }
 
            const closeStats = document.querySelector('  .sidePanel .closeStats   ');
            if (closeStats){
-            closeStats.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+           // closeStats.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
            }
 
            const openStats = document.querySelector(' .openStats   ');
            if (openStats){
-            openStats.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+           // openStats.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
            }
 
 
@@ -201,18 +218,53 @@
 
            const b = document.querySelectorAll('b');
             b.forEach(b => {
-                 b.style.color= value? "#fff" : "#333";
-               b.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+               //  b.style.color= value? "#fff" : "#333";
+               //b.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
                 
                
             });
 
-            const p = document.querySelectorAll('p');
-            p.forEach(p => {
-                 p.style.color= value? "#fff" : "#333";
-               p.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+            const clickCounterP = document.querySelector('#click-counter');
+    if (clickCounterP) {
+        clickCounterP.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+        clickCounterP.style.color = value ? "#fff" : "#1a1a1a";
+    }
+
+
+    const startPage = document.querySelector('#start-page');
+    if (startPage) {
+        startPage.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+        startPage.style.color = value ? "#fff" : "#1a1a1a";
+    }
+        
+
+    const timerC = document.querySelector('#timer');
+    if (timerC) {
+        timerC.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+        timerC.style.color = value ? "#fff" : "#1a1a1a";
+    }
+        
+
+    const toPage = document.querySelector('#to-page');
+    if (toPage) {
+        toPage.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+       
+    }
+        
+    const endPage= document.querySelector('#end-page');
+    if (endPage){
+        endPage.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+        endPage.style.color = value ? "#fff" : "#1a1a1a";
+    }
+
+        
+
+          //  const p = document.querySelectorAll('p');
+          //  p.forEach(p => {
+           //      p.style.color= value? "#fff" : "#333";
+         //      p.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
                 
-            });
+         //   });
 
             const wikipage = document.querySelectorAll( " #wiki-page-container");
             wikipage.forEach(wikipage => {
@@ -220,17 +272,11 @@
                 wikipage.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
                 
             });
+    }
+    
+    onMount(() => {
 
-
-
-
-
-
-            
-   
-           
-    });
-
+    
 
           
 
@@ -681,7 +727,7 @@
             &gt;
             {/if}
         </a>
-        <img class="logoimage s-7IPF32Wcq3s8" src="/assets/wikilogo2.png" alt="Logo">
+        <img id ="gameimage" class="logoimage s-7IPF32Wcq3s8" src="/assets/wikilogo2.png" alt="Logo">
         <p id="click-counter"><b> {count} clicks </b></p> <!-- counter is at the bottom, not formated the best-->
         <p id="timer"><b><Timer bind:this={ timerComponent } /></b></p>
         <p id="start-page"> <b> {firstPage} </b></p>

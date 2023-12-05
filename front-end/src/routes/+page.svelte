@@ -4,7 +4,7 @@
     import type { PageApiResponse, StartEndApiResponse } from "../constants/models";
     import CopyButton from "../shared-components/CopyButton.svelte";
     //import DarkModeToggle from "../shared-components/DarkModeToggle.svelte";
-    import { onMount } from 'svelte'
+    import { afterUpdate, onMount } from 'svelte'
    // import {darkMode} from 
     import {darkMode} from '../lib/darkModeStore'
     let startCheck: boolean = false;
@@ -34,91 +34,97 @@
 
 
     function returnHome(): any {
+        applyDarkModeStyles();
         startCheck = false;
         loading = false;
        
-       // changeBgColor();
+        //location.reload()
+
     }
 
-  
-  
     
 
-    function changeBgColor(): void {
-       // if (document.body.classList.contains('dark')) {
-        // Dark mode background color
-       // document.body.style.backgroundColor = "#1a1a1a"; // Adjust this to the desired dark mode background color
-        // Add more dark mode specific color updates as needed
-   // } else {
-        // Light mode background color
-       // document.body.style.backgroundColor = "#FFFFFF";
-        // Add more light mode specific color updates as needed
-        darkMode.update((value) => !value);
-  //  }
-    }
+   function applyDarkModeStyles() {
+    const value = $darkMode; // Get the current dark mode value
+    // Add your dark mode styling logic here
+    updateStyles(value);
+  }
+  
 
     function updateStyles(value: boolean): void {
-        const centeredContainer = document.querySelectorAll('.centered-container');
+
+
+        darkMode.subscribe(value => {
+       // document.body.style.color = value ? "#fff" : "#1a1a1a";
+    
+       const centeredContainer = document.querySelectorAll('.centered-container');
       centeredContainer.forEach(centeredContainer => {
-        centeredContainer.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+       // centeredContainer.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
 
       });
     
         // Add more styles or adjustments as needed
       
-      const pageContent = document.querySelectorAll('.page-content');
+       const pageContent = document.querySelectorAll('.page-content');
       pageContent.forEach(pageContent => {
                 pageContent.style.backgroundColor = value ? "#1a1a1a" : "#FFFFFF";
-                // Add more styles or adjustments as needed
-            });
+               
+                pageContent.style.color = value ? "#fff" : "#1a1a1a";
+              const h2rule = document.querySelector('h2');
+        if(h2rule){
+            h2rule.style.color= value? "#fff" : "#333";
 
-        const h1style = document.querySelectorAll('h1');
-        h1style.forEach(h1style => {
-                h1style.style.color= value? "#fff" : "#333";
-                h1style.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
-                
-            });
-            
+          } 
 
-            const h2 = document.querySelector('h2');
-        if(h2){
-        h2.style.backgroundColor = value ? "black": "white";
-          }
-
-          const p = document.querySelector('p');
-        if(p){
-        p.style.backgroundColor = value ? "#1a1a1a": "#fff";
-        p.style.color = value ? "#fff" : "#333";
-          }
-
-
-           
-            
-
-            const li = document.querySelectorAll('li');
+          const li = document.querySelectorAll('li');
             li.forEach(li => {
                 li.style.color= value? "#fff" : "#333";
                 //p.style.backgroundColor = value ? "#1a1a1a" : "#fff";
                 
+           }); 
+    
+            });
+            
+
+        const h1style = document.querySelectorAll('#welcome');
+        h1style.forEach(h1style => {
+                h1style.style.color= value? "#fff" : "#1a1a1a";
+                //h1style.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+                
             });
 
-
-    }
-
-
-    onMount(() => {
-    darkMode.subscribe(value => {
-        document.body.style.color = value ? "#fff" : "#1a1a1a";
-    
-        updateStyles(value);
-
-        
+            const loadingh1 = document.querySelectorAll('#loadingh1');
+            loadingh1.forEach(loadingh1 => {
+                loadingh1.style.color= value? "#fff" : "#1a1a1a";
+                //h1style.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+                
+            });
             
-            const logoImage = document.querySelectorAll('.logoimage');
+            const logoImage = document.querySelectorAll('#mainlogo');
             logoImage.forEach(logoImage => {
                 logoImageSrc = value ? 'src/lib/assets/wikilogo3transparent.png' : 'src/lib/assets/wikilogo3.png';
                 logoImage.src = logoImageSrc;
             });
+
+            const loadingImage = document.querySelectorAll('#loadinglogo');
+            loadingImage.forEach(loadingImage => {
+                logoImageSrc = value ? 'src/lib/assets/wikilogo3transparent.png' : 'src/lib/assets/wikilogo3.png';
+                loadingImage.src = logoImageSrc;
+            });
+
+
+           
+
+         const p = document.querySelector('p');
+        if(p){
+        p.style.backgroundColor = value ? "#1a1a1a": "#fff";
+        p.style.color = value ? "#fff" : "#333";
+          } 
+
+        
+            
+        
+            
 
         
     
@@ -132,7 +138,27 @@
 
     });
 
+    
+
+           
+            
+
+           
+
+
+    }
+
+
+
+    onMount(() => {
+   
+        applyDarkModeStyles()
+
   });
+
+  afterUpdate(() =>{
+    applyDarkModeStyles()
+  })
 
 
 </script>
@@ -180,7 +206,7 @@
     
 
     h1 {
-        color:#333
+        color:#1a1a1a
     }
 
     p {
@@ -210,10 +236,10 @@
     {#if !startCheck && !loading}
         <div class="centered-container">
             <a class="logolink" href="/">
-                <img class="logoimage" src={'src/lib/assets/wikilogo3transparent.png'} alt="Logo">
+                <img class="logoimage" id='mainlogo' src={'src/lib/assets/wikilogo3.png'} alt="Logo">
                 <!-- <h1 style="margin: 0 10px;">WikiHunt</h1> -->
             </a>
-            <h1>
+            <h1 id= "welcome">
                 Welcome to WikiHunt!</h1>
             <div class="page-content">
                 <p>Welcome to WikiHunt, a Wikipedia game where the player must navigate from one randomly selected article to another pre-selected article.</p>
@@ -227,14 +253,14 @@
             <button id="start-button" on:click={ start }>Start Game</button>
         </div>
     {:else if loading && !startCheck}
-        <div class="centered-container">
+        <div class="centered-container" id ='loading-centered-container'>
             <a class="logolink" href="/">
-                <img class="logoimage" src="/assets/wikilogo3.png" alt="Logo">
+                <img class="logoimage" id='loadinglogo' src="/assets/wikilogo3.png" alt="Logo">
                 <!-- <h1 style="margin: 0 10px;">WikiHunt</h1> -->
             </a>
-            <h1>Welcome to WikiHunt!</h1>
+            <h1 id = "loadingh1">Welcome to WikiHunt!</h1>
             <div class="page-content">
-                <h1>Loading Game...</h1>
+                <h1 id = "loadingh1" >Loading Game...</h1>
             </div>
         </div>
     {:else}

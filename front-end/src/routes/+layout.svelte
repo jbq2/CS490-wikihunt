@@ -1,7 +1,7 @@
 <script lang='ts'>
     import GameStats from './../shared-components/GameStats.svelte'; 
     import {darkMode} from '../lib/darkModeStore'
-    import { onMount } from 'svelte';
+    import { afterUpdate, onMount } from 'svelte';
     import {writable} from 'svelte/store'
     //import DarkModeToggle from '../shared-components/DarkModeToggle.svelte';
     let isSidebarOpen = false;
@@ -39,13 +39,40 @@
     darkMode.subscribe(value => {
 
       document.body.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
-     // document.body.style.color = value ? "#fff" : "#1a1a1a";
+      document.body.style.color = value ? "#fff" : "#1a1a1a";
+
+
+     //nav bar
+     const navItems = document.querySelectorAll('.nav-bar li');
+      navItems.forEach(item => {
+        item.style.backgroundColor = value ? "#444" : "#fff"; 
+        item.style.color = value ? "#fff" : "#1a1a1a"// Adjust this to the desired color
+      });
+
+      //mobile side bar
+      const sidebar = document.querySelector('.sidebar');
+      if(sidebar){
+        sidebar.style.backgroundColor = value ? "black": "white";
+      }
+      
+
+
+      
+    });
+  });
+
+  afterUpdate(() => {
+    darkMode.subscribe(value => {
+
+      document.body.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+      document.body.style.color = value ? "#fff" : "#1a1a1a";
 
 
      //nav bar
       const navItems = document.querySelectorAll('.nav-bar li');
       navItems.forEach(item => {
-        item.style.backgroundColor = value ? "#444" : "#fff"; // Adjust this to the desired color
+        item.style.backgroundColor = value ? "#444" : "#fff"; 
+        item.style.color = value ? "#fff" : "#1a1a1a"// Adjust this to the desired color
       });
 
       //mobile side bar

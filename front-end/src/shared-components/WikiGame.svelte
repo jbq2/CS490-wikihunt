@@ -198,6 +198,7 @@
             if (logoImage) {
                 logoImageSrc = value ? 'src/lib/assets/wikilogo3transparent.png' : 'src/lib/assets/wikilogo3.png';
             logoImage.src = logoImageSrc;
+            logoImage.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
             }
 
            const closeStats = document.querySelector('  .sidePanel .closeStats   ');
@@ -214,15 +215,13 @@
            const overlay= document.querySelector('#overlay-container');
            if(overlay){
             overlay.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+
            }
 
-           const b = document.querySelectorAll('b');
-            b.forEach(b => {
-               //  b.style.color= value? "#fff" : "#333";
-               //b.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
-                
-               
-            });
+           const b = document.querySelector('#clicks');
+           if(b){
+            b.style.backgroundColor= value ? "#1a1a1a" : "#edf6f7";
+           }
 
             const clickCounterP = document.querySelector('#click-counter');
     if (clickCounterP) {
@@ -257,7 +256,10 @@
         endPage.style.color = value ? "#fff" : "#1a1a1a";
     }
 
-        
+   
+    
+
+
 
           //  const p = document.querySelectorAll('p');
           //  p.forEach(p => {
@@ -266,11 +268,12 @@
                 
          //   });
 
-            const wikipage = document.querySelectorAll( " #wiki-page-container");
+            const wikipage = document.querySelectorAll( "#wiki-page-container");
             wikipage.forEach(wikipage => {
-                wikipage.style.color= value? "#fff" : "#333";
-                wikipage.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
-                
+                wikipage.style.color= value? "#fff" : "#1a1a1a";
+              //  wikipage.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+               // wikipage.classList.toggle('dark-mode', value);
+
             });
     }
     
@@ -386,11 +389,9 @@
         padding: 5px;
     }
 
-    .dark #wiki-page-container :global(table.wikitable),.dark :global(figure), .dark :global(li.gallerybox) {
-        background-color: #1a1a1a;
-        border: 1px solid #a2a9b1;     
-        padding: 5px;
-    }
+   
+
+   
     
     #wiki-page-container :global(li.gallerybox) {
         margin: 3px;
@@ -407,26 +408,28 @@
     #wiki-page-container :global(table.wikitable) {
         background-color: #f8f9fa;
         border: 1px solid #a2a9b1;
+        
     }
 
-    .dark  #wiki-page-container :global(table.wikitable) {
-        background-color: #1a1a1a;
-        border: 1px solid #a2a9b1;
-    }
+
 
     #wiki-page-container :global(figure) {
         padding:5px;
         text-align: center;
         float: right;
         margin: 1rem;
+        
+        
     }
 
     #wiki-page-container :global(p) {
         clear: left;
+        
     }
 
     #wiki-page-container :global(figcaption) {
         width:20rem
+        
     }
 
     #overlay-container {
@@ -728,7 +731,7 @@
             {/if}
         </a>
         <img id ="gameimage" class="logoimage s-7IPF32Wcq3s8" src="/assets/wikilogo2.png" alt="Logo">
-        <p id="click-counter"><b> {count} clicks </b></p> <!-- counter is at the bottom, not formated the best-->
+        <p id="click-counter"><b id="clicks"> {count} clicks </b></p> <!-- counter is at the bottom, not formated the best-->
         <p id="timer"><b><Timer bind:this={ timerComponent } /></b></p>
         <p id="start-page"> <b> {firstPage} </b></p>
         <p id="to-page"> 

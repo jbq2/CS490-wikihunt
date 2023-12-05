@@ -49,7 +49,7 @@
                 <a id="right-link" on:click={toggleStats}><li style="right: 1.6rem; cursor: pointer" id="nav-bar-link3" on:click={toggleStats}>Stats</li></a>
             </ul>
         </nav>
-        <aside class="sidebar {isSidebarOpen ? 'open' : ''}">
+        <aside class="side-menu {isSidebarOpen ? 'open' : ''}">
             <button class="close-button" on:click={toggleSidebar}>×</button>
             <!-- svelte-ignore a11y-missing-attribute -->
             <ul style="list-style-type: none; margin-right: 5rem; padding-left: 1rem">

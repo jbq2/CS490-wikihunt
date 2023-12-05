@@ -1,9 +1,7 @@
 <script lang="ts">
     import { today, writeToCookie } from '../lib/CookieHelper';
-    import { onMount } from "svelte";
-    import type { PageApiResponse, FinalTime, Stats, StartEndApiResponse } from "../constants/models";
+    import type { Stats, StartEndApiResponse } from "../constants/models";
     import { mediaWikiService } from "../services/MediaWikiService";  
-    import Timer from "./Timer.svelte";   
     import CopyButton from './CopyButton.svelte';    
 
     let pageContent: string = "";
@@ -38,7 +36,8 @@
         minutes = 0;
         seconds = 0;
 
-        timer = setInterval(() => {
+        // timer = setInterval(() => {
+        setInterval(() => {
             if (seconds === 59) {
                 minutes++;
                 seconds = 0;
@@ -104,13 +103,9 @@
     }
 
     function fetchWikiPage() {
-        // Figured out URL from here: https://www.mediawiki.org/w/api.php?action=parse&format=json&origin=*&page=Project%3ASandbox&formatversion=2
-        // on https://www.mediawiki.org/wiki/API:Parsing_wikitext and API sandbox
-        // console.log(currPage);
         mediaWikiService.getPagePromise(currPage)
             .then((data) => { // get data
                 if (data && data.parse && data.parse.text) { // gets all data, parsed data, and parsed text
-                    console.log(data)
                     // let tempData = ArticleEnhancerUtil.cleanArticle(data.parse.text["*"]);
                     let tempData = cleanArticle(data.parse.text["*"]);
                     if (isRedirectPage(tempData)){  
@@ -146,7 +141,6 @@
             isWin = true;
             elapsedTime = getTime();
             if (dailyMode) {
-                console.log('here');
                 writeToCookie(getGameStats());
             }
         } else 
@@ -179,7 +173,6 @@
         fetchWikiPage();
         path.push(currPage);
         pathString += currPage + ' → ';
-        console.log(`START:"${currPage}", END: "${endPage}"`);
         var width = document.body.clientWidth;
         if (width <= 450) {
             isMobile = true;
@@ -193,7 +186,7 @@
         currPage = firstPage;
         restartTimer();
         fetchWikiPage();
-        startTimer();
+        start();
     }
 
     function newGame(): void {
@@ -657,7 +650,7 @@
                     {#each path.slice(0, 3) as page}
                         {' '+page+' →'}
                     {/each}
-                        ...{path.length - 7} more pages... →
+                        ...{path.length - 6} more pages... →
                     {#each path.slice(-4, -2) as page}
                         {' '+page+' →'}
                     {/each}

@@ -25,7 +25,6 @@
 		noCookies = false;
 		allTimeBestString = 'No Records!', dailyString = 'No Records!';
 		cookieCheck = false;
-		console.log('here')
 		allTimeBest = readFromCookie(allTimeBestCookieName);
 		if (allTimeBest)
 			cookieCheck = true;

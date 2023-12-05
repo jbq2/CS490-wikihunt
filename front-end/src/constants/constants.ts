@@ -1,4 +1,4 @@
-export const wordList: string[] = [
+export const words: string[] = [
     'Apple',
     'Kyoto',
     'Tetris',
@@ -534,6 +534,6 @@ export const sportsMemesVideoGamesAnimeList: string[] = [
     'Code Geass'
 ];
 
-export const combinedList = Array.from(
-    new Set([...wordList, ...historyList, ...sportsMemesVideoGamesAnimeList, ...mathScienceList]).values()
+export const wordList = Array.from(
+    new Set([...words, ...historyList, ...sportsMemesVideoGamesAnimeList, ...mathScienceList]).values()
 );

@@ -121,7 +121,7 @@ nav ul li:hover::before {
 	margin-top: 15px;
 }
 
-.sidebar {
+.side-menu {
 	font-family: 'Varela Round';
 	position: fixed;
 	z-index: 50;
@@ -134,7 +134,7 @@ nav ul li:hover::before {
 	opacity: 0.9;
 }
 
-.sidebar.open {
+.side-menu.open {
 	left: 0;
 }
 

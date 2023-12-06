@@ -613,6 +613,7 @@
             {#if window.innerWidth < 450}<br>{/if}
             <div id="wiki-page-container">
                 {#if currPage}
+                    <br>
                     <h1>{ currPage }</h1>
                 {/if}
                 {@html pageContent} <!-- loads content -->

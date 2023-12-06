@@ -117,7 +117,7 @@
     {#if !startCheck && !loading}
         <div class="centered-container">
             <a class="logolink" href="/">
-                <img class="logoimage" src={'src/lib/assets/wikilogo3.png'} alt="Logo">
+                <img class="logoimage" src={'assets/wikilogo3.png'} alt="Logo">
                 <!-- <h1 style="margin: 0 10px;">WikiHunt</h1> -->
             </a>
             <h1>Practice Mode</h1>
@@ -137,7 +137,7 @@
     {:else if loading && !startCheck}
         <div class="centered-container">
             <a class="logolink" href="/">
-                <img class="logoimage" src={'src/lib/assets/wikilogo3.png'} alt="Logo">
+                <img class="logoimage" src={'/assets/wikilogo3.png'} alt="Logo">
                 <!-- <h1 style="margin: 0 10px;">WikiHunt</h1> -->
             </a>
             <h1>Practice Mode</h1>

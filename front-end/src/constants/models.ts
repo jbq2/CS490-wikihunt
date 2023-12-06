@@ -1,6 +1,6 @@
 export type StartEndApiResponse = {
     start: string,
-    end: string
+    end: string | undefined
 };
 
 export type PageApiResponse = {
@@ -35,5 +35,7 @@ export type CookieCollection = {
     dailyStats: Stats,
     allTimeBest: Stats,
     dailyStreak: GameCount,
-    lastPlayed: DateFormat
+    lastPlayed: DateFormat,
+    bestStreak: GameCount,
+    gamesPlayed: GameCount
 };

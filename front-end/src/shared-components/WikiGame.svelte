@@ -1,7 +1,7 @@
 <script lang="ts">
     import { today, writeToCookie } from '../lib/CookieHelper';
     import { onMount } from "svelte";
-    import type { PageApiResponse, FinalTime, Stats } from "../constants/models";
+    import type { PageApiResponse, FinalTime, Stats, StartEndApiResponse } from "../constants/models";
     import { mediaWikiService } from "../services/MediaWikiService";  
     import Timer from "./Timer.svelte";   
     import CopyButton from './CopyButton.svelte';    
@@ -27,7 +27,7 @@
 
 
     function getGameStats(): Stats {
-        let wordPair: object = {
+        let wordPair: StartEndApiResponse = {
             'start': firstPage,
             'end': endPage
         };  

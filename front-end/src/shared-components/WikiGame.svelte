@@ -180,8 +180,13 @@
     function updateStylesWiki(value: boolean): void{
 
         darkMode.subscribe(value => {
-       // document.body.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+        //document.body.style.backgroundColor = value ? "#1a1a1a" : "#ff000";
       //document.body.style.color = value ? "#fff" : "#1a1a1a";
+
+      const body = document.querySelector("body");
+            if (body){
+                body.style.backgroundColor = value ? "#1a1a1a" : "#fff";
+            }
 
     //  const h1style = document.querySelector('h1');
         //    if(h1style){
@@ -261,7 +266,7 @@
    
     const currentPage = document.querySelector('#current-page');
     if (currentPage) {
-        currentPage.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+       // currentPage.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
         currentPage.style.color = value ? "#fff" : "#1a1a1a";
     }
     
@@ -270,10 +275,59 @@
 
             const p = document.querySelectorAll('p');
             p.forEach(p => {
-                 p.style.color= value? "#fff" : "#333";
-              p.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+                // p.style.color= value? "#fff" : "#333";
+             // p.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
                 
             });
+
+            const li = document.querySelectorAll('li');
+            li.forEach(li => {
+             //    li.style.color= value? "#fff" : "#333";
+             // li.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+                
+            });
+            const h2 = document.querySelectorAll('h2');
+            h2.forEach(h2 => {
+              //   h2.style.color= value? "#fff" : "#333";
+            //  h2.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+                
+            });
+
+        
+
+
+        const wp = document.querySelectorAll('#wiki-page-container');
+        wp.forEach(icon => {
+            icon.style.color = value ? "#fff" : "#1a1a1a";
+        });
+
+        /*
+        const h3 = document.querySelectorAll('h3');
+            h3.forEach(h3 => {
+                 h3.style.color= value? "#fff" : "#333";
+            //  h2.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+                
+            });
+            const h4 = document.querySelectorAll('h4');
+            h4.forEach(h4 => {
+                 h4.style.color= value? "#fff" : "#333";
+            //  h2.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+                
+            });
+
+            const noteDiv = document.querySelector('[role="note"]');
+        if (noteDiv) {
+            //noteDiv.style.backgroundColor = value ? "#333" : "#f4f4f4";
+            noteDiv.style.color = value ? "#fff" : "#333";
+        }
+           
+
+            */
+      
+
+
+             
+
 
            // const div = document.querySelectorAll('');
           //  div.forEach(p => {
@@ -298,6 +352,9 @@
     onMount(() => {
 
     
+      
+            
+
 
           
         applyDarkModeStyles()

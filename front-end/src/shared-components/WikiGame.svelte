@@ -323,7 +323,13 @@
             // Adjust other styles as needed
         });
 
-       
+        const td = document.querySelectorAll('td');
+        td.forEach(box => {
+            box.style.backgroundColor = value ? "#444" : "#fff";
+            box.style.color = value ? "#fff" : "#1a1a1a";
+            // Adjust other styles as needed
+        });
+
 
 
         /*

@@ -108,7 +108,7 @@
 
         const mobileli = document.querySelectorAll('mobileli');
       mobileli.forEach(item => {
-        //item.style.backgroundColor = value ? "#444" : "#fff"; 
+        item.style.backgroundColor = value ? "#444" : "#fff"; 
         item.style.color = value ? "#ff0000" : "#1a1a1a"// Adjust this to the desired color
       });
 

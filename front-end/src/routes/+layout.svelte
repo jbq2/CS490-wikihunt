@@ -1,5 +1,6 @@
 <script lang='ts'>
     import GameStats from './../shared-components/GameStats.svelte';
+    import { page } from '$app/stores';
     let isSidebarOpen = false;
     let showStats: boolean = false;
     let shekhmus: GameStats;
@@ -22,9 +23,18 @@
         shekhmus.updateStats();
     }
 
-    function resetBgColor(): void {
-        let color = "#edf6f7"
-        document.body.style.backgroundColor = color;
+    function resetBgColorDaily(): void {
+        if ($page.url.pathname != "/") {
+            let color = "#edf6f7";
+            document.body.style.backgroundColor = color;
+        }
+    }
+
+    function resetBgColorPractice(): void {
+        if ($page.url.pathname != "/practice") {
+            let color = "#edf6f7";
+            document.body.style.backgroundColor = color;
+        }
     }
 </script>
 
@@ -43,8 +53,8 @@
         </div>
         <nav class="nav-bar" style="text-align: center">
             <ul style="padding: 0 0 0 20px;" id="nav-bar">
-                <a id="left-link" on:click={resetBgColor} href="/"><li style="left: 1.6rem" id="nav-bar-link1">Daily</li></a>
-                <a on:click={resetBgColor} href="/practice"><li id="nav-bar-link2">Practice</li></a>
+                <a id="left-link" on:click={resetBgColorDaily} href="/"><li style="left: 1.6rem" id="nav-bar-link1">Daily</li></a>
+                <a on:click={resetBgColorPractice} href="/practice"><li id="nav-bar-link2">Practice</li></a>
                 <!-- svelte-ignore a11y-no-static-element-interactions -->
                 <a id="right-link" on:click={toggleStats}><li style="right: 1.6rem; cursor: pointer" id="nav-bar-link3" on:click={toggleStats}>Stats</li></a>
             </ul>

@@ -124,7 +124,7 @@
             <div class="page-content">
                 <!-- <h1>Practice Mode</h1> -->
                 <p>Play WikiHunt for fun! </p>
-                <p>Two randomly selected words are chose each time you play.</p>
+                <p>Two randomly selected words are chosen each time you play.</p>
                 <!-- <h1>Rules</h1>
                 <ul>
                     <li>The user can only navigate by only clicking through links within the same article. No search bar allowed!</li>

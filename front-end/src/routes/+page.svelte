@@ -55,7 +55,11 @@
 
 
         darkMode.subscribe(value => {
-        //document.body.style.color = value ? "#fff" : "#1a1a1a";
+
+            const body = document.querySelector("body");
+            if (body){
+                body.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+            }
     
        const centeredContainer = document.querySelectorAll('.centered-container');
       centeredContainer.forEach(centeredContainer => {

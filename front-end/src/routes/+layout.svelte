@@ -37,9 +37,14 @@
         
     }
     onMount(() => {
+
+        const link = document.createElement('link');
+        link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css';
+        link.rel = 'stylesheet';
+        document.head.appendChild(link);
     darkMode.subscribe(value => {
 
-      document.body.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+     // document.body.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
      // document.body.style.color = value ? "#fff" : "#1a1a1a";
 
 
@@ -49,6 +54,11 @@
         item.style.backgroundColor = value ? "#444" : "#fff"; 
        item.style.color = value ? "#fff" : "#1a1a1a"// Adjust this to the desired color
       });
+
+
+
+
+     
 
       //mobile side bar
       const sidebar = document.querySelector('.sidebar');
@@ -65,7 +75,7 @@
   afterUpdate(() => {
     darkMode.subscribe(value => {
 
-      document.body.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+    //  document.body.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
     //  document.body.style.color = value ? "#fff" : "#1a1a1a";
 
 
@@ -80,7 +90,33 @@
       const sidebar = document.querySelector('.sidebar');
       if(sidebar){
         sidebar.style.backgroundColor = value ? "black": "white";
+        sidebar.color = value ? "#fff": "#1a1a1a"
       }
+
+      
+      const moonIcon = document.querySelector('.moon-icon');
+        if (moonIcon) {
+            // Add your styles for the moon icon (e.g., color: white)
+            moonIcon.style.color = "#fff"; //works
+        }
+        const sunIcon = document.querySelector('.sun-icon');
+        if (sunIcon) {
+            // Add your styles for the moon icon (e.g., color: white)
+            sunIcon.style.color = "#fff"; //works
+
+        }
+
+        const mobileli = document.querySelectorAll('mobileli');
+      mobileli.forEach(item => {
+        //item.style.backgroundColor = value ? "#444" : "#fff"; 
+        item.style.color = value ? "#ff0000" : "#1a1a1a"// Adjust this to the desired color
+      });
+
+    
+
+        
+      
+
       
 
 
@@ -110,9 +146,6 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <main on:click={clickOff}>
-     <button class="dark-mode-toggle" on:click={toggleDarkMode}>
-        {$darkMode ? "Change to Light Mode" : "Change to Dark Mode"}
-      </button>
     <div id="header">
         <div id="hamburger-and-logo">
             {#if !isSidebarOpen}
@@ -125,19 +158,33 @@
                 <a href="/practice"><li id="nav-bar-link2">Practice</li></a>
                 <!-- svelte-ignore a11y-no-static-element-interactions -->
                 <a id="right-link" on:click={toggleStats}><li style="right: 1.6rem; cursor: pointer" id="nav-bar-link3" on:click={toggleStats}>Stats</li></a>
+                <button id="darkmodeWeb" class="dark-mode-toggle" on:click={toggleDarkMode}>
+                    {#if $darkMode}
+                        <i class="fas fa-sun sun-icon"></i> Light Mode
+                    {:else}
+                        <i class="fas fa-moon moon-icon"></i> Dark Mode
+                    {/if}
+                </button>
             </ul>
         </nav>
         <aside class="sidebar {isSidebarOpen ? 'open' : ''}">
             <button class="close-button" on:click={toggleSidebar}>×</button>
             <!-- svelte-ignore a11y-missing-attribute -->
             <ul style="list-style-type: none; margin-right: 5rem; padding-left: 1rem">
-                <a on:click={toggleSidebar} href="/"><li>Daily</li></a>
-                <a on:click={toggleSidebar} href="/practice"><li>Practice</li></a>
+                <a on:click={toggleSidebar} href="/"><li id = "mobileli">Daily</li></a>
+                <a on:click={toggleSidebar} href="/practice"><li  id = "mobileli">Practice</li></a>
                 <!-- svelte-ignore a11y-no-static-element-interactions -->
                 <a on:click={()=>{
                     toggleStats();
                     toggleSidebar();
-                }}><li style="cursor: pointer">Stats</li></a>
+                }}><li style="cursor: pointer" id = "mobileli">Stats</li></a>
+                  <button id="darkmodeMobile" class="dark-mode-toggle" on:click={toggleDarkMode}>
+                    {#if $darkMode}
+                    <i class="fas fa-sun sun-icon"></i>
+                {:else}
+                    <i class="fas fa-moon moon-icon"></i>
+                {/if}
+                </button>
             </ul>
         </aside>
     </div>
@@ -153,6 +200,8 @@
     padding: 0;
 
   }
+
+  
  
    
     
@@ -195,6 +244,38 @@
     #nav-bar-link3 {
         text-indent: -0.25rem;
     }
+   
+
+
+#darkmodeWeb{
+        background-color: #000080; /* Adjust background color */
+    color: #fff; /* Adjust text color */
+    border: none;
+    padding: 10px;
+    font-weight: bold; 
+    margin-left: 10px; /* Adjust spacing */
+    cursor: pointer;
+    font-family: 'Varela Round';
+        border-radius: 4px;
+       
+
+}
+
+#darkmodeMobile{
+        background-color: #000080; /* Adjust background color */
+    color: #fff; /* Adjust text color */
+    border: none;
+    padding: 10px;
+    font-weight: bold; 
+    cursor: pointer;
+    font-family: 'Varela Round';
+        border-radius: 4px;
+       
+
+}
+
+
+
 
     .hamburger-menu {
         display: none; 

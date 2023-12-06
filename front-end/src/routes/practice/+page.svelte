@@ -53,9 +53,16 @@
     function updateStylesPractice(value: boolean): void {
 
 
-
+        
 
         darkMode.subscribe(value => {
+
+          
+            const body = document.querySelector("body");
+            if (body){
+                body.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+            }
+    
         
         //document.body.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
  

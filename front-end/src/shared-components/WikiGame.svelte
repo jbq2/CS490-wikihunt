@@ -301,6 +301,31 @@
             icon.style.color = value ? "#fff" : "#1a1a1a";
         });
 
+        const galleryBoxes = document.querySelectorAll('li.gallerybox');
+        galleryBoxes.forEach(box => {
+            box.style.backgroundColor = value ? "#444" : "#fff";
+            box.style.color = value ? "#fff" : "#1a1a1a";
+            // Adjust other styles as needed
+        });
+
+
+        const table = document.querySelectorAll('table');
+        table.forEach(box => {
+            box.style.backgroundColor = value ? "#444" : "#fff";
+            box.style.color = value ? "#fff" : "#1a1a1a";
+            // Adjust other styles as needed
+        });
+        
+        const figure = document.querySelectorAll('figure');
+        figure.forEach(box => {
+            box.style.backgroundColor = value ? "#444" : "#fff";
+            box.style.color = value ? "#fff" : "#1a1a1a";
+            // Adjust other styles as needed
+        });
+
+       
+
+
         /*
         const h3 = document.querySelectorAll('h3');
             h3.forEach(h3 => {

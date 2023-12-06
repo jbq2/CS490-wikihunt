@@ -1,8 +1,14 @@
 <script lang='ts'>
-    import GameStats from './../shared-components/GameStats.svelte';
+    import GameStats from './../shared-components/GameStats.svelte'; 
+    import {darkMode} from '../lib/darkModeStore'
+    import { afterUpdate, onMount } from 'svelte';
+    import {writable} from 'svelte/store'
+    //import DarkModeToggle from '../shared-components/DarkModeToggle.svelte';
     let isSidebarOpen = false;
     let showStats: boolean = false;
     let shekhmus: GameStats;
+
+    //let darkMode = writable(false);
 
     function toggleSidebar(): void {
         isSidebarOpen = !isSidebarOpen;
@@ -22,10 +28,65 @@
         shekhmus.updateStats();
     }
 
-    function resetBgColor(): void {
-        let color = "#edf6f7"
-        document.body.style.backgroundColor = color;
+  
+
+    function toggleDarkMode() {
+        // Update the darkMode store on button click
+        darkMode.update((value) => !value);
+        
     }
+    onMount(() => {
+    darkMode.subscribe(value => {
+
+      document.body.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+     // document.body.style.color = value ? "#fff" : "#1a1a1a";
+
+
+     //nav bar
+     const navItems = document.querySelectorAll('.nav-bar li');
+      navItems.forEach(item => {
+        item.style.backgroundColor = value ? "#444" : "#fff"; 
+       item.style.color = value ? "#fff" : "#1a1a1a"// Adjust this to the desired color
+      });
+
+      //mobile side bar
+      const sidebar = document.querySelector('.sidebar');
+      if(sidebar){
+        sidebar.style.backgroundColor = value ? "black": "white";
+      }
+      
+
+
+      
+    });
+  });
+
+  afterUpdate(() => {
+    darkMode.subscribe(value => {
+
+      document.body.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+    //  document.body.style.color = value ? "#fff" : "#1a1a1a";
+
+
+     //nav bar
+      const navItems = document.querySelectorAll('.nav-bar li');
+      navItems.forEach(item => {
+        item.style.backgroundColor = value ? "#444" : "#fff"; 
+        item.style.color = value ? "#fff" : "#1a1a1a"// Adjust this to the desired color
+      });
+
+      //mobile side bar
+      const sidebar = document.querySelector('.sidebar');
+      if(sidebar){
+        sidebar.style.backgroundColor = value ? "black": "white";
+      }
+      
+
+
+      
+    });
+  });
+
 </script>
 
 <GameStats 
@@ -35,6 +96,9 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <main on:click={clickOff}>
+     <button class="dark-mode-toggle" on:click={toggleDarkMode}>
+        {$darkMode ? "Change to Light Mode" : "Change to Dark Mode"}
+      </button>
     <div id="header">
         <div id="hamburger-and-logo">
             {#if !isSidebarOpen}
@@ -43,8 +107,8 @@
         </div>
         <nav class="nav-bar" style="text-align: center">
             <ul style="padding: 0 0 0 20px;" id="nav-bar">
-                <a id="left-link" on:click={resetBgColor} href="/"><li style="left: 1.6rem" id="nav-bar-link1">Daily</li></a>
-                <a on:click={resetBgColor} href="/practice"><li id="nav-bar-link2">Practice</li></a>
+                <a id="left-link" href="/"><li style="left: 1.6rem" id="nav-bar-link1">Daily</li></a>
+                <a href="/practice"><li id="nav-bar-link2">Practice</li></a>
                 <!-- svelte-ignore a11y-no-static-element-interactions -->
                 <a id="right-link" on:click={toggleStats}><li style="right: 1.6rem; cursor: pointer" id="nav-bar-link3" on:click={toggleStats}>Stats</li></a>
             </ul>
@@ -67,9 +131,17 @@
 </main>
 <style>
     @import '/public/global.css';
-
     @import url('https://fonts.googleapis.com/css?family=Varela Round');
 
+
+    :global(body) { 
+    margin: 0; 
+    padding: 0;
+
+  }
+ 
+   
+    
     nav ul li {
         font-family: 'Varela Round';
         border-radius: 0px;
@@ -79,6 +151,8 @@
         margin: 0;
         text-align: center;
     }
+
+    
     nav ul li::before {
         content: "";
         position: absolute;
@@ -129,6 +203,7 @@
         opacity: 0.9;
     }
 
+  
     .sidebar.open {
         left: 0;
     }

@@ -1,11 +1,13 @@
 <script lang="ts">
     import { today, writeToCookie } from '../lib/CookieHelper';
-    import { onMount } from "svelte";
+    import { afterUpdate, onMount } from "svelte";
     import type { PageApiResponse, FinalTime, Stats } from "../constants/models";
     import { mediaWikiService } from "../services/MediaWikiService";  
     import Timer from "./Timer.svelte";   
-    import CopyButton from './CopyButton.svelte';    
+    import CopyButton from './CopyButton.svelte';  
+    
 
+    import { darkMode } from '$lib/darkModeStore';
     let pageContent: string = "";
     let currPage: string = ""; 
     let endPage: string | undefined = undefined; // has to be different than wikiPage initially
@@ -24,6 +26,11 @@
     export let returnHome: any;
 
     let timerComponent: Timer;
+
+    export let updateStyles: any;
+
+    let logoImageSrc = 'src/lib/assets/wikilogo2.png'; 
+ 
 
 
     function getGameStats(): Stats {
@@ -109,6 +116,9 @@
         } else {
             isMobile = false;
         }
+
+       
+
     }
 
     function restartGame(): void {
@@ -122,7 +132,10 @@
     function newGame(): void {
         clearGame();
         timerComponent.restart();
+
         returnHome();
+     
+       
         // start();
         // fetchWikiPage();
     }
@@ -155,9 +168,146 @@
             statsBar.style.right = "-8.5%";
         }
     }
+
+    function applyDarkModeStyles() {
+    const value = $darkMode; // Get the current dark mode value
+    // Add your dark mode styling logic here
+    updateStylesWiki(value);
+  }
+  
+
+
+    function updateStylesWiki(value: boolean): void{
+
+        darkMode.subscribe(value => {
+       // document.body.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+      //document.body.style.color = value ? "#fff" : "#1a1a1a";
+
+    //  const h1style = document.querySelector('h1');
+        //    if(h1style){
+         //       h1style.style.color= value? "#fff" : "#333";
+           //     h1style.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+                
+        //    }
+
+        const winMessage = document.querySelector('#win-message');
+        if (winMessage) {
+            winMessage.style.color = value ? "#1a1a1a" : "#333"; // Adjust the color as needed
+        }
+
+
+            const logoImage = document.querySelector("#gameimage");
+            if (logoImage) {
+                logoImageSrc = value ? 'src/lib/assets/wikilogo2darkmode.png' : 'src/lib/assets/wikilogo2.png';
+            logoImage.src = logoImageSrc;
+            logoImage.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+            }
+
+           const closeStats = document.querySelector('  .sidePanel .closeStats   ');
+           if (closeStats){
+           // closeStats.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+           }
+
+           const openStats = document.querySelector(' .openStats   ');
+           if (openStats){
+           // openStats.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+           }
+
+
+           const overlay= document.querySelector('#overlay-container');
+           if(overlay){
+            overlay.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+
+           }
+
+           const b = document.querySelector('#clicks');
+           if(b){
+            b.style.backgroundColor= value ? "#1a1a1a" : "#edf6f7";
+           }
+
+            const clickCounterP = document.querySelector('#click-counter');
+    if (clickCounterP) {
+        clickCounterP.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+        clickCounterP.style.color = value ? "#fff" : "#1a1a1a";
+    }
+
+
+    const startPage = document.querySelector('#start-page');
+    if (startPage) {
+        startPage.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+        startPage.style.color = value ? "#fff" : "#1a1a1a";
+    }
+        
+
+    const timerC = document.querySelector('#timer');
+    if (timerC) {
+        timerC.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+        timerC.style.color = value ? "#fff" : "#1a1a1a";
+    }
+        
+
+    const toPage = document.querySelector('#to-page');
+    if (toPage) {
+        toPage.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+       
+    }
+        
+    const endPage= document.querySelector('#end-page');
+    if (endPage){
+        endPage.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+        endPage.style.color = value ? "#fff" : "#1a1a1a";
+    }
+
+   
+    const currentPage = document.querySelector('#current-page');
+    if (currentPage) {
+        currentPage.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+        currentPage.style.color = value ? "#fff" : "#1a1a1a";
+    }
+    
+
+
+
+            const p = document.querySelectorAll('p');
+            p.forEach(p => {
+                 p.style.color= value? "#fff" : "#333";
+              p.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+                
+            });
+
+           // const div = document.querySelectorAll('');
+          //  div.forEach(p => {
+           //      p.style.color= value? "#fff" : "#333";
+           //   p.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+                
+          //  });
+
+
+           // const wikipage = document.querySelectorAll( "");
+           // wikipage.forEach(wikipage => {
+             //   wikipage.style.color= value? "#333" : "#1a1a1a";
+              //  wikipage.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+               // wikipage.classList.toggle('dark-mode', value);
+
+          //  });
+        });
+    }
+
+    
     
     onMount(() => {
+
+    
+
+          
+        applyDarkModeStyles()
+
         start();
+    });
+
+    afterUpdate(() => {
+        applyDarkModeStyles()
+
     });
 </script>
 
@@ -176,7 +326,6 @@
         border: 2px solid #5aa8a8; 
         border-radius: 10px; 
     }
-
     
     @media(max-width: 450px) {
         #win-container{
@@ -198,6 +347,8 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
+    
+
     #win-message,
     #win-caption,
     #win-time,
@@ -210,6 +361,7 @@
     #win-message {
         font-size: 70px;
         margin-top: 24px;
+        color:#1a1a1a
     }
 
     #win-caption {
@@ -240,7 +392,9 @@
         grid-column-gap: 1px;
         margin: auto;
         margin-bottom: 25px;
+        color: grey;
     }
+   
 
     @media(max-width: 450px) {
         #wiki-page-container {
@@ -251,36 +405,58 @@
 
     #wiki-page-container :global(.mw-content-ltr) {
         overflow-x: scroll;
+        
     }
     
     #wiki-page-container :global(table.wikitable), :global(figure), :global(li.gallerybox) {
         background-color: #f8f9fa;
         border: 1px solid #a2a9b1;     
         padding: 5px;
+        
     }
+
+   
+
+   
+    
     #wiki-page-container :global(li.gallerybox) {
         margin: 3px;
         display: inline-block;
     }
+    #wiki-page-container :global(li.gallerybox) {
+        margin: 3px;
+        display: inline-block;
+        background-color: #1a1a1a;
+
+    }
+
 
     #wiki-page-container :global(table.wikitable) {
         background-color: #f8f9fa;
         border: 1px solid #a2a9b1;
+        
     }
+
+
 
     #wiki-page-container :global(figure) {
         padding:5px;
         text-align: center;
         float: right;
         margin: 1rem;
+        
+        
     }
 
     #wiki-page-container :global(p) {
         clear: left;
+        
+        
     }
 
     #wiki-page-container :global(figcaption) {
         width:20rem
+        
     }
 
     #overlay-container {
@@ -301,6 +477,8 @@
         transition: 0.5s;
         width: 8.5%;
     }
+
+ 
 
     .sidePanel .closeStats {
         position: absolute;
@@ -525,11 +703,16 @@
         }
     }
 
+
+
+
+
 </style>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-<main on:click={clickLink}>
+<main on:click={clickLink} >
+
     {#if isWin}
         <div id="win-container">
             <h1 id="win-message">You Win!</h1>
@@ -574,8 +757,8 @@
             &gt;
             {/if}
         </a>
-        <img class="logoimage s-7IPF32Wcq3s8" src="/assets/wikilogo2.png" alt="Logo">
-        <p id="click-counter"><b> {count} clicks </b></p> <!-- counter is at the bottom, not formated the best-->
+        <img id ="gameimage" class="logoimage s-7IPF32Wcq3s8" src="/assets/wikilogo2.png" alt="Logo">
+        <p id="click-counter"><b id="clicks"> {count} clicks </b></p> <!-- counter is at the bottom, not formated the best-->
         <p id="timer"><b><Timer bind:this={ timerComponent } /></b></p>
         <p id="start-page"> <b> {firstPage} </b></p>
         <p id="to-page"> 
@@ -606,7 +789,7 @@
             {#if window.innerWidth < 450}<br>{/if}
             <div id="wiki-page-container">
                 {#if currPage}
-                    <h1>{ currPage }</h1>
+                    <h1 id="current-page">{ currPage }</h1>
                 {/if}
                 {@html pageContent} <!-- loads content -->
             </div>

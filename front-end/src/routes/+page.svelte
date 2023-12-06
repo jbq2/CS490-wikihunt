@@ -13,7 +13,7 @@
     let fetchedEndPage: string | undefined = undefined; // has to be different than wikiPage initially
 
 
-    let logoImageSrc = 'src/lib/assets/wikilogo3transparentlightmode.png'; 
+    let logoImageSrc = '/static/assets/wikilogo3.png'; 
 
     function start(): void {
         loading = true;
@@ -105,13 +105,13 @@
             
             const logoImage = document.querySelectorAll('#mainlogo');
             logoImage.forEach(logoImage => {
-                logoImageSrc = value ? 'src/lib/assets/wikilogo3transparentdarkmode.png' : 'src/lib/assets/wikilogo3transparentlightmode.png';
+                logoImageSrc = value ? '/static/assets/wikilogo3transparentdarkmode.png' : '/static/assets/wikilogo3.png';
                 logoImage.src = logoImageSrc;
             });
 
             const loadingImage = document.querySelectorAll('#loadinglogo');
             loadingImage.forEach(loadingImage => {
-                logoImageSrc = value ? 'src/lib/assets/wikilogo3transparentdarkmode.png' : 'src/lib/assets/wikilogo3transparentlightmode.png';
+                logoImageSrc = value ? '/static/assets/wikilogo3transparentdarkmode.png' : '/static/assets/wikilogo3.png';
                 loadingImage.src = logoImageSrc;
             });
 
@@ -238,7 +238,7 @@
     {#if !startCheck && !loading}
         <div class="centered-container">
             <a class="logolink" href="/">
-                <img class="logoimage" id='mainlogo' src={'src/lib/assets/wikilogo3transparentlightmode.png'} alt="Logo">
+                <img class="logoimage" id='mainlogo' src={'/static/assets/wikilogo3.png'} alt="Logo">
                 <!-- <h1 style="margin: 0 10px;">WikiHunt</h1> -->
             </a>
             <h1 id= "welcome">
@@ -257,7 +257,7 @@
     {:else if loading && !startCheck}
         <div class="centered-container" id ='loading-centered-container'>
             <a class="logolink" href="/">
-                <img class="logoimage" id='loadinglogo' src="/assets/wikilogo3transparentlightmode.png" alt="Logo">
+                <img class="logoimage" id='loadinglogo' src="/assets/wikilogo3.png" alt="Logo">
                 <!-- <h1 style="margin: 0 10px;">WikiHunt</h1> -->
             </a>
             <h1 id = "loadingh1">Welcome to WikiHunt!</h1>

@@ -138,7 +138,7 @@
         let statsBar = document.getElementById("overlay-container");
         var width = document.body.clientWidth;
         if (width <= 450 && statsBar) {
-            statsBar.style.transform = "translateY(85vh)";
+            statsBar.style.transform = "translateY(84vh)";
         } else if (statsBar) {
             statsBar.style.width = "8.5%";
             statsBar.style.right = "0";

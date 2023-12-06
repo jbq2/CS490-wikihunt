@@ -29,7 +29,7 @@
 
     export let updateStyles: any;
 
-    let logoImageSrc = 'src/lib/assets/wikilogo2.png'; 
+    let logoImageSrc = '/assets/wikilogo2.png'; 
  
 
 
@@ -203,7 +203,7 @@
 
             const logoImage = document.querySelector("#gameimage");
             if (logoImage) {
-                logoImageSrc = value ? 'src/lib/assets/wikilogo2darkmode.png' : 'src/lib/assets/wikilogo2.png';
+                logoImageSrc = value ? '/assets/wikilogo2darkmode.png' : '/assets/wikilogo2.png';
             logoImage.src = logoImageSrc;
             logoImage.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
             }

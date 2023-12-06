@@ -11,7 +11,7 @@
     import CopyButton from "../../shared-components/CopyButton.svelte";
     import { afterUpdate, onMount } from "svelte";
 
-    let logoImageSrc = 'src/lib/assets/wikilogo3transparentlightmode.png'; 
+    let logoImageSrc = '/assets/wikilogo3.png'; 
 
     function start(): void {
         loading = true;
@@ -92,7 +92,7 @@
 
             const logoImage = document.querySelectorAll('.logoimage');
             logoImage.forEach(logoImage => {
-                logoImageSrc = value ? 'src/lib/assets/wikilogo3transparentdarkmode.png' : 'src/lib/assets/wikilogo3transparentlightmode.png';
+                logoImageSrc = value ? '/assets/wikilogo3transparentdarkmode.png' : '/assets/wikilogo3.png';
                 logoImage.src = logoImageSrc;
             });
     
@@ -101,7 +101,7 @@
             // Add more styles or adjustments as needed loadingimage
             const loadingImage = document.querySelectorAll('#loadingimage');
             loadingImage.forEach(loadingImage => {
-                logoImageSrc = value ? 'src/lib/assets/wikilogo3transparentdarkmode.png' : 'src/lib/assets/wikilogo3transparentlightmode.png';
+                logoImageSrc = value ? '/assets/wikilogo3transparentdarkmode.png' : '/assets/wikilogo3.png';
                 loadingImage.src = logoImageSrc;
             });
 
@@ -274,7 +274,7 @@
     {#if !startCheck && !loading}
         <div id = "maincenter" class="centered-container">
             <a class="logolink" href="/">
-                <img class="logoimage" src={'src/lib/assets/wikilogo3transparentlightmode.png'} alt="Logo">
+                <img class="logoimage" src={'/assets/wikilogo3.png'} alt="Logo">
                 <!-- <h1 style="margin: 0 10px;">WikiHunt</h1> -->
             </a>
             <h1>Practice Mode</h1>
@@ -294,7 +294,7 @@
     {:else if loading && !startCheck}
     <div class="centered-container" id ='loadingcontainer'>
             <a class="logolink" href="/">
-                <img class="logoimage" id='loadingimage' src={'src/lib/assets/wikilogo3transparentlightmode.png'} alt="Logo">
+                <img class="logoimage" id='loadingimage' src={'src/lib/assets/wikilogo3.png'} alt="Logo">
                 <!-- <h1 style="margin: 0 10px;">WikiHunt</h1> -->
             </a>
             <h1 id = "loadingh1"> Practice Mode</h1>

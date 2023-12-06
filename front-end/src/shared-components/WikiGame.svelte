@@ -138,7 +138,7 @@
         let statsBar = document.getElementById("overlay-container");
         var width = document.body.clientWidth;
         if (width <= 450 && statsBar) {
-            statsBar.style.transform = "translateY(87vh)";
+            statsBar.style.transform = "translateY(85vh)";
         } else if (statsBar) {
             statsBar.style.width = "8.5%";
             statsBar.style.right = "0";
@@ -341,8 +341,7 @@
 
     #restart-button {
         cursor: pointer;
-        position: fixed;
-        top: 75%;
+        margin-top: 75%;
         width: 110px;
         left: 10%;
         background-color: #008CBA;
@@ -358,8 +357,8 @@
 
     #quit-button {
         cursor: pointer;
-        position: fixed;
-        top: 85%;
+        /* position: fixed; */
+        margin-top: 25%;
         width: 110px;
         left: 10%;
         background-color: #f44336;
@@ -432,78 +431,84 @@
     @media(max-width: 450px) {
         #overlay-container {
             width: 100%;
-            height: 110px;
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            /* align-items: center; */
+            height: 200px;
             font-size: 0.75em;
-            transform: translateY(87vh);
+            transform: translateY(84vh);
             border-top-color: #94d4d0;
             border-top-style: groove;
-            
+            display: grid;
+            grid-template-rows: repeat(4, auto);
+            grid-template-columns: repeat(6, 1fr);
+            gap: 2px;
         }
-        .logoimage {
-            z-index: 30;
-            width: 25%;
-            height: 90%;
-            transform: translate(-18vh, -0.5vh);
-            position: fixed;
-        }
-        
+
         #click-counter {
-            z-index: 35;
-            transform: translate(-10vh, -0.75vh);
-            text-align: left;
-            position: fixed;
+            grid-row: 1;
+            grid-column: 2;
+            max-height: 10px;
         }
 
         #timer {
-            z-index: 35;
-            transform: translate(-9.2vh, 2vh);
-            text-align: left;
-            position: fixed;
+            grid-row: 2;
+            grid-column: 2;
+            margin-top: 5px;
         }
 
-        #start-page{
-            z-index: 35;
-            transform: translate(1.5vh, -0.75vh);
-            display: flex;
-            max-width: 25vw;
-            padding-right: 10px;
-            text-align: center;
-            position: fixed;
-        } 
+        #start-page {
+            grid-row: 1;
+            grid-column: 3;
+            font-size: 1em;
+            max-height: 50px;
+            margin-bottom: -10px;
+        }
+
         #to-page {
-            z-index: 35;
-            transform: translate(8vh, -0.75vh);
-            max-width: 3vh;
-            text-align: left;
-            position: fixed;
-        }
-        #end-page {
-            z-index: 35;
-            transform: translate(15vh, -0.75vh);
-            max-width: 25vw;
-            text-align: center;
-            position: fixed;
+            grid-row: 1;
+            grid-column: 4;
+            font-size: 1em;
+            max-height: 25px;
+            margin-bottom: -10px;
         }
 
-        #restart-button, #quit-button {
-            z-index: 35;
-            display: inline-block;
-            margin-right: 10px;
+        #end-page {
+            grid-row: 1;
+            font-size: 1em;
+            grid-column: 5;
+            max-height: 25px;
+            margin-bottom: -10px;
         }
-        
+
+        .closeStats {
+            z-index: 50;
+            margin-right: -75%;
+            width: 50%;
+            margin-left: 10%;
+            grid-row: 1;
+            grid-column: 6;
+        }
+
+        .logoimage {
+            grid-row: span 2;
+            grid-column: 1;
+            width: 100%;
+        }
+
         #restart-button {
-            top: 8.15vh;
-            left: 11vh;
-            position: fixed;
+            grid-row: 2;
+            grid-column: 3;
+            max-width: 70px;
+            max-height: 25px;
+            font-size: 1em;
+            margin-top: 15px;
         }
-        
+
         #quit-button {
-            transform: translate(25vh, -4.1vh);
-            position: fixed;
+            grid-row: 2;
+            grid-column: 5;
+            max-width: 80px;
+            max-height: 25px; 
+            font-size: 1em;
+            margin-top: 15px;
         }
 
         .openStats {
@@ -514,14 +519,16 @@
             text-align: center;
         }
 
-        .sidePanel .closeStats {
-            transform: translateX(38vh);
-            z-index: 51;
-            text-align: center;
-            position: fixed;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        #win-message {
+            font-size: 3em;
+        }
+        #win-caption,
+        #win-time,
+        #win-clicks {
+            font-size: 1.5em;
+        }
+        #path-and-new-game-button-container {
+            font-size: 1em;
         }
     }
 
@@ -575,10 +582,10 @@
             {/if}
         </a>
         <img class="logoimage s-7IPF32Wcq3s8" src="/assets/wikilogo2.png" alt="Logo">
-        <p id="click-counter"><b> {count} clicks </b></p> <!-- counter is at the bottom, not formated the best-->
-        <p id="timer"><b><Timer bind:this={ timerComponent } /></b></p>
-        <p id="start-page"> <b> {firstPage} </b></p>
-        <p id="to-page"> 
+        <p id="click-counter" class="grid-item"><b> {count} clicks </b></p> <!-- counter is at the bottom, not formated the best-->
+        <p id="timer" class="grid-item"><b><Timer bind:this={ timerComponent } /></b></p>
+        <p id="start-page" class="grid-item"> <b> {firstPage} </b></p>
+        <p id="to-page" class="grid-item"> 
             <b>
                 {#if isMobile} 
                 ➡️
@@ -586,10 +593,10 @@
                 ⬇️
                 {/if}
             </b> </p>
-        <p id="end-page"> <b> {endPage} </b> 
+        <p id="end-page" class="grid-item"> <b> {endPage} </b> 
         </p>
-        <button id='restart-button' on:click={ restartGame }>Restart Game</button>
-        <button id='quit-button' on:click={ newGame }>Quit Game</button>
+        <button id='restart-button' class="grid-item" on:click={ restartGame }>Restart</button>
+        <button id='quit-button'class="grid-item" on:click={ newGame }>Quit Game</button>
     </div>
     <button class="openStats" on:click={ openStats }>
         {#if isMobile} 
@@ -606,6 +613,7 @@
             {#if window.innerWidth < 450}<br>{/if}
             <div id="wiki-page-container">
                 {#if currPage}
+                    <br>
                     <h1>{ currPage }</h1>
                 {/if}
                 {@html pageContent} <!-- loads content -->

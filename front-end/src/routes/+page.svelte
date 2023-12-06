@@ -7,6 +7,11 @@
     import { afterUpdate, onMount } from 'svelte'
    // import {darkMode} from 
     import {darkMode} from '../lib/darkModeStore'
+    import CopyButton from "../shared-components/CopyButton.svelte";
+    //import DarkModeToggle from "../shared-components/DarkModeToggle.svelte";
+    import { afterUpdate, onMount } from 'svelte'
+   // import {darkMode} from 
+    import {darkMode} from '../lib/darkModeStore'
     let startCheck: boolean = false;
     let loading: boolean = false;
     let fetchedFirstPage: string = "";
@@ -17,6 +22,9 @@
 
     function start(): void {
         loading = true;
+
+    
+        
 
     
         

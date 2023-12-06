@@ -1,13 +1,19 @@
 <script lang='ts'>
-    import GameStats from './../shared-components/GameStats.svelte'; 
+    import GameStats from './../shared-components/GameStats.svelte';  
     import {darkMode} from '../lib/darkModeStore'
     import { afterUpdate, onMount } from 'svelte';
     import {writable} from 'svelte/store'
     //import DarkModeToggle from '../shared-components/DarkModeToggle.svelte';
     import { page } from '$app/stores';
+    import {darkMode} from '../lib/darkModeStore'
+    import { afterUpdate, onMount } from 'svelte';
+    import {writable} from 'svelte/store'
+    //import DarkModeToggle from '../shared-components/DarkModeToggle.svelte';
     let isSidebarOpen = false;
     let showStats: boolean = false;
     let shekhmus: GameStats;
+
+    //let darkMode = writable(false);
 
     //let darkMode = writable(false);
 
@@ -156,8 +162,17 @@
             <ul style="padding: 0 0 0 20px;" id="nav-bar">
                 <a id="left-link" href="/"><li style="left: 1.6rem" id="nav-bar-link1">Daily</li></a>
                 <a href="/practice"><li id="nav-bar-link2">Practice</li></a>
+                <a id="left-link" href="/"><li style="left: 1.6rem" id="nav-bar-link1">Daily</li></a>
+                <a href="/practice"><li id="nav-bar-link2">Practice</li></a>
                 <!-- svelte-ignore a11y-no-static-element-interactions -->
                 <a id="right-link" on:click={toggleStats}><li style="right: 1.6rem; cursor: pointer" id="nav-bar-link3" on:click={toggleStats}>Stats</li></a>
+                <button id="darkmodeWeb" class="dark-mode-toggle" on:click={toggleDarkMode}>
+                    {#if $darkMode}
+                        <i class="fas fa-sun sun-icon"></i> Light Mode
+                    {:else}
+                        <i class="fas fa-moon moon-icon"></i> Dark Mode
+                    {/if}
+                </button>
                 <button id="darkmodeWeb" class="dark-mode-toggle" on:click={toggleDarkMode}>
                     {#if $darkMode}
                         <i class="fas fa-sun sun-icon"></i> Light Mode
@@ -173,10 +188,20 @@
             <ul style="list-style-type: none; margin-right: 5rem; padding-left: 1rem">
                 <a on:click={toggleSidebar} href="/"><li id = "mobileli">Daily</li></a>
                 <a on:click={toggleSidebar} href="/practice"><li  id = "mobileli">Practice</li></a>
+                <a on:click={toggleSidebar} href="/"><li id = "mobileli">Daily</li></a>
+                <a on:click={toggleSidebar} href="/practice"><li  id = "mobileli">Practice</li></a>
                 <!-- svelte-ignore a11y-no-static-element-interactions -->
                 <a on:click={()=>{
                     toggleStats();
                     toggleSidebar();
+                }}><li style="cursor: pointer" id = "mobileli">Stats</li></a>
+                  <button id="darkmodeMobile" class="dark-mode-toggle" on:click={toggleDarkMode}>
+                    {#if $darkMode}
+                    <i class="fas fa-sun sun-icon"></i>
+                {:else}
+                    <i class="fas fa-moon moon-icon"></i>
+                {/if}
+                </button>
                 }}><li style="cursor: pointer" id = "mobileli">Stats</li></a>
                   <button id="darkmodeMobile" class="dark-mode-toggle" on:click={toggleDarkMode}>
                     {#if $darkMode}
@@ -205,6 +230,18 @@
  
    
     
+
+
+    :global(body) { 
+    margin: 0; 
+    padding: 0;
+
+  }
+
+  
+ 
+   
+    
     nav ul li {
         font-family: 'Varela Round';
         border-radius: 0px;
@@ -214,6 +251,8 @@
         margin: 0;
         text-align: center;
     }
+
+    
 
     
     nav ul li::before {
@@ -276,6 +315,38 @@
 
 
 
+   
+
+
+#darkmodeWeb{
+        background-color: #000080; /* Adjust background color */
+    color: #fff; /* Adjust text color */
+    border: none;
+    padding: 10px;
+    font-weight: bold; 
+    margin-left: 10px; /* Adjust spacing */
+    cursor: pointer;
+    font-family: 'Varela Round';
+        border-radius: 4px;
+       
+
+}
+
+#darkmodeMobile{
+        background-color: #000080; /* Adjust background color */
+    color: #fff; /* Adjust text color */
+    border: none;
+    padding: 10px;
+    font-weight: bold; 
+    cursor: pointer;
+    font-family: 'Varela Round';
+        border-radius: 4px;
+       
+
+}
+
+
+
 
     .hamburger-menu {
         display: none; 
@@ -297,6 +368,8 @@
         transition: left 0.3s;
         opacity: 0.9;
     }
+
+  
 
   
     .sidebar.open {

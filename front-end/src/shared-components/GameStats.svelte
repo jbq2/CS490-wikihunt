@@ -3,8 +3,8 @@
 	import CopyButton from './CopyButton.svelte'
 	import { today, readFromCookie, dailyCookieName, dailyStreakCookieName, lastPlayedCookieName, allTimeBestCookieName, copyText, dateFormatter } from '$lib/CookieHelper';
 	import type { DateFormat, Stats } from "../constants/models";
-	import { onMount } from 'svelte';
-
+	import { afterUpdate, onMount } from 'svelte';
+	import { darkMode } from '$lib/darkModeStore';
 	const fireEmoji: string = '🔥';
 	export let showModal: boolean = false;
 	let noCookies: boolean = false;
@@ -14,8 +14,55 @@
 	let lastPlayed: DateFormat | any;
 	let streak: number;
 	let dailyGame: Stats | any;
+
+
+
+	function applyDarkModeStyles() {
+    const value = $darkMode; // Get the current dark mode value
+    // Add your dark mode styling logic here
+    updateStyles(value);
+  }
+  
+
+  function updateStyles(value: boolean): void {
+
+
+darkMode.subscribe(value => {
+//document.body.style.color = value ? "#fff" : "#1a1a1a";
+
+
+	
+
+
+
+   
+   
+   
+
+
+
+
+
+});
+
+
+
+   
+	
+
+   
+
+
+}
+
 	onMount(() => {
+		applyDarkModeStyles()
+
 		updateStats();
+	});
+	afterUpdate(() => {
+		applyDarkModeStyles()
+
 	});
 
 	export function updateStats(): void {

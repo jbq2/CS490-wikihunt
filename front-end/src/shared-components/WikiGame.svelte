@@ -1,10 +1,11 @@
 <script lang="ts">
     import { today, writeToCookie } from '../lib/CookieHelper';
-    import { onMount } from "svelte";
+    import { onMount,afterUpdate } from "svelte";
     import type { PageApiResponse, FinalTime, Stats } from "../constants/models";
     import { mediaWikiService } from "../services/MediaWikiService";  
     import Timer from "./Timer.svelte";   
-    import CopyButton from './CopyButton.svelte';    
+    import CopyButton from './CopyButton.svelte';
+    import { darkMode } from '$lib/darkModeStore';    
 
     let pageContent: string = "";
     let currPage: string = ""; 
@@ -24,6 +25,10 @@
     export let returnHome: any;
 
     let timerComponent: Timer;
+
+    export let updateStyles: any;
+    let logoImageSrc = '/assets/wikilogo2.png';
+
 
 
     function getGameStats(): Stats {
@@ -155,9 +160,232 @@
             statsBar.style.right = "-8.5%";
         }
     }
+
+    
+    function applyDarkModeStyles() {
+    const value = $darkMode; // Get the current dark mode value
+    // Add your dark mode styling logic here
+    updateStylesWiki(value);
+  }
+  
+
+
+    function updateStylesWiki(value: boolean): void{
+
+        darkMode.subscribe(value => {
+        //document.body.style.backgroundColor = value ? "#1a1a1a" : "#ff000";
+      //document.body.style.color = value ? "#fff" : "#1a1a1a";
+
+      const body = document.querySelector("body");
+            if (body){
+                body.style.backgroundColor = value ? "#1a1a1a" : "#fff";
+            }
+
+    //  const h1style = document.querySelector('h1');
+        //    if(h1style){
+         //       h1style.style.color= value? "#fff" : "#333";
+           //     h1style.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+                
+        //    }
+
+        const winMessage = document.querySelector('#win-message');
+        if (winMessage) {
+            winMessage.style.color = value ? "#1a1a1a" : "#333"; // Adjust the color as needed
+        }
+
+
+            const logoImage = document.querySelector("#gameimage");
+            if (logoImage) {
+                logoImageSrc = value ? '/assets/wikilogo2darkmode.png' : '/assets/wikilogo2.png';
+            logoImage.src = logoImageSrc;
+            logoImage.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+            }
+
+           const closeStats = document.querySelector('  .sidePanel .closeStats   ');
+           if (closeStats){
+           // closeStats.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+           }
+
+           const openStats = document.querySelector(' .openStats   ');
+           if (openStats){
+           // openStats.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+           }
+
+
+           const overlay= document.querySelector('#overlay-container');
+           if(overlay){
+            overlay.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+
+           }
+
+           const b = document.querySelector('#clicks');
+           if(b){
+            b.style.backgroundColor= value ? "#1a1a1a" : "#edf6f7";
+           }
+
+            const clickCounterP = document.querySelector('#click-counter');
+    if (clickCounterP) {
+        clickCounterP.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+        clickCounterP.style.color = value ? "#fff" : "#1a1a1a";
+    }
+
+
+    const startPage = document.querySelector('#start-page');
+    if (startPage) {
+        startPage.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+        startPage.style.color = value ? "#fff" : "#1a1a1a";
+    }
+        
+
+    const timerC = document.querySelector('#timer');
+    if (timerC) {
+        timerC.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+        timerC.style.color = value ? "#fff" : "#1a1a1a";
+    }
+        
+
+    const toPage = document.querySelector('#to-page');
+    if (toPage) {
+        toPage.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+       
+    }
+        
+    const endPage= document.querySelector('#end-page');
+    if (endPage){
+        endPage.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+        endPage.style.color = value ? "#fff" : "#1a1a1a";
+    }
+
+   
+    const currentPage = document.querySelector('#current-page');
+    if (currentPage) {
+       // currentPage.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+        currentPage.style.color = value ? "#fff" : "#1a1a1a";
+    }
+    
+
+
+
+            const p = document.querySelectorAll('p');
+            p.forEach(p => {
+                // p.style.color= value? "#fff" : "#333";
+             // p.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+                
+            });
+
+            const li = document.querySelectorAll('li');
+            li.forEach(li => {
+             //    li.style.color= value? "#fff" : "#333";
+             // li.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+                
+            });
+            const h2 = document.querySelectorAll('h2');
+            h2.forEach(h2 => {
+              //   h2.style.color= value? "#fff" : "#333";
+            //  h2.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+                
+            });
+
+        
+
+
+        const wp = document.querySelectorAll('#wiki-page-container');
+        wp.forEach(icon => {
+            icon.style.color = value ? "#fff" : "#1a1a1a";
+        });
+
+        const galleryBoxes = document.querySelectorAll('li.gallerybox');
+        galleryBoxes.forEach(box => {
+            box.style.backgroundColor = value ? "#444" : "#fff";
+            box.style.color = value ? "#fff" : "#1a1a1a";
+            // Adjust other styles as needed
+        });
+
+
+        const table = document.querySelectorAll('table');
+        table.forEach(box => {
+            box.style.backgroundColor = value ? "#444" : "#fff";
+            box.style.color = value ? "#fff" : "#1a1a1a";
+            // Adjust other styles as needed
+        });
+        
+        const figure = document.querySelectorAll('figure');
+        figure.forEach(box => {
+            box.style.backgroundColor = value ? "#444" : "#fff";
+            box.style.color = value ? "#fff" : "#1a1a1a";
+            // Adjust other styles as needed
+        });
+
+        const td = document.querySelectorAll('td');
+        td.forEach(box => {
+            box.style.backgroundColor = value ? "#444" : "#fff";
+            box.style.color = value ? "#fff" : "#1a1a1a";
+            // Adjust other styles as needed
+        });
+
+
+
+        /*
+        const h3 = document.querySelectorAll('h3');
+            h3.forEach(h3 => {
+                 h3.style.color= value? "#fff" : "#333";
+            //  h2.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+                
+            });
+            const h4 = document.querySelectorAll('h4');
+            h4.forEach(h4 => {
+                 h4.style.color= value? "#fff" : "#333";
+            //  h2.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+                
+            });
+
+            const noteDiv = document.querySelector('[role="note"]');
+        if (noteDiv) {
+            //noteDiv.style.backgroundColor = value ? "#333" : "#f4f4f4";
+            noteDiv.style.color = value ? "#fff" : "#333";
+        }
+           
+
+            */
+      
+
+
+             
+
+
+           // const div = document.querySelectorAll('');
+          //  div.forEach(p => {
+           //      p.style.color= value? "#fff" : "#333";
+           //   p.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+                
+          //  });
+
+
+           // const wikipage = document.querySelectorAll( "");
+           // wikipage.forEach(wikipage => {
+             //   wikipage.style.color= value? "#333" : "#1a1a1a";
+              //  wikipage.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+               // wikipage.classList.toggle('dark-mode', value);
+
+          //  });
+        });
+    }
+
+
+
+
+
+
+
     
     onMount(() => {
+        applyDarkModeStyles()
         start();
+    });
+
+    afterUpdate(() => {
+        applyDarkModeStyles()
+
     });
 </script>
 
@@ -261,6 +489,13 @@
     #wiki-page-container :global(li.gallerybox) {
         margin: 3px;
         display: inline-block;
+    }
+
+    #wiki-page-container :global(li.gallerybox) {
+        margin: 3px;
+        display: inline-block;
+        background-color: #1a1a1a;
+
     }
 
     #wiki-page-container :global(table.wikitable) {
@@ -581,8 +816,8 @@
             &gt;
             {/if}
         </a>
-        <img class="logoimage s-7IPF32Wcq3s8" src="/assets/wikilogo2.png" alt="Logo">
-        <p id="click-counter" class="grid-item"><b> {count} clicks </b></p> <!-- counter is at the bottom, not formated the best-->
+        <img id ="gameimage" class="logoimage s-7IPF32Wcq3s8" src="/assets/wikilogo2.png" alt="Logo">
+        <p id="click-counter" class="grid-item"><b id="clicks"> {count} clicks </b></p> <!-- counter is at the bottom, not formated the best-->
         <p id="timer" class="grid-item"><b><Timer bind:this={ timerComponent } /></b></p>
         <p id="start-page" class="grid-item"> <b> {firstPage} </b></p>
         <p id="to-page" class="grid-item"> 
@@ -614,7 +849,7 @@
             <div id="wiki-page-container">
                 {#if currPage}
                     <br>
-                    <h1>{ currPage }</h1>
+                    <h1 id="current-page">{ currPage }</h1>
                 {/if}
                 {@html pageContent} <!-- loads content -->
             </div>

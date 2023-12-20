@@ -6,6 +6,11 @@
     let loading: boolean = false;
     let fetchedFirstPage: string = "";
     let fetchedEndPage: string | undefined = undefined; // has to be different than wikiPage initially
+
+
+    import {darkMode} from '../../lib/darkModeStore'
+    import { afterUpdate, onMount } from "svelte";
+    let logoImageSrc = '/assets/wikilogo3.png';
     
     function start(): void {
         loading = true;
@@ -15,27 +20,159 @@
                 fetchedEndPage = data.end;
                 loading = false;
                 startCheck = true;
-                changeBgColor("#FFFFFF");
+                //changeBgColor("#FFFFFF");
             });
     }
 
     function returnHome(): any {
+        applyDarkModeStyles()
         startCheck = false;
         loading = false;
-        changeBgColor("#edf6f7");
+        //changeBgColor("#edf6f7");
     }
 
     function changeBgColor(color: string): void {
         document.body.style.backgroundColor = color;
     }
+    
+
+    function applyDarkModeStyles() {
+    const value = $darkMode; // Get the current dark mode value
+    // Add your dark mode styling logic here
+    updateStylesPractice(value);
+  }
+  
+
+    function updateStylesPractice(value: boolean): void {
+
+
+        
+
+        darkMode.subscribe(value => {
+
+          
+            const body = document.querySelector("body");
+            if (body){
+                body.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+            }
+    
+        
+        //document.body.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+ 
+        const centeredContainer = document.querySelector("#maincenter");
+      if (centeredContainer) {
+        centeredContainer.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+        // Add more styles or adjustments as needed
+      }
+      const pageContent = document.querySelector('#practice-pagecontent');
+            if (pageContent) {
+                pageContent.style.backgroundColor = value ? "#1a1a1a" : "#FFFFFF";
+                pageContent.style.color= value? "#fff" : "#1a1a1a";
+            }
+
+        const h1style = document.querySelectorAll('h1');
+        h1style.forEach(h1style => {
+               h1style.style.color= value? "#fff" : "#333";
+               // h1style.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+                
+            });
+            const p = document.querySelectorAll('#forfun');
+            p.forEach(p => {
+                p.style.color= value? "#fff" : "#333";
+                p.style.backgroundColor = value ? "#1a1a1a" : "#fff";
+                
+            });
+
+            const logoImage = document.querySelectorAll('.logoimage');
+            logoImage.forEach(logoImage => {
+                logoImageSrc = value ? '/assets/wikilogo3transparentdarkmode.png' : '/assets/wikilogo3.png';
+                logoImage.src = logoImageSrc;
+            });
+    
+           
+             
+            // Add more styles or adjustments as needed loadingimage
+            const loadingImage = document.querySelectorAll('#loadingimage');
+            loadingImage.forEach(loadingImage => {
+                logoImageSrc = value ? '/assets/wikilogo3transparentdarkmode.png' : '/assets/wikilogo3.png';
+                loadingImage.src = logoImageSrc;
+            });
+
+         const loadingContain= document.querySelector("#loadingcontainer");
+         if (loadingContain) {
+            loadingContain.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+        // Add more styles or adjustments as needed
+      }
+
+      const loadingh1 = document.querySelectorAll('#loadingh1');
+            loadingh1.forEach(loadingh1 => {
+                loadingh1.style.color= value? "#fff" : "#1a1a1a";
+                loadingh1.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+                
+            });
+     
+            const pageload = document.querySelectorAll('#pageload');
+            pageload.forEach(pageload => {
+                //pageload.style.color= value? "#fff" : "#1a1a1a";
+                pageload.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+                
+            });
+
+
+
+    });
+        
+
+       
+    } 
+
+   
+
+
+    onMount(() => {
+        applyDarkModeStyles()
+
+        
+  });
+
+
+  afterUpdate(() => {
+        
+        //document.body.style.backgroundColor = value ? "#1a1a1a" : "#edf6f7";
+ 
+
+        applyDarkModeStyles()
+           
+           
+      
+     
+
+
+
+  });
+
+
+
 </script>
 <style>
     @import url('https://fonts.googleapis.com/css?family=Varela Round');
+    @import '/public/global.css';
 
     :global(body) { 
         margin: 0; 
         padding: 0; 
         background-color: #edf6f7; 
+    }
+    .loading-container {
+        /* Add styles for the loading container */
+        background-color: #fff; /* Customize the background color */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .loading-container h1 {
+        color: #333; /* Customize the text color */
     }
     .centered-container {
         flex: 1;
@@ -115,16 +252,16 @@
 
 <main>
     {#if !startCheck && !loading}
-        <div class="centered-container">
+        <div  id = "maincenter" class="centered-container">
             <a class="logolink" href="/">
-                <img class="logoimage" src={'src/lib/assets/wikilogo3.png'} alt="Logo">
+                <img class="logoimage" src={'/assets/wikilogo3.png'} alt="Logo">
                 <!-- <h1 style="margin: 0 10px;">WikiHunt</h1> -->
             </a>
             <h1>Practice Mode</h1>
-            <div class="page-content">
+            <div id= "practice-pagecontent" class="page-content">
                 <!-- <h1>Practice Mode</h1> -->
-                <p>Play WikiHunt for fun! </p>
-                <p>Two randomly selected words are chosen each time you play.</p>
+                <p id="forfun">Play WikiHunt for fun! </p>
+                <p id="forfun">Two randomly selected words are chosen each time you play.</p>
                 <!-- <h1>Rules</h1>
                 <ul>
                     <li>The user can only navigate by only clicking through links within the same article. No search bar allowed!</li>
@@ -135,14 +272,14 @@
             <button id="start-button" on:click={ start }>Start Practice</button>
         </div>
     {:else if loading && !startCheck}
-        <div class="centered-container">
+        <div class="centered-container" id ='loadingcontainer'>
             <a class="logolink" href="/">
-                <img class="logoimage" src={'src/lib/assets/wikilogo3.png'} alt="Logo">
+                <img class="logoimage" id='loadingimage' src={'src/lib/assets/wikilogo3.png'} alt="Logo">
                 <!-- <h1 style="margin: 0 10px;">WikiHunt</h1> -->
             </a>
-            <h1>Practice Mode</h1>
-            <div class="page-content">
-                <h1>Loading Game...</h1>
+            <h1 id = "loadingh1"> Practice Mode</h1>
+            <div class="page-content"  id = "pageload">
+                <h1 id = "loadingh1">Loading Game...</h1>
             </div>
         </div>
     {:else}
